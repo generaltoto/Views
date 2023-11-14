@@ -1,0 +1,12 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea/
+x64/
+
+# Build files
+Build/
+ViewsEngine/intermediate/
+VoidDemo/intermediate/

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{23A28DC8-3A06-4A9E-9B6B-503117DD3498}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>VoidDemo</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\BlankProject.cpp" />
+    <ClCompile Include="Source\GameObjects\Asteroid.cpp" />
+    <ClCompile Include="Source\GameObjects\AsteroidLarge.cpp" />
+    <ClCompile Include="Source\GameObjects\AsteroidMedium.cpp" />
+    <ClCompile Include="Source\GameObjects\AsteroidSmall.cpp" />
+    <ClCompile Include="Source\GameObjects\Camera.cpp" />
+    <ClCompile Include="Source\GameObjects\Particles\ProjectileParticles.cpp" />
+    <ClCompile Include="Source\GameObjects\Planet.cpp" />
+    <ClCompile Include="Source\GameObjects\Player.cpp" />
+    <ClCompile Include="Source\GameObjects\Projectile.cpp" />
+    <ClCompile Include="Source\GameObjects\Skybox.cpp" />
+    <ClCompile Include="Source\GameObjects\UI\CrossAir.cpp" />
+    <ClCompile Include="Source\GameObjects\UI\Digit.cpp" />
+    <ClCompile Include="Source\GameObjects\UI\Score.cpp" />
+    <ClCompile Include="Source\GameObjects\Wing.cpp" />
+    <ClCompile Include="Source\Scripts\Asteroids\AsteroidBehaviour.cpp" />
+    <ClCompile Include="Source\Scripts\Asteroids\AsteroidLargeBehaviour.cpp" />
+    <ClCompile Include="Source\Scripts\Asteroids\AsteroidLife.cpp" />
+    <ClCompile Include="Source\Scripts\Asteroids\AsteroidMediumBehaviour.cpp" />
+    <ClCompile Include="Source\Scripts\Asteroids\AsteroidSmallBehaviour.cpp" />
+    <ClCompile Include="Source\Scripts\Asteroids\AsteroidSpawner.cpp" />
+    <ClCompile Include="Source\Scripts\Asteroids\PlanetLife.cpp" />
+    <ClCompile Include="Source\Scripts\LifeComponent.cpp" />
+    <ClCompile Include="Source\Scripts\Player\PlayerLife.cpp" />
+    <ClCompile Include="Source\Scripts\Player\PlayerMovement.cpp" />
+    <ClCompile Include="Source\Scripts\Player\PlayerShoot.cpp" />
+    <ClCompile Include="Source\Scripts\ProjectileBehavior.cpp" />
+    <ClCompile Include="Source\Scripts\TriggerCollisionEvent\AsteroidCollisionEvent.cpp" />
+    <ClCompile Include="Source\Scripts\TriggerCollisionEvent\PlanetCollisionEvent.cpp" />
+    <ClCompile Include="Source\Scripts\TriggerCollisionEvent\PlayerCollisionEvent.cpp" />
+    <ClCompile Include="Source\Scripts\UI\DigitBehavior.cpp" />
+    <ClCompile Include="Source\Scripts\UI\ScoreBehavior.cpp" />
+    <ClCompile Include="VoidDemo.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\BlankProject.h" />
+    <ClInclude Include="Source\GameObjects\Asteroid.h" />
+    <ClInclude Include="Source\GameObjects\AsteroidLarge.h" />
+    <ClInclude Include="Source\GameObjects\AsteroidMedium.h" />
+    <ClInclude Include="Source\GameObjects\AsteroidSmall.h" />
+    <ClInclude Include="Source\GameObjects\Camera.h" />
+    <ClInclude Include="Source\GameObjects\Particles\ProjectileParticles.h" />
+    <ClInclude Include="Source\GameObjects\Planet.h" />
+    <ClInclude Include="Source\GameObjects\Player.h" />
+    <ClInclude Include="Source\GameObjects\Projectile.h" />
+    <ClInclude Include="Source\GameObjects\SkyBox.h" />
+    <ClInclude Include="Source\GameObjects\UI\CrossAir.h" />
+    <ClInclude Include="Source\GameObjects\UI\Digit.h" />
+    <ClInclude Include="Source\GameObjects\UI\Score.h" />
+    <ClInclude Include="Source\GameObjects\Wing.h" />
+    <ClInclude Include="Source\Scripts\Asteroids\AsteroidBehaviour.h" />
+    <ClInclude Include="Source\Scripts\Asteroids\AsteroidLargeBehaviour.h" />
+    <ClInclude Include="Source\Scripts\Asteroids\AsteroidLife.h" />
+    <ClInclude Include="Source\Scripts\Asteroids\AsteroidMediumBehaviour.h" />
+    <ClInclude Include="Source\Scripts\Asteroids\AsteroidSmallBehaviour.h" />
+    <ClInclude Include="Source\Scripts\Asteroids\AsteroidSpawner.h" />
+    <ClInclude Include="Source\Scripts\Asteroids\PlanetLife.h" />
+    <ClInclude Include="Source\Scripts\LifeComponent.h" />
+    <ClInclude Include="Source\Scripts\Player\PlayerLife.h" />
+    <ClInclude Include="Source\Scripts\Player\PlayerMovement.h" />
+    <ClInclude Include="Source\Scripts\Player\PlayerShoot.h" />
+    <ClInclude Include="Source\Scripts\ProjectileBehavior.h" />
+    <ClInclude Include="Source\Scripts\TriggerCollisionEvent\AsteroidCollisionEvent.h" />
+    <ClInclude Include="Source\Scripts\TriggerCollisionEvent\PlanetCollisionEvent.h" />
+    <ClInclude Include="Source\Scripts\TriggerCollisionEvent\PlayerCollisionEvent.h" />
+    <ClInclude Include="Source\Scripts\UI\DigitBehavior.h" />
+    <ClInclude Include="Source\Scripts\UI\ScoreBehavior.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Icons\mainIcon.ico" />
+    <Content Include="Resources\Textures\4k.dds" />
+    <Content Include="Resources\Textures\angry_winnie.dds" />
+    <Content Include="Resources\Textures\asteroid.dds" />
+    <Content Include="Resources\Textures\crossAir1.dds" />
+    <Content Include="Resources\Textures\Cubemap Loading\nx.jpg" />
+    <Content Include="Resources\Textures\Cubemap Loading\ny.jpg" />
+    <Content Include="Resources\Textures\Cubemap Loading\nz.jpg" />
+    <Content Include="Resources\Textures\Cubemap Loading\px.jpg" />
+    <Content Include="Resources\Textures\Cubemap Loading\py.jpg" />
+    <Content Include="Resources\Textures\Cubemap Loading\pz.jpg" />
+    <Content Include="Resources\Textures\Cubemap Loading\texassemble.exe" />
+    <Content Include="Resources\Textures\cubemap.dds" />
+    <Content Include="Resources\Textures\mars.dds" />
+    <Content Include="Resources\Textures\number.dds" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

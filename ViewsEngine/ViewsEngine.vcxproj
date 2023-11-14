@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{1A0691A3-B0CE-405A-9930-2281B8CA0B57}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ViewsEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Chokbar.cpp" />
+    <ClCompile Include="Source\Common\Logger.cpp" />
+    <ClCompile Include="Source\Common\Time.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DMath.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DUtils.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\External\DDSTextureLoader.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\D3DMesh.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\GeometryHandler.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\Particle.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\IRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\MeshRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\ParticleRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\SkyRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\UIRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Cubemap.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Material.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\ShaderBase.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Texture.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\UpdloadBuffer.cpp" />
+    <ClCompile Include="Source\Engine\Core\DebugUtils.cpp" />
+    <ClCompile Include="Source\Engine\Core\PerGameSettings.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Base\ComponentManager.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Base\Coordinator.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Base\EntityManager.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Base\GameObject.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Base\Object.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Base\SystemManager.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Components\CameraComponent.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Components\Collision\Collider.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Components\Collision\Rigidbody.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Components\Collision\SphereCollider.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Components\Collision\TriggerCollisionEvent.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Components\Component.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Components\CustomComponent.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Components\TransformComponent.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Systems\ParticlesSystem.cpp" />
+    <ClCompile Include="Source\Engine\Engine.cpp" />
+    <ClCompile Include="Source\Engine\IResourceObject.cpp" />
+    <ClCompile Include="Source\Engine\Managers\CameraManager.cpp" />
+    <ClCompile Include="Source\Engine\Managers\InputHandler.cpp" />
+    <ClCompile Include="Source\Engine\Managers\LayerManager.cpp" />
+    <ClCompile Include="Source\Engine\Managers\PhysicsWorld.cpp" />
+    <ClCompile Include="Source\Engine\Managers\TimeManager.cpp" />
+    <ClCompile Include="Source\Engine\Resource.cpp" />
+    <ClCompile Include="Source\Engine\SplashScreen.cpp" />
+    <ClCompile Include="Source\Platform\Windows\IApplication.cpp" />
+    <ClCompile Include="Source\Platform\Windows\Win32Utils.cpp" />
+    <ClCompile Include="Source\Platform\Windows\Window.cpp" />
+    <ClCompile Include="ViewsEngine.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Images\ChokbarSplashScreen.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Chokbar.h" />
+    <ClInclude Include="Source\Common\Logger.h" />
+    <ClInclude Include="Source\Common\Time.h" />
+    <ClInclude Include="Source\Engine\Core\Core.h" />
+    <ClInclude Include="Source\Engine\Core\CoreDefinitions.h" />
+    <ClInclude Include="Source\Engine\Core\CoreMinimal.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DMath.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DUtils.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\MaterialType.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\MeshType.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\External\d3dx12.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\External\DDSTextureLoader.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\D3DMesh.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\GeometryHandler.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\Particle.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\IRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\MeshRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\ParticleRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\SkyRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\UIRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Cubemap.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Material.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\ShaderBase.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Texture.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\UploadBuffer.h" />
+    <ClInclude Include="Source\Engine\Core\DebugUtils.h" />
+    <ClInclude Include="Source\Engine\Core\PerGameSettings.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\ComponentArray.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\ComponentManager.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\Coordinator.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\EntityManager.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\GameObject.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\Object.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\System.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\SystemManager.h" />
+    <ClInclude Include="Source\Engine\ECS\Base\TypeDef.h" />
+    <ClInclude Include="Source\Engine\ECS\Components\CameraComponent.h" />
+    <ClInclude Include="Source\Engine\ECS\Components\Collision\Collider.h" />
+    <ClInclude Include="Source\Engine\ECS\Components\Collision\Rigidbody.h" />
+    <ClInclude Include="Source\Engine\ECS\Components\Collision\SphereCollider.h" />
+    <ClInclude Include="Source\Engine\ECS\Components\Collision\TriggerCollisionEvent.h" />
+    <ClInclude Include="Source\Engine\ECS\Components\Component.h" />
+    <ClInclude Include="Source\Engine\ECS\Components\CustomComponent.h" />
+    <ClInclude Include="Source\Engine\ECS\Components\TransformComponent.h" />
+    <ClInclude Include="Source\Engine\ECS\Systems\ParticlesSystem.h" />
+    <ClInclude Include="Source\Engine\Engine.h" />
+    <ClInclude Include="Source\Engine\IResourceObject.h" />
+    <ClInclude Include="Source\Engine\Managers\CameraManager.h" />
+    <ClInclude Include="Source\Engine\Managers\InputHandler.h" />
+    <ClInclude Include="Source\Engine\Managers\LayerManager.h" />
+    <ClInclude Include="Source\Engine\Managers\PhysicsWorld.h" />
+    <ClInclude Include="Source\Engine\Managers\TimeManager.h" />
+    <ClInclude Include="Source\Engine\Resource.h" />
+    <ClInclude Include="Source\Engine\SplashScreen.h" />
+    <ClInclude Include="Source\Platform\Windows\IApplication.h" />
+    <ClInclude Include="Source\Platform\Windows\Win32Utils.h" />
+    <ClInclude Include="Source\Platform\Windows\Window.h" />
+    <ClInclude Include="Source\Platform\Windows\WinEntry.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
