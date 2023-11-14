@@ -23,7 +23,7 @@
     <ProjectGuid>{1A0691A3-B0CE-405A-9930-2281B8CA0B57}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ViewsEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup>

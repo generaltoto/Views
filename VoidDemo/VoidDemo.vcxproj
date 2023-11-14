@@ -23,7 +23,7 @@
     <ProjectGuid>{23A28DC8-3A06-4A9E-9B6B-503117DD3498}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>VoidDemo</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup>
