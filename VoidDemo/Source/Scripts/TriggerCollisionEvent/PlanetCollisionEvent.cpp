@@ -16,7 +16,7 @@ void PlanetCollisionEvent::OnTriggerEnter(Collider* other)
 {
 	if (other->gameObject->m_CategoryBitmask.GetLayer() == PROJECTILE)
 	{
-		if (!m_ParticleRenderer->transform) return;
+		if (m_ParticleRenderer == nullptr || !m_ParticleRenderer->transform) return;
 		
 		m_ParticleRenderer->transform->SetPosition(other->gameObject->transform->GetWorldPosition());
 		m_ParticleRenderer->AddParticles(10);
@@ -28,7 +28,7 @@ void PlanetCollisionEvent::OnTriggerEnter(Collider* other)
 
 void PlanetCollisionEvent::GetParticleRenderer()
 {
-	m_ParticleRenderer = GameObject::Find("Particles")->GetComponent<ParticleRenderer>();
+	//m_ParticleRenderer = GameObject::Find("Particles")->GetComponent<ParticleRenderer>();
 }
 
 PlanetCollisionEvent::PlanetCollisionEvent()
