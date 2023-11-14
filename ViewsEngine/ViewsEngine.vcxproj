@@ -204,6 +204,7 @@
     <ClCompile Include="Source\Engine\ECS\Components\Component.cpp" />
     <ClCompile Include="Source\Engine\ECS\Components\CustomComponent.cpp" />
     <ClCompile Include="Source\Engine\ECS\Components\TransformComponent.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Systems\VECS_RenderSystem.cpp" />
     <ClCompile Include="Source\Engine\Engine.cpp" />
     <ClCompile Include="Source\Engine\IResourceObject.cpp" />
     <ClCompile Include="Source\Engine\Managers\CameraManager.cpp" />
@@ -341,6 +342,7 @@
     <ClInclude Include="Source\Engine\ECS\Components\Component.h" />
     <ClInclude Include="Source\Engine\ECS\Components\CustomComponent.h" />
     <ClInclude Include="Source\Engine\ECS\Components\TransformComponent.h" />
+    <ClInclude Include="Source\Engine\ECS\Systems\VECS_RenderSystem.h" />
     <ClInclude Include="Source\Engine\Engine.h" />
     <ClInclude Include="Source\Engine\IResourceObject.h" />
     <ClInclude Include="Source\Engine\Managers\CameraManager.h" />
@@ -355,9 +357,6 @@
     <ClInclude Include="Source\Platform\Windows\Window.h" />
     <ClInclude Include="Source\Platform\Windows\WinEntry.h" />
     <ClInclude Include="Source\ViewsEngine.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Engine\ECS\Systems\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

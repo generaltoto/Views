@@ -225,6 +225,8 @@ void CameraComponent::UpdateProjectionMatrix()
 {
 	XMStoreFloat4x4(&m_Proj, XMMatrixPerspectiveFovLH(XMConvertToRadians(m_FovY), m_Aspect, m_NearZ, m_FarZ));
 
+	BoundingFrustum::CreateFromMatrix(m_Frustum, XMLoadFloat4x4(&m_Proj));
+
 	float winWidth = Engine::GetWindow()->GetWidth();
 	float winHeight = Engine::GetWindow()->GetHeight();
 	XMStoreFloat4x4(&m_OrthoProj, XMMatrixOrthographicLH(winWidth, winHeight, m_NearZ, m_FarZ));

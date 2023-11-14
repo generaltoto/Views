@@ -64,6 +64,8 @@ public:
 	DirectX::XMFLOAT4X4 GetOrthoView4x4f()const;
 	DirectX::XMFLOAT4X4 GetOrthoViewProj4x4f()const;
 
+	DirectX::BoundingFrustum GetFrustum() const { return m_Frustum; }
+
 
 	// Strafe/Walk the camera a distance d.
 	void Strafe(float d);
@@ -107,4 +109,6 @@ private:
 	DirectX::XMFLOAT4X4 m_OthoView = Identity4X4();
 	DirectX::XMFLOAT4X4 m_Proj = Identity4X4();
 	DirectX::XMFLOAT4X4 m_OrthoProj = Identity4X4();
+
+	DirectX::BoundingFrustum m_Frustum;
 };

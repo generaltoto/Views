@@ -7,6 +7,7 @@
 #include "D3D/Renderers/UIRenderer.h"
 #include "Engine/ECS/Components/Collision/Collider.h"
 #include "Engine/ECS/Components/Collision/RigidBody.h"
+#include "Engine/ECS/Systems/VECS_RenderSystem.h"
 
 
 
@@ -50,8 +51,16 @@ void Coordinator::RegisterComponents()
 
 void Coordinator::RegisterSystems()
 {
+	RegisterSystem<VECS_RenderSystem>();
+	{
+		Signature signature;
+		signature.set(GetComponentType<MeshRenderer>());
+		signature.set(GetComponentType<ParticleRenderer>());
+		signature.set(GetComponentType<SkyRenderer>());
+		signature.set(GetComponentType<UIRenderer>());
 
-
+		SetSystemSignature<VECS_RenderSystem>(signature);
+	}
 }
 
 GameObject* Coordinator::GetEntityByName(const std::string& name)
