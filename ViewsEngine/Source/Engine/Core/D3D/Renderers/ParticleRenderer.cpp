@@ -1,5 +1,3 @@
-#include "Chokbar.h"
-
 #include "IRenderer.h"
 
 #include "D3D/Shaders/UploadBuffer.h"

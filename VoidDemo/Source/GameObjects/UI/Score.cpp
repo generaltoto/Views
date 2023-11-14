@@ -1,4 +1,4 @@
-#include "BlankProject.h"
+
 
 #include "Scripts/UI/ScoreBehavior.h"
 

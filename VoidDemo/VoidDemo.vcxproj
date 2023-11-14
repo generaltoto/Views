@@ -23,7 +23,7 @@
     <ProjectGuid>{23A28DC8-3A06-4A9E-9B6B-503117DD3498}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>VoidDemo</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup>
@@ -78,12 +78,18 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,12 +113,19 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)ViewsEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>VoidDemo.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Build\ViewsEngine\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ViewsEngine.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -143,18 +156,24 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(SolutionDir)ViewsEngine\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>VoidDemo.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Build\ViewsEngine\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ViewsEngine.lib;d3d12.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\BlankProject.cpp" />
     <ClCompile Include="Source\GameObjects\Asteroid.cpp" />
     <ClCompile Include="Source\GameObjects\AsteroidLarge.cpp" />
     <ClCompile Include="Source\GameObjects\AsteroidMedium.cpp" />
@@ -186,10 +205,10 @@
     <ClCompile Include="Source\Scripts\TriggerCollisionEvent\PlayerCollisionEvent.cpp" />
     <ClCompile Include="Source\Scripts\UI\DigitBehavior.cpp" />
     <ClCompile Include="Source\Scripts\UI\ScoreBehavior.cpp" />
-    <ClCompile Include="VoidDemo.cpp" />
+    <ClCompile Include="Source\VoidDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\BlankProject.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Source\GameObjects\Asteroid.h" />
     <ClInclude Include="Source\GameObjects\AsteroidLarge.h" />
     <ClInclude Include="Source\GameObjects\AsteroidMedium.h" />
@@ -221,9 +240,9 @@
     <ClInclude Include="Source\Scripts\TriggerCollisionEvent\PlayerCollisionEvent.h" />
     <ClInclude Include="Source\Scripts\UI\DigitBehavior.h" />
     <ClInclude Include="Source\Scripts\UI\ScoreBehavior.h" />
+    <ClInclude Include="Source\VoidDemo.h" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Icons\mainIcon.ico" />
     <Content Include="Resources\Textures\4k.dds" />
     <Content Include="Resources\Textures\angry_winnie.dds" />
     <Content Include="Resources\Textures\asteroid.dds" />
@@ -238,6 +257,12 @@
     <Content Include="Resources\Textures\cubemap.dds" />
     <Content Include="Resources\Textures\mars.dds" />
     <Content Include="Resources\Textures\number.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="VoidDemo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Icons\mainIcon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

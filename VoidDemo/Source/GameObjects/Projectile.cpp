@@ -1,4 +1,4 @@
-#include "BlankProject.h"
+
 #include "Projectile.h"
 
 #include "Scripts/ProjectileBehavior.h"

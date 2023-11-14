@@ -1,5 +1,3 @@
-#include "Chokbar.h"
-
 #include "Engine/Resource.h"
 
 #include "D3D/Shaders/Texture.h"

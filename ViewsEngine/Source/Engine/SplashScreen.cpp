@@ -1,4 +1,4 @@
-#include "Chokbar.h"
+
 #include "SplashScreen.h"
 
 #include "Platform/Windows/Win32Utils.h"

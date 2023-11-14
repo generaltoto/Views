@@ -1,4 +1,4 @@
-#include "Chokbar.h"
+
 #include "Win32Utils.h"
 
 namespace Win32 {

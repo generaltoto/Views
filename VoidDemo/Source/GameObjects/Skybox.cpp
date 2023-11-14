@@ -1,4 +1,4 @@
-#include "BlankProject.h"
+
 #include "SkyBox.h"
 
 SkyBox::SkyBox()

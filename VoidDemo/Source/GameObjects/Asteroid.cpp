@@ -1,4 +1,4 @@
-#include "BlankProject.h"
+
 #include "Asteroid.h"
 #include "Engine/Resource.h"
 
