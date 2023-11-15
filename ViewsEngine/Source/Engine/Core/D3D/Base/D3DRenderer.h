@@ -36,8 +36,7 @@ public:
 	void EndList();
 
 	int UpdateTextureHeap(Texture* tex, int textType);
-
-
+	
 	int m_bufferWidth;
 	int m_bufferHeight;
 
@@ -59,13 +58,7 @@ private:
 	void CreateDepthStencilBuffer();
 
 	void CreateResources();
-
-	void GetRenderComponentsRef();
-	void RenderObjects();
-	void UpdateRenderedObjects(const float dt, const float totalTime) const;
-
-	void CreateFrustum();
-
+	
 	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
 	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
 
@@ -131,21 +124,8 @@ private:
 	DXGI_FORMAT m_depthStencilFormat;
 
 	/*
-	These arrays store renderers of different types. Each renderer is associated with an entity.
-	Some renderers like MeshRenderers needs to be clipped by the frustum, so we differentiate them from the others
-	TODO : Implemented frustum clipping for ParticleRenderers
-	*/
-	std::array<MeshRenderer*, MAX_ENTITIES>* m_meshRenderers;
-	std::array<ParticleRenderer*, MAX_ENTITIES>* m_particleRenderers;
-	std::array<SkyRenderer*, MAX_ENTITIES>* m_skyRenderers;
-	std::array<UIRenderer*, MAX_ENTITIES>* m_uiRenderers;
-
-	/*
 	Keeps track of how many textures were created in the CBV/SRV/UAV heap.
 	TODO : Move this the Resource class
 	*/
 	int m_texIndex;
-
-	/* The frustum is used to clip objects that are not in the camera's view */
-	DirectX::BoundingFrustum m_frustum;
 };

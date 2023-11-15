@@ -26,7 +26,7 @@ D3DRenderer::D3DRenderer() :
 	m_pInstance(nullptr), m_4xMsaaState(false), m_4xMsaaQuality(0),
 	m_driveType(D3D_DRIVER_TYPE_HARDWARE), m_CurrentFenceValue(0), m_rtvDescriptorSize(0),
 	m_dsvDescriptorSize(0), m_cbvSrvUavDescriptorSize(0), m_currBackBuffer(0), m_backBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_depthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
-	m_meshRenderers(nullptr), m_particleRenderers(nullptr), m_skyRenderers(nullptr), m_texIndex(0)
+	m_texIndex(0)
 {
 	m_pDebugController = nullptr;
 
@@ -87,9 +87,6 @@ D3DRenderer::~D3DRenderer() {
 
 	RELPTR(m_pDebugController)
 
-	NULLPTR(m_meshRenderers)
-	NULLPTR(m_particleRenderers)
-
 	// Delete all static meshes from GeometryHandler
 	GeometryHandler::DestroyAllMeshes();
 
@@ -99,8 +96,6 @@ D3DRenderer::~D3DRenderer() {
 
 void D3DRenderer::Update(const float dt, const float totalTime) const
 {
-	UpdateRenderedObjects(dt, totalTime);
-
 	Engine::GetMainCamera()->UpdateViewMatrix();
 
 	for (const auto& shader : Resource::GetShaders() | std::views::values)
@@ -138,7 +133,9 @@ void D3DRenderer::Render()
 	ID3D12DescriptorHeap* descriptorHeaps[] = { m_pCbvSrvHeap };
 	m_pCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
-	RenderObjects();
+	// Render all systems (e.g. MeshRendererSystem, ParticleRendererSystem, etc.)
+	// Only systems that have implemented the Render() method will be rendered so we don't need to worry abort sorting
+	I(Coordinator)->RenderSystems();
 
 	// Set resource barrier to transition the back buffer from render target to present
 	// This allows to present the back buffer (D3D12_RESOURCE_STATE_PRESENT state)
@@ -165,8 +162,6 @@ void D3DRenderer::OnResize(const int newWidth, const int newHeight)
 
 	const auto cam = Engine::GetMainCamera();
 	//cam->SetLens(0.25f * XM_PI, m_bufferWidth / m_bufferHeight, 1.0f, 1000.0f);
-
-	BoundingFrustum::CreateFromMatrix(m_frustum, cam->GetProj());
 }
 
 D3DRenderer* D3DRenderer::GetInstance()
@@ -201,7 +196,6 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 	GeometryHandler::CreateAllMeshes();
 
 	CreateResources();
-	GetRenderComponentsRef();
 }
 #pragma endregion
 
@@ -484,22 +478,6 @@ void D3DRenderer::CreateResources()
 		shader->CreatePsoAndRootSignature(VertexType::VERTEX, m_backBufferFormat, m_depthStencilFormat);
 	}
 }
-
-void D3DRenderer::GetRenderComponentsRef()
-{
-	// TODO : CHANGE THIS ASAP
-	Coordinator* coordinator = Coordinator::GetInstance();
-
-	m_meshRenderers = coordinator->GetAllComponentsOfType<MeshRenderer>()->GetAllData();
-	m_particleRenderers = coordinator->GetAllComponentsOfType<ParticleRenderer>()->GetAllData();
-	m_skyRenderers = coordinator->GetAllComponentsOfType<SkyRenderer>()->GetAllData();
-	m_uiRenderers = coordinator->GetAllComponentsOfType<UIRenderer>()->GetAllData();
-}
-
-void D3DRenderer::CreateFrustum()
-{
-	BoundingFrustum::CreateFromMatrix(m_frustum, Engine::GetMainCamera()->GetProj());
-}
 #pragma endregion
 
 #pragma region UPDATE 
@@ -523,91 +501,6 @@ int D3DRenderer::UpdateTextureHeap(Texture* tex, int textType)
 	m_pDevice->CreateShaderResourceView(tex->Resource, &srvDesc, hDescriptor);
 
 	return m_texIndex++;
-}
-
-void D3DRenderer::UpdateRenderedObjects(const float dt, const float totalTime) const
-{
-	for (UIRenderer* uir : *m_uiRenderers)
-	{
-		if (!uir) continue;
-		uir->Update(dt);
-	}
-
-	for (MeshRenderer* mr : *m_meshRenderers)
-	{
-		if (!mr) continue;
-		mr->Update(dt);
-	}
-
-	for (ParticleRenderer* pr : *m_particleRenderers)
-	{
-		if (!pr) continue;
-		pr->Update(dt);
-	}
-
-	for (SkyRenderer* sr : *m_skyRenderers)
-	{
-		if (!sr) continue;
-		sr->Update(dt);
-	}
-}
-
-void D3DRenderer::RenderObjects()
-{
-	// Render the UI first since they are most likely to hide other objects
-	for (UIRenderer* uir : *m_uiRenderers)
-	{
-		if (!uir) continue;
-		uir->Render(m_pCommandList);
-	}
-
-	// Create the bounding frustum from the camera's projection matrix
-	// For more Frustum information, please see the chapter 16.2 and 16.3 of the book
-	CreateFrustum();
-
-	const XMMATRIX view = Engine::GetMainCamera()->GetView();
-	const XMMATRIX invView = XMMatrixInverse(nullptr, view);
-
-	for (MeshRenderer* mr : *m_meshRenderers)
-	{
-		if (!mr) continue;
-
-		// Some mesh renderers are not clippable (e.g. spaceship parts)
-		if (mr->IsClippable())
-		{
-			// Create a bounding sphere from the mesh renderer's transform
-			// Note that we get the highest scale of the transform to make sure the bounding sphere is big enough
-			// This could be improved by using the bounding box instead or multiplying the scale by the mesh radius
-			
-			BoundingSphere bs;
-			bs.Center = mr->transform->GetPosition();
-			bs.Radius = mr->transform->GetHighestScale();
-
-			// Create a bounding frustum from the camera's view matrix
-			BoundingFrustum viewFrustum;
-			m_frustum.Transform(viewFrustum, invView);
-
-			// If the bounding sphere is not in the camera's view, don't render the mesh
-			if (viewFrustum.Contains(bs) == DirectX::DISJOINT) continue;
-		}
-
-		mr->Render(m_pCommandList);
-	}
-
-	// Render the particles after the meshRenderers to avoid depth buffer issues (particles are transparent)
-	for (ParticleRenderer* pr : *m_particleRenderers)
-	{
-		if (!pr) continue;
-		pr->Render(m_pCommandList);
-	}
-
-	// Render the first registered skybox only
-	// We render the skybox at the end as it is the most likely to be hidden by other objects
-	if (SkyRenderer* sr = m_skyRenderers->at(0))
-	{
-		sr->Render(m_pCommandList);
-	}
-
 }
 #pragma endregion
 
