@@ -204,7 +204,10 @@
     <ClCompile Include="Source\Engine\ECS\Components\Component.cpp" />
     <ClCompile Include="Source\Engine\ECS\Components\CustomComponent.cpp" />
     <ClCompile Include="Source\Engine\ECS\Components\TransformComponent.cpp" />
-    <ClCompile Include="Source\Engine\ECS\Systems\VECS_RenderSystem.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Systems\VECS_MeshRendererSystem.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Systems\VECS_ParticleRendererSystem.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Systems\VECS_SkyRendererSystem.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Systems\VECS_UiRenderSystem.cpp" />
     <ClCompile Include="Source\Engine\Engine.cpp" />
     <ClCompile Include="Source\Engine\IResourceObject.cpp" />
     <ClCompile Include="Source\Engine\Managers\CameraManager.cpp" />
@@ -223,10 +226,10 @@
       <Optimization>Disabled</Optimization>
       <SupportJustMyCode>true</SupportJustMyCode>
       <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</AssemblerListingLocation>
+      <AssemblerListingLocation>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</AssemblerListingLocation>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
       <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</BrowseInformationFile>
+      <BrowseInformationFile>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</BrowseInformationFile>
       <CompileAs>Default</CompileAs>
       <ConformanceMode>true</ConformanceMode>
       <DiagnosticsFormat>Column</DiagnosticsFormat>
@@ -249,37 +252,37 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ModuleOutputFile>
+      <ModuleDependenciesFile>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</ModuleDependenciesFile>
+      <ModuleOutputFile>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</ModuleOutputFile>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ObjectFileName>
+      <ObjectFileName>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</ObjectFileName>
       <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>C:\Users\thoma\workspaces\PERSO\Views\\Build\ViewsEngine\Debug\ViewsEngine.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\Build\$(ProjectName)\$(Configuration)\ViewsEngine.pdb</ProgramDataBaseFileName>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\ViewsEngine.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\ViewsEngine.pch</PrecompiledHeaderOutputFile>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessKeepComments>false</PreprocessKeepComments>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
       <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
       <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</SourceDependenciesFile>
+      <SourceDependenciesFile>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</SourceDependenciesFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <SpectreMitigation>false</SpectreMitigation>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\ViewsEngine.tlog\</TrackerLogDirectory>
+      <TrackerLogDirectory>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\ViewsEngine.tlog\</TrackerLogDirectory>
       <TranslateIncludes>false</TranslateIncludes>
       <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
       <TreatWarningAsError>false</TreatWarningAsError>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <UseFullPaths>true</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</XMLDocumentationFileName>
+      <XMLDocumentationFileName>$(SolutionDir)\$(ProjectName)\Intermediate\$(Configuration)\</XMLDocumentationFileName>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <IntelJCCErratum>false</IntelJCCErratum>
       <BuildStlModules>false</BuildStlModules>
@@ -289,7 +292,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\thoma\workspaces\PERSO\Views\ViewsEngine\Source/Engine/Core;C:\Users\thoma\workspaces\PERSO\Views\ViewsEngine\Source;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\$(ProjectName)\Source\Engine\Core;$(SolutionDir)\$(ProjectName)\Source;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
@@ -342,7 +345,10 @@
     <ClInclude Include="Source\Engine\ECS\Components\Component.h" />
     <ClInclude Include="Source\Engine\ECS\Components\CustomComponent.h" />
     <ClInclude Include="Source\Engine\ECS\Components\TransformComponent.h" />
-    <ClInclude Include="Source\Engine\ECS\Systems\VECS_RenderSystem.h" />
+    <ClInclude Include="Source\Engine\ECS\Systems\VECS_MeshRendererSystem.h" />
+    <ClInclude Include="Source\Engine\ECS\Systems\VECS_ParticleRendererSystem.h" />
+    <ClInclude Include="Source\Engine\ECS\Systems\VECS_SkyRendererSystem.h" />
+    <ClInclude Include="Source\Engine\ECS\Systems\VECS_UiRenderSystem.h" />
     <ClInclude Include="Source\Engine\Engine.h" />
     <ClInclude Include="Source\Engine\IResourceObject.h" />
     <ClInclude Include="Source\Engine\Managers\CameraManager.h" />
