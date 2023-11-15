@@ -1,8 +1,9 @@
 
 #include "SystemManager.h"
 
-SystemManager::SystemManager()
-	: m_Signatures(), m_Systems()
+#include <ranges>
+
+SystemManager::SystemManager() : m_Signatures(), m_Systems()
 {
 }
 
@@ -12,45 +13,45 @@ SystemManager::~SystemManager()
 	m_Signatures.clear();
 }
 
-void SystemManager::UpdateAllSystems(float dt)
+void SystemManager::UpdateAllSystems(const float dt) const
 {
-	for (auto const& pair : m_Systems)
+	for (const auto& system : m_Systems | std::views::values)
 	{
-		auto const& system = pair.second;
-
 		system->Update(dt);
 	}
 }
 
-
-void SystemManager::EntityDestroyed(InstanceID entity)
+void SystemManager::RenderAllSystems()
 {
-	for (auto const& pair : m_Systems)
+	for (const auto& system : m_Systems | std::views::values)
 	{
-		auto const& system = pair.second;
-
-		system->m_RegisteredEntities.erase(entity);
+		system->Render();
 	}
 }
 
-void SystemManager::EntitySignatureChanged(InstanceID entity, Signature entitySignature)
+
+void SystemManager::EntityDestroyed(const InstanceID entity) const
+{
+	for (const auto& system : m_Systems | std::views::values)
+	{
+		system->RegisteredEntities.erase(entity);
+	}
+}
+
+void SystemManager::EntitySignatureChanged(const InstanceID entity, const Signature entitySignature)
 {
 	// Notify each system that an entity's signature changed
-	for (auto const& pair : m_Systems)
+	for (const auto& [type, system] : m_Systems)
 	{
-		auto const& type = pair.first;
-		auto const& system = pair.second;
-		auto const& systemSignature = m_Signatures[type];
-
 		// InstanceID signature matches system signature - insert into set
-		if ((entitySignature & systemSignature) == systemSignature)
+		if (auto const& systemSignature = m_Signatures[type]; (entitySignature & systemSignature) == systemSignature)
 		{
-			system->m_RegisteredEntities.insert(entity);
+			system->RegisteredEntities.insert(entity);
 		}
 		// InstanceID signature does not match system signature - erase from set
 		else
 		{
-			system->m_RegisteredEntities.erase(entity);
+			system->RegisteredEntities.erase(entity);
 		}
 	}
 }

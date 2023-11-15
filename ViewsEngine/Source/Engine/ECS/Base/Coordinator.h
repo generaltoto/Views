@@ -10,6 +10,7 @@ class Coordinator
 {
 	friend class Engine;
 	friend class PhysicsWorld;
+	friend class D3DRenderer;
 public:
 	~Coordinator();
 
@@ -19,42 +20,33 @@ public:
 	static Coordinator* GetInstance();
 
 	// Create a new game object ID
-	InstanceID GetNewInstanceID();
-	void RegisterGameObject(GameObject* go);
-
-
-	// Create a new game object ID
-	//GameObject* CreateNewObject(Transform* transform);
-
+	InstanceID GetNewInstanceID() const;
+	void RegisterGameObject(GameObject* go) const;
 	
-
-	void RegisterCustomComponent(CustomComponent* customComponent);
-	void UnregisterCustomComponent(CustomComponent* customComponent);
-
+	void RegisterCustomComponent(CustomComponent* customComponent) const;
+	void UnregisterCustomComponent(CustomComponent* customComponent) const;
 	
 	void SetEntityToBeDestroyed(InstanceID entity);
-
-
-
+	
 private:
-
 	Coordinator();
 
 	void Init();
-	void AwakeComponents();
-	void StartComponents();
-	void UpdateComponents();
-	void FixedUpdateComponents();
-	void LateUpdateComponents();
-	void UpdateSystems(float dt);
+	void AwakeComponents() const;
+	void StartComponents() const;
+	void UpdateComponents() const;
+	void FixedUpdateComponents() const;
+	void LateUpdateComponents() const;
+	void UpdateSystems(float dt) const;
+	void RenderSystems() const;
 	void CleanUp();
 
-	void DestroyRegisteredEntites();
+	void DestroyRegisteredEntities();
 
 	void RegisterComponents();
 	void RegisterSystems();
 
-	void DestroyEntity(InstanceID entity);
+	void DestroyEntity(InstanceID entity) const;
 
 public:
 
@@ -119,7 +111,7 @@ public:
 
 #pragma region Entity methods
 
-	GameObject* GetEntityByName(const std::string& name);
+	GameObject* GetEntityByName(const std::string& name) const;
 
 
 #pragma endregion
@@ -143,9 +135,8 @@ public:
 private:
 
 	static Coordinator* m_Instance;
-
-
-	std::vector<InstanceID> m_EntitesToUpdate;
+	
+	std::vector<InstanceID> m_EntitiesToUpdate;
 	std::vector<InstanceID> m_EntitiesToDestroy;
 
 	std::unique_ptr<ComponentManager> m_ComponentManager;

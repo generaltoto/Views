@@ -15,7 +15,8 @@ public:
 	SystemManager();
 	~SystemManager();
 
-	void UpdateAllSystems(float dt);
+	void UpdateAllSystems(float dt) const;
+	void RenderAllSystems();
 
 public:
 	template<typename T>
@@ -47,7 +48,7 @@ public:
 public:
 
 	// Erase a destroyed entity from all system lists
-	void EntityDestroyed(InstanceID entity);
+	void EntityDestroyed(InstanceID entity) const;
 
 	void EntitySignatureChanged(InstanceID entity, Signature entitySignature);
 
