@@ -1,6 +1,5 @@
-
-
 #include "Engine/ECS/Components/Component.h"
+
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/ShaderBase.h"
 
@@ -8,34 +7,29 @@
 
 using namespace DirectX;
 
-MeshRenderer::MeshRenderer() : IRenderer()
+MeshRenderer::MeshRenderer(): IRenderer(), m_IsClippable(true)
 {
-	m_isClippable = true;
 }
 
-MeshRenderer::~MeshRenderer()
-{
-}
+MeshRenderer::~MeshRenderer() = default;
 
 void MeshRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
-	if (!IsEnabled() || !Mat || !Mesh) return;
+    if (!IsEnabled() || !Mat || !Mesh) return;
+    const auto shader = Mat->GetShader();
+    
+    shader->BeginDraw(cmdList);
 
-	auto shader = Mat->GetShader();
-	shader->BeginDraw(cmdList);
+    shader->Draw(cmdList, this);
 
-	shader->Draw(cmdList, this);
-
-	shader->EndDraw(cmdList);
-
+    shader->EndDraw(cmdList);
 }
 
 void MeshRenderer::Update(float dt)
 {
-	if (!IsEnabled() || !Mat || !Mesh) return;
+    if (!IsEnabled() || !Mat || !Mesh) return;
 
-	//if ((transform->m_pParent && transform->m_pParent->IsDirty()) || transform->IsDirty())
-		transform->UpdateParentedWorldMatrix();
+    transform->UpdateParentedWorldMatrix();
 
-	Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCBIndex);
+    Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCBIndex);
 }

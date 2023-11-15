@@ -10,8 +10,7 @@ For now, it is used as a general renderer for all particles.
 */
 class ParticleRenderer final : public Component, public IRenderer
 {
-	// Only D3DRenderer can Update and Render this component.
-	friend class D3DRenderer;
+	friend class VECS_ParticleRendererSystem;
 public:
 	ParticleRenderer();
 	~ParticleRenderer() override;

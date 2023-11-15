@@ -6,8 +6,7 @@ It is not working yet.
 */
 class SkyRenderer final : public Component, public IRenderer
 {
-	// Only the D3DRenderer can Update and Render this class.
-	friend class D3DRenderer;
+	friend class VECS_SkyRendererSystem;
 
 public:
 	SkyRenderer();

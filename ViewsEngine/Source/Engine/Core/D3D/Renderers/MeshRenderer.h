@@ -1,13 +1,13 @@
-#pragma once 
-#include "Engine/ECS/Components/Component.h"
+#pragma once
+
 #include "IRenderer.h"
 
 /*
 Classic mesh renderer component, used to render a mesh with a material
 */
-class MeshRenderer : public Component, public IRenderer
+class MeshRenderer final : public Component, public IRenderer
 {
-	friend class D3DRenderer;
+	friend class VECS_MeshRendererSystem;
 
 public:
 	MeshRenderer();
@@ -18,11 +18,11 @@ private:
 	void Update(float dt) override;
 
 public:
-	void SetClippable(const bool value) { m_isClippable = value; }
-	[[nodiscard]] bool IsClippable() const { return m_isClippable; }
+	void SetClippable(const bool value) { m_IsClippable = value; }
+	[[nodiscard]] bool IsClippable() const { return m_IsClippable; }
 
 private:
 	// Should this mesh be clipped by the frustum or not
-	bool m_isClippable;
+	bool m_IsClippable;
 
 };

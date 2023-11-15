@@ -1,5 +1,3 @@
-
-
 #include "Engine/ECS/Components/Component.h"
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/ShaderBase.h"
@@ -12,16 +10,15 @@ UIRenderer::UIRenderer() : IRenderer(), m_uvOffsetY(0)
 {
 }
 
-UIRenderer::~UIRenderer()
-= default;
+UIRenderer::~UIRenderer() = default;
 
-void UIRenderer::SetOffsetY(float offsetY)
+void UIRenderer::SetOffsetY(const float offsetY)
 {
 	m_uvOffsetY = offsetY;
 	UpdateShader();
 }
 
-void UIRenderer::AddOffsetY(float offsetY)
+void UIRenderer::AddOffsetY(const float offsetY)
 {
 	SetOffsetY(m_uvOffsetY + offsetY);
 }
@@ -40,8 +37,8 @@ void UIRenderer::UpdateShader() const
 void UIRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
 	if (!IsEnabled() || !Mat || !Mesh) return;
-
 	const auto shader = Mat->GetShader();
+	
 	shader->BeginDraw(cmdList);
 
 	shader->Draw(cmdList, this);

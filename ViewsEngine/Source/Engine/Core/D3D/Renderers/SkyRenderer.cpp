@@ -1,5 +1,3 @@
-
-
 #include "Engine/ECS/Components/Component.h"
 #include "IRenderer.h"
 #include "D3D/Shaders/Material.h"
@@ -9,19 +7,15 @@
 
 SkyRenderer::SkyRenderer() : IRenderer()
 {
-
 }
 
-SkyRenderer::~SkyRenderer()
-{
-
-}
+SkyRenderer::~SkyRenderer() = default;
 
 void SkyRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
 	if (!Mat || !Mesh) return;
-
-	auto shader = Mat->GetShader();
+	const auto shader = Mat->GetShader();
+	
 	shader->BeginDraw(cmdList);
 
 	shader->Draw(cmdList, this);

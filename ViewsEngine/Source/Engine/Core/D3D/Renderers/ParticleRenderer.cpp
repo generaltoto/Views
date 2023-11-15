@@ -1,6 +1,3 @@
-#include "IRenderer.h"
-
-#include "D3D/Shaders/UploadBuffer.h"
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/ShaderBase.h"
 

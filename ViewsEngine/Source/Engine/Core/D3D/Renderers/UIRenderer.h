@@ -8,7 +8,7 @@ Be careful to use shaders that supports UI rendering, such as ShaderTextureOffse
 */
 class UIRenderer final : public Component, public IRenderer
 {
-	friend class D3DRenderer;
+	friend class VECS_UiRenderSystem;
 
 public:
 	UIRenderer();
