@@ -1,6 +1,6 @@
 #include "Engine/Resource.h"
 
-#include "D3D/Shaders/Texture.h"
+#include "D3D/Shaders/Textures/Texture.h"
 #include "D3D/Shaders/ShaderBase.h"
 
 #include "D3D/Renderers/MeshRenderer.h"
@@ -25,8 +25,7 @@ D3DRenderer::D3DRenderer() :
 	m_bufferWidth(DEFAULT_WIDTH), m_bufferHeight(DEFAULT_HEIGHT),
 	m_pInstance(nullptr), m_4xMsaaState(false), m_4xMsaaQuality(0),
 	m_driveType(D3D_DRIVER_TYPE_HARDWARE), m_CurrentFenceValue(0), m_rtvDescriptorSize(0),
-	m_dsvDescriptorSize(0), m_cbvSrvUavDescriptorSize(0), m_currBackBuffer(0), m_backBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_depthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
-	m_texIndex(0)
+	m_dsvDescriptorSize(0), m_cbvSrvUavDescriptorSize(0), m_currBackBuffer(0), m_backBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_depthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT)
 {
 	m_pDebugController = nullptr;
 
@@ -200,6 +199,12 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 #pragma endregion
 
 #pragma region COMMAND_LIST_PUBLIC
+UINT D3DRenderer::GetCbvHeap(ID3D12DescriptorHeap** heap) const
+{
+	*heap = m_pCbvSrvHeap;
+	return m_cbvSrvUavDescriptorSize;
+}
+
 void D3DRenderer::BeginList() const
 {
 	HRESULT hr = m_pCommandAllocator->Reset();
@@ -477,30 +482,6 @@ void D3DRenderer::CreateResources()
 	{
 		shader->CreatePsoAndRootSignature(VertexType::VERTEX, m_backBufferFormat, m_depthStencilFormat);
 	}
-}
-#pragma endregion
-
-#pragma region UPDATE 
-int D3DRenderer::UpdateTextureHeap(Texture* tex, int textType)
-{
-	if (!tex) return -1;
-
-	// Everytime we create a new texture, we need to store it in the m_pCbvSrvHeap.
-	// To do so, we create a new descriptor handle and offset it by the number of textures already stored in the heap.
-	// The methods returns the index of the texture in the heap, which will be stored in the Texture class.
-	CD3DX12_CPU_DESCRIPTOR_HANDLE hDescriptor(m_pCbvSrvHeap->GetCPUDescriptorHandleForHeapStart());
-	hDescriptor.Offset(m_texIndex, m_cbvSrvUavDescriptorSize);
-
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = static_cast<D3D12_SRV_DIMENSION>(textType);
-	srvDesc.Format = tex->Resource->GetDesc().Format;
-	srvDesc.Texture2D.MostDetailedMip = 0;
-	srvDesc.Texture2D.MipLevels = tex->Resource->GetDesc().MipLevels;
-	srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
-	m_pDevice->CreateShaderResourceView(tex->Resource, &srvDesc, hDescriptor);
-
-	return m_texIndex++;
 }
 #pragma endregion
 

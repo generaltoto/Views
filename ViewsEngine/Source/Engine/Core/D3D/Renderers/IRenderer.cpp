@@ -7,7 +7,7 @@
 
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/ShaderBase.h"
-#include "D3D/Shaders/Texture.h"
+#include "D3D/Shaders/Textures/Texture.h"
 
 #include "IRenderer.h"
 

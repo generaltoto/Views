@@ -31,11 +31,9 @@ public:
 
 	ID3D12Device* GetDevice() const { return m_pDevice; }
 	ID3D12GraphicsCommandList* GetCommandList() const { return m_pCommandList; }
-	ID3D12DescriptorHeap* GetCbvHeap() const { return m_pCbvSrvHeap; }
+	UINT GetCbvHeap(ID3D12DescriptorHeap** heap) const;
 	void BeginList() const;
 	void EndList();
-
-	int UpdateTextureHeap(Texture* tex, int textType);
 	
 	int m_bufferWidth;
 	int m_bufferHeight;
@@ -122,10 +120,4 @@ private:
 	This results with objects appearing to be behind each others */
 	ID3D12Resource* m_pDepthStencilBuffer;
 	DXGI_FORMAT m_depthStencilFormat;
-
-	/*
-	Keeps track of how many textures were created in the CBV/SRV/UAV heap.
-	TODO : Move this the Resource class
-	*/
-	int m_texIndex;
 };

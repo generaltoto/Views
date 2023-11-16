@@ -8,16 +8,20 @@
 
 #include <ranges>
 
-std::unordered_map<MaterialType, ShaderBase*> Resource::m_shaders;
-std::unordered_map<MaterialType, Material*> Resource::m_materials;
-std::unordered_map<std::string, IResourceObject*> Resource::m_resources;
+#include "D3D/Base/D3DRenderer.h"
+
+std::unordered_map<MaterialType, ShaderBase*> Resource::m_Shaders;
+std::unordered_map<MaterialType, Material*> Resource::m_Materials;
+std::unordered_map<std::string, IResourceObject*> Resource::m_Resources;
+
+int Resource::m_TexIndex = 0;
 
 Resource::~Resource()
 = default;
 
 Material* Resource::LoadMaterial(MaterialType matType)
 {
-	return m_materials[matType];
+	return m_Materials[matType];
 }
 
 void Resource::CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize)
@@ -28,31 +32,31 @@ void Resource::CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHe
 
 void Resource::ReleaseResources()
 {
-	for (auto& mat : m_materials)
+	for (auto& mat : m_Materials)
 	{
 		DELPTR(mat.second)
 	}
 
-	for (auto& shader : m_shaders)
+	for (auto& shader : m_Shaders)
 	{
 		DELPTR(shader.second)
 	}
 
-	for (auto& resource : m_resources)
+	for (auto& resource : m_Resources)
 	{
 		DELPTR(resource.second)
 	}
 
 
-	m_shaders.clear();
-	m_materials.clear();
-	m_resources.clear();
+	m_Shaders.clear();
+	m_Materials.clear();
+	m_Resources.clear();
 }
 
 ShaderBase* Resource::FindShader(MaterialType& id)
 {
-	auto iter = m_shaders.find(id);
-	if (iter != m_shaders.end())
+	auto iter = m_Shaders.find(id);
+	if (iter != m_Shaders.end())
 	{
 		return iter->second;
 	}
@@ -65,38 +69,63 @@ ShaderBase* Resource::FindShader(MaterialType& id)
 void Resource::CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize)
 {
 	std::wstring shaderPathSimple = L"Shader/Simple.hlsl";
-	m_shaders[MaterialType::SIMPLE] = new ShaderSimple(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSimple);
-	m_shaders[MaterialType::SIMPLE]->Init();
+	m_Shaders[SIMPLE] = new ShaderSimple(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSimple);
+	m_Shaders[SIMPLE]->Init();
 
 	std::wstring shaderPathTex = L"Shader/Texture.hlsl";
-	m_shaders[MaterialType::TEXTURE] = new ShaderTexture(device, cbvHeap, cbvSrvDescriptorSize, shaderPathTex);
-	m_shaders[MaterialType::TEXTURE]->Init();
+	m_Shaders[TEXTURE] = new ShaderTexture(device, cbvHeap, cbvSrvDescriptorSize, shaderPathTex);
+	m_Shaders[TEXTURE]->Init();
 
 	std::wstring shaderPathTexTrans = L"Shader/Texture_UI.hlsl";
-	m_shaders[MaterialType::TEXTURE_UI] = new ShaderTextureUI(device, cbvHeap, cbvSrvDescriptorSize, shaderPathTexTrans);
-	m_shaders[MaterialType::TEXTURE_UI]->Init();
+	m_Shaders[TEXTURE_UI] = new ShaderTextureUI(device, cbvHeap, cbvSrvDescriptorSize, shaderPathTexTrans);
+	m_Shaders[TEXTURE_UI]->Init();
 
 	std::wstring shaderPathParticle = L"Shader/Particle.hlsl";
-	m_shaders[MaterialType::PARTICLE] = new ShaderParticle(device, cbvHeap, cbvSrvDescriptorSize, shaderPathParticle);
-	m_shaders[MaterialType::PARTICLE]->Init();
+	m_Shaders[PARTICLE] = new ShaderParticle(device, cbvHeap, cbvSrvDescriptorSize, shaderPathParticle);
+	m_Shaders[PARTICLE]->Init();
 
 	std::wstring shaderPathSkybox = L"Shader/Sky.hlsl";
-	m_shaders[MaterialType::SKYBOX] = new ShaderSkybox(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSkybox);
-	m_shaders[MaterialType::SKYBOX]->Init();
+	m_Shaders[SKYBOX] = new ShaderSkybox(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSkybox);
+	m_Shaders[SKYBOX]->Init();
 }
 
 void Resource::CreateMaterials()
 {
-	CreateMaterial(MaterialType::SIMPLE, "Simple");
-	CreateMaterial(MaterialType::TEXTURE, "Texture");
-	CreateMaterial(MaterialType::TEXTURE_UI, "TextureOffset");
-	CreateMaterial(MaterialType::PARTICLE, "Particle");
-	CreateMaterial(MaterialType::SKYBOX, "Skybox");
+	CreateMaterial(SIMPLE, "Simple");
+	CreateMaterial(TEXTURE, "Texture");
+	CreateMaterial(TEXTURE_UI, "TextureOffset");
+	CreateMaterial(PARTICLE, "Particle");
+	CreateMaterial(SKYBOX, "Skybox");
 }
 
 void Resource::CreateMaterial(const MaterialType& mt, const std::string& name)
 {
-	m_materials[mt] = new Material();
-	m_materials[mt]->SetShader(m_shaders[mt]);
-	m_materials[mt]->Name = name;
+	m_Materials[mt] = new Material();
+	m_Materials[mt]->SetShader(m_Shaders[mt]);
+	m_Materials[mt]->Name = name;
+}
+
+int Resource::AddToResourceHeap(IResourceObject* resObj, int resType)
+{
+	if (!resObj) return -1;
+
+	// Everytime we create a new texture, we need to store it in the m_pCbvSrvHeap.
+	// To do so, we create a new descriptor handle and offset it by the number of textures already stored in the heap.
+	// The methods returns the index of the texture in the heap, which will be stored in the Texture class.
+	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
+	UINT heapSize = I(D3DRenderer)->GetCbvHeap(&cbvSrvHeap);
+	CD3DX12_CPU_DESCRIPTOR_HANDLE hDescriptor(cbvSrvHeap->GetCPUDescriptorHandleForHeapStart());
+	hDescriptor.Offset(m_TexIndex, heapSize);
+
+	ID3D12Resource* res = resObj->GetResource();
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = static_cast<D3D12_SRV_DIMENSION>(resType);
+	srvDesc.Format = res->GetDesc().Format;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	srvDesc.Texture2D.MipLevels = res->GetDesc().MipLevels;
+	srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
+	I(D3DRenderer)->GetDevice()->CreateShaderResourceView(res, &srvDesc, hDescriptor);
+
+	return m_TexIndex++;
 }
