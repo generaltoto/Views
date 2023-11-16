@@ -53,7 +53,7 @@ private:
 
 	void CreateRtvAndDsvDescriptorHeaps();
 	void CreateRenderTargetView();
-	void CreateDepthStencilBuffer();
+	void CreateDepthStencilBuffer(const D3D12_DEPTH_STENCIL_VIEW_DESC* dsvDesc);
 
 	void CreateResources();
 

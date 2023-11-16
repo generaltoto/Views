@@ -48,23 +48,23 @@ public:
 
 
 	// Get View/Proj matrices.
-	DirectX::XMMATRIX GetView()const;
-	DirectX::XMMATRIX GetProj()const;
-	DirectX::XMMATRIX GetViewProj()const;
+	[[nodiscard]] DirectX::XMMATRIX GetView()const;
+	[[nodiscard]] DirectX::XMMATRIX GetProj()const;
+	[[nodiscard]] DirectX::XMMATRIX GetViewProj()const;
 
-	DirectX::XMMATRIX GetOrthoProj()const;
-	DirectX::XMMATRIX GetOrthoView()const;
-	DirectX::XMMATRIX GetOrthoViewProj()const;
+	[[nodiscard]] DirectX::XMMATRIX GetOrthoProj()const;
+	[[nodiscard]] DirectX::XMMATRIX GetOrthoView()const;
+	[[nodiscard]] DirectX::XMMATRIX GetOrthoViewProj()const;
 
-	DirectX::XMFLOAT4X4 GetView4x4f()const;
-	DirectX::XMFLOAT4X4 GetProj4x4f()const;
-	DirectX::XMFLOAT4X4 GetViewProj4x4f()const; 
+	[[nodiscard]] DirectX::XMFLOAT4X4 GetView4x4f()const;
+	[[nodiscard]] DirectX::XMFLOAT4X4 GetProj4x4f()const;
+	[[nodiscard]] DirectX::XMFLOAT4X4 GetViewProj4x4f()const; 
 
-	DirectX::XMFLOAT4X4 GetOrthoProj4x4f()const;
-	DirectX::XMFLOAT4X4 GetOrthoView4x4f()const;
-	DirectX::XMFLOAT4X4 GetOrthoViewProj4x4f()const;
+	[[nodiscard]] DirectX::XMFLOAT4X4 GetOrthoProj4x4f()const;
+	[[nodiscard]] DirectX::XMFLOAT4X4 GetOrthoView4x4f()const;
+	[[nodiscard]] DirectX::XMFLOAT4X4 GetOrthoViewProj4x4f()const;
 
-	DirectX::BoundingFrustum GetFrustum() const { return m_Frustum; }
+	[[nodiscard]] DirectX::BoundingFrustum GetFrustum() const { return m_Frustum; }
 
 
 	// Strafe/Walk the camera a distance d.
@@ -90,8 +90,7 @@ private:
 private:
 
 	const DirectX::XMVECTOR m_WorldUp = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-
+	
 	// Cache frustum properties.
 	float m_NearZ = 0.5f;
 	float m_FarZ = 1000.0f;
