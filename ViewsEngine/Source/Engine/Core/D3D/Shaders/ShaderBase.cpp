@@ -1,7 +1,7 @@
 
 
 #include "D3D/Geometry/D3DMesh.h"
-#include "Texture.h"
+#include "D3D/Shaders/Textures/Texture.h"
 #include "D3D/Renderers/MeshRenderer.h"
 #include "D3D/Renderers/ParticleRenderer.h"
 #include "D3D/Base/D3DRenderer.h"
@@ -339,7 +339,7 @@ void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMes
 {
 	// UINT are not supposed to be negative, it will only be negative if it is not initialized (debug only).
 	// ReSharper disable once CppUnsignedZeroComparison
-	assert(drawnMeshR->GetTexture(0)->HeapIndex >= 0);
+	assert(drawnMeshR->GetTexture(0)->GetHeapIndex() >= 0);
 
 	// If the object has no constant buffer index, we add one.
 	// This is not supposed to happen, but it is a security.
@@ -351,8 +351,10 @@ void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMes
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
 
-	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(I(D3DRenderer)->GetCbvHeap()->GetGPUDescriptorHandleForHeapStart());
-	cbvHandle.Offset(drawnMeshR->GetTexture(0)->HeapIndex, m_cbvDescriptorSize);
+	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
+	UINT heapSize = I(D3DRenderer)->GetCbvHeap(&cbvSrvHeap);
+	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
+	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_cbvDescriptorSize);
 
 	cmdList->SetGraphicsRootDescriptorTable(0, cbvHandle);
 	cmdList->SetGraphicsRootConstantBufferView(1, m_objectCBs[drawnMeshR->ObjectCBIndex]->GetResource()->GetGPUVirtualAddress());
@@ -467,7 +469,9 @@ void ShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const Pa
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
 
-	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(I(D3DRenderer)->GetCbvHeap()->GetGPUDescriptorHandleForHeapStart());
+	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
+	UINT heapSize = I(D3DRenderer)->GetCbvHeap(&cbvSrvHeap);
+	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
 	cbvHandle.Offset(drawnMeshR->ObjectCBIndex, m_cbvDescriptorSize);
 
 	cmdList->SetGraphicsRootShaderResourceView(0, m_particleInstanceDataBuffer->GetResource()->GetGPUVirtualAddress());
@@ -567,7 +571,7 @@ void ShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnM
 {
 	// UINT are not supposed to be negative, it will only be negative if it is not initialized (debug only).
 	// ReSharper disable once CppUnsignedZeroComparison
-	assert(drawnMeshR->GetTexture(0)->HeapIndex >= 0);
+	assert(drawnMeshR->GetTexture(0)->GetHeapIndex() >= 0);
 
 	if (drawnMeshR->ObjectCBIndex >= m_offSetCb.size())
 		AddObjectCB();
@@ -577,8 +581,10 @@ void ShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnM
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
 
-	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(I(D3DRenderer)->GetCbvHeap()->GetGPUDescriptorHandleForHeapStart());
-	cbvHandle.Offset(drawnMeshR->GetTexture(0)->HeapIndex, m_cbvDescriptorSize);
+	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
+	UINT heapSize = I(D3DRenderer)->GetCbvHeap(&cbvSrvHeap);
+	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
+	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_cbvDescriptorSize);
 
 	cmdList->SetGraphicsRootDescriptorTable(0, cbvHandle);
 	cmdList->SetGraphicsRootConstantBufferView(1, m_offSetCb[drawnMeshR->ObjectCBIndex]->GetResource()->GetGPUVirtualAddress());

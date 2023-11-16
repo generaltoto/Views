@@ -21,16 +21,18 @@ public:
 
 		std::string name = path.substr(path.find_last_of("/") + 1, path.find_last_of("."));
 
-		if (auto iter = m_resources.find(name) != m_resources.end())
+		if (m_Resources.contains(name))
 		{
-			IResourceObject* resource = m_resources[name];
+			IResourceObject* resource = m_Resources[name];
 			T* cRes = reinterpret_cast<T*>(resource);
 			return cRes;
 		}
 
 		T* resource = new T(name);
 		resource->Load(path);
-		m_resources[name] = resource;
+		m_Resources[name] = resource;
+
+		AddToResourceHeap(resource, resource->GetResType());
 
 		return resource;
 	}
@@ -39,15 +41,18 @@ public:
 
 	static void CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize);
 	static void ReleaseResources();
+	static int AddToResourceHeap(IResourceObject* resObj, int resType);
 
-	static std::unordered_map<MaterialType, ShaderBase*>& GetShaders() { return m_shaders; }
-	static std::unordered_map<std::string, IResourceObject*>& GetResources() { return m_resources; }
-	static IResourceObject* GetResource(std::string& name) { return m_resources[name]; }
+	static std::unordered_map<MaterialType, ShaderBase*>& GetShaders() { return m_Shaders; }
+	static std::unordered_map<std::string, IResourceObject*>& GetResources() { return m_Resources; }
+	static IResourceObject* GetResource(const std::string& name) { return m_Resources[name]; }
 
 private:
-	static std::unordered_map<MaterialType, ShaderBase*> m_shaders;
-	static std::unordered_map<MaterialType, Material*> m_materials;
-	static std::unordered_map<std::string, IResourceObject*> m_resources;
+	static std::unordered_map<MaterialType, ShaderBase*> m_Shaders;
+	static std::unordered_map<MaterialType, Material*> m_Materials;
+	static std::unordered_map<std::string, IResourceObject*> m_Resources;
+
+	static int m_TexIndex;
 
 	static ShaderBase* FindShader(MaterialType& id);
 
@@ -55,4 +60,5 @@ private:
 
 	static void CreateMaterials();
 	static void CreateMaterial(const MaterialType& mt, const std::string& name);
+
 };
