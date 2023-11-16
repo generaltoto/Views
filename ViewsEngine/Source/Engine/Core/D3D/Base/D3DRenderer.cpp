@@ -22,10 +22,10 @@ using namespace DirectX;
 D3DRenderer* D3DRenderer::m_pApp = nullptr;
 
 D3DRenderer::D3DRenderer() :
-	m_bufferWidth(DEFAULT_WIDTH), m_bufferHeight(DEFAULT_HEIGHT),
-	m_pInstance(nullptr), m_4xMsaaState(false), m_4xMsaaQuality(0),
-	m_driveType(D3D_DRIVER_TYPE_HARDWARE), m_CurrentFenceValue(0), m_rtvDescriptorSize(0),
-	m_dsvDescriptorSize(0), m_cbvSrvUavDescriptorSize(0), m_currBackBuffer(0), m_backBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_depthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT)
+	BufferWidth(DEFAULT_WIDTH), BufferHeight(DEFAULT_HEIGHT),
+	m_pInstance(nullptr), m_4XMsaaState(false), m_4XMsaaQuality(0),
+	m_DriveType(D3D_DRIVER_TYPE_HARDWARE), m_CurrentFenceValue(0), m_RtvDescriptorSize(0),
+	m_DsvDescriptorSize(0), m_CbvSrvUavDescriptorSize(0), m_CurrBackBuffer(0), m_BackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_DepthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT)
 {
 	m_pDebugController = nullptr;
 
@@ -111,12 +111,12 @@ void D3DRenderer::Render()
 	// Set resource barrier to transition the back buffer from present to render target
 	// This allows to draw to the back buffer (D3D12_RESOURCE_STATE_RENDER_TARGET state)
 	// /!\ When the resource barrier is set to D3D12_RESOURCE_STATE_RENDER_TARGET, you back buffer is set to be used as a render target, it cannot be presented.
-	const CD3DX12_RESOURCE_BARRIER bPresentToTarget = CD3DX12_RESOURCE_BARRIER::Transition(m_pSwapChainBuffer[m_currBackBuffer], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+	const CD3DX12_RESOURCE_BARRIER bPresentToTarget = CD3DX12_RESOURCE_BARRIER::Transition(m_pSwapChainBuffer[m_CurrBackBuffer], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	m_pCommandList->ResourceBarrier(1, &bPresentToTarget);
 
 	// Create Viewport and ScissorRect for the current back buffer rendering 
-	const D3D12_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(m_bufferWidth), static_cast<float>(m_bufferHeight), 0.0f, 1.0f };
-	const D3D12_RECT scissorRect = { 0, 0, m_bufferWidth, m_bufferHeight };
+	const D3D12_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(BufferWidth), static_cast<float>(BufferHeight), 0.0f, 1.0f };
+	const D3D12_RECT scissorRect = { 0, 0, BufferWidth, BufferHeight };
 	m_pCommandList->RSSetViewports(1, &viewport);
 	m_pCommandList->RSSetScissorRects(1, &scissorRect);
 	
@@ -139,7 +139,7 @@ void D3DRenderer::Render()
 	// Set resource barrier to transition the back buffer from render target to present
 	// This allows to present the back buffer (D3D12_RESOURCE_STATE_PRESENT state)
 	// /!\ When the resource barrier is set to D3D12_RESOURCE_STATE_PRESENT, you cannot draw to the back buffer anymore
-	const CD3DX12_RESOURCE_BARRIER bTargetToPresent = CD3DX12_RESOURCE_BARRIER::Transition(m_pSwapChainBuffer[m_currBackBuffer], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+	const CD3DX12_RESOURCE_BARRIER bTargetToPresent = CD3DX12_RESOURCE_BARRIER::Transition(m_pSwapChainBuffer[m_CurrBackBuffer], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	m_pCommandList->ResourceBarrier(1, &bTargetToPresent);
 
 	EndList();
@@ -149,13 +149,13 @@ void D3DRenderer::Render()
 	// Our utility function ThrowIfFailed will throw an exception if the HRESULT is not S_OK
 	const HRESULT hr = m_pSwapChain->Present(1, 0);
 	ThrowIfFailed(hr)
-	m_currBackBuffer = (m_currBackBuffer + 1) % SWAP_CHAIN_BUFFER_COUNT;
+	m_CurrBackBuffer = (m_CurrBackBuffer + 1) % SWAP_CHAIN_BUFFER_COUNT;
 }
 
 void D3DRenderer::OnResize(const int newWidth, const int newHeight)
 {
-	m_bufferWidth = newWidth;
-	m_bufferHeight = newHeight;
+	BufferWidth = newWidth;
+	BufferHeight = newHeight;
 
 	//TODO : Resize the swap chain and recreate the render target view
 
@@ -179,12 +179,12 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 	EnableDebugLayer();
 #endif
 
-	m_bufferWidth = window->GetWidth();
-	m_bufferHeight = window->GetHeight();
+	BufferWidth = window->GetWidth();
+	BufferHeight = window->GetHeight();
 
 	CreateDevice();
 	CreateFenceAndGetDescriptorsSizes();
-	CheckMSAAQualitySupport();
+	CheckMsaaQualitySupport();
 	CreateCommandObjects();
 	CreateSwapChain(window->GetHandle());
 
@@ -202,7 +202,7 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 UINT D3DRenderer::GetCbvHeap(ID3D12DescriptorHeap** heap) const
 {
 	*heap = m_pCbvSrvHeap;
-	return m_cbvSrvUavDescriptorSize;
+	return m_CbvSrvUavDescriptorSize;
 }
 
 void D3DRenderer::BeginList() const
@@ -267,15 +267,15 @@ void D3DRenderer::CreateFenceAndGetDescriptorsSizes()
 	const HRESULT hr = m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence));
 	ThrowIfFailed(hr)
 
-	m_rtvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	m_dsvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-	m_cbvSrvUavDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	m_RtvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	m_DsvDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+	m_CbvSrvUavDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
-void D3DRenderer::CheckMSAAQualitySupport()
+void D3DRenderer::CheckMsaaQualitySupport()
 {
 	D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msQualityLevels;
-	msQualityLevels.Format = m_backBufferFormat;
+	msQualityLevels.Format = m_BackBufferFormat;
 	msQualityLevels.SampleCount = 4;
 	msQualityLevels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
 	msQualityLevels.NumQualityLevels = 0;
@@ -283,9 +283,9 @@ void D3DRenderer::CheckMSAAQualitySupport()
 	const HRESULT hr = m_pDevice->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msQualityLevels, sizeof(msQualityLevels));
 	ThrowIfFailed(hr)
 
-	m_4xMsaaQuality = msQualityLevels.NumQualityLevels;
-	m_4xMsaaState = SUCCEEDED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msQualityLevels, sizeof(msQualityLevels)));
-	assert(m_4xMsaaQuality > 0 && "Unexpected MSAA quality level.");
+	m_4XMsaaQuality = msQualityLevels.NumQualityLevels;
+	m_4XMsaaState = SUCCEEDED(m_pDevice->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &msQualityLevels, sizeof(msQualityLevels)));
+	assert(m_4XMsaaQuality > 0 && "Unexpected MSAA quality level.");
 }
 
 void D3DRenderer::CreateSwapChain(const HWND windowHandle)
@@ -294,11 +294,11 @@ void D3DRenderer::CreateSwapChain(const HWND windowHandle)
 	if (m_pSwapChain != nullptr) m_pSwapChain->Release();
 
 	DXGI_SWAP_CHAIN_DESC sd;
-	sd.BufferDesc.Width = m_bufferWidth;
-	sd.BufferDesc.Height = m_bufferHeight;
+	sd.BufferDesc.Width = BufferWidth;
+	sd.BufferDesc.Height = BufferHeight;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
-	sd.BufferDesc.Format = m_backBufferFormat;
+	sd.BufferDesc.Format = m_BackBufferFormat;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	sd.SampleDesc.Count = 1;
@@ -353,18 +353,18 @@ void D3DRenderer::CreateDepthStencilBuffer()
 	D3D12_RESOURCE_DESC depthStencilDesc;
 	depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	depthStencilDesc.Alignment = 0;
-	depthStencilDesc.Width = m_bufferWidth;
-	depthStencilDesc.Height = m_bufferHeight;
+	depthStencilDesc.Width = BufferWidth;
+	depthStencilDesc.Height = BufferHeight;
 	depthStencilDesc.DepthOrArraySize = 1;
 	depthStencilDesc.MipLevels = 1;
-	depthStencilDesc.Format = m_depthStencilFormat;
+	depthStencilDesc.Format = m_DepthStencilFormat;
 	depthStencilDesc.SampleDesc.Count = 1;
 	depthStencilDesc.SampleDesc.Quality = 0;
 	depthStencilDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 	depthStencilDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
 	D3D12_CLEAR_VALUE optClear;
-	optClear.Format = m_depthStencilFormat;
+	optClear.Format = m_DepthStencilFormat;
 	optClear.DepthStencil.Depth = 1.0f;
 	optClear.DepthStencil.Stencil = 0;
 
@@ -397,13 +397,13 @@ void D3DRenderer::CreateRenderTargetView()
 		m_pDevice->CreateRenderTargetView(m_pSwapChainBuffer[i], nullptr, rtvHeapHandle);
 
 		// Next entry in heap.
-		rtvHeapHandle.Offset(1, m_rtvDescriptorSize);
+		rtvHeapHandle.Offset(1, m_RtvDescriptorSize);
 	}
 }
 #pragma endregion
 
 #pragma region COMMAND_LIST_PRIVATE
-void D3DRenderer::DEBUG_CreateInfoQueue() const
+void D3DRenderer::Debug_CreateInfoQueue() const
 {
 	ID3D12InfoQueue* infoQueue = nullptr;
 	HRESULT hr = m_pDevice->QueryInterface(IID_PPV_ARGS(&infoQueue));
@@ -475,12 +475,12 @@ void D3DRenderer::FlushCommandQueue()
 void D3DRenderer::CreateResources()
 {
 	// Create all resources for our engine (shaders and materials)
-	Resource::CreateResources(m_pDevice, m_pCbvSrvHeap, m_cbvSrvUavDescriptorSize);
+	Resource::CreateResources(m_pDevice, m_pCbvSrvHeap, m_CbvSrvUavDescriptorSize);
 
 	// Now that all resources are created, we can create the PSO and Root Signature for each shader
 	for (const auto& shader : Resource::GetShaders() | std::views::values)
 	{
-		shader->CreatePsoAndRootSignature(VertexType::VERTEX, m_backBufferFormat, m_depthStencilFormat);
+		shader->CreatePsoAndRootSignature(VertexType::VERTEX, m_BackBufferFormat, m_DepthStencilFormat);
 	}
 }
 #pragma endregion
@@ -491,8 +491,8 @@ D3D12_CPU_DESCRIPTOR_HANDLE D3DRenderer::CurrentBackBufferView() const
 	// CD3DX12 constructor to offset to the RTV of the current back buffer.
 	return CD3DX12_CPU_DESCRIPTOR_HANDLE(
 		m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(),		// handle start
-		m_currBackBuffer,										// index to offset
-		m_rtvDescriptorSize										// byte size of descriptor
+		m_CurrBackBuffer,										// index to offset
+		m_RtvDescriptorSize										// byte size of descriptor
 	);
 }
 

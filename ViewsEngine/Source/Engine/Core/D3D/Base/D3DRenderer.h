@@ -29,20 +29,20 @@ public:
 	void Update(const float dt, const float totalTime) const;
 	void Render();
 
-	ID3D12Device* GetDevice() const { return m_pDevice; }
-	ID3D12GraphicsCommandList* GetCommandList() const { return m_pCommandList; }
+	[[nodiscard]] ID3D12Device* GetDevice() const { return m_pDevice; }
+	[[nodiscard]] ID3D12GraphicsCommandList* GetCommandList() const { return m_pCommandList; }
 	UINT GetCbvHeap(ID3D12DescriptorHeap** heap) const;
 	void BeginList() const;
 	void EndList();
 	
-	int m_bufferWidth;
-	int m_bufferHeight;
+	int BufferWidth;
+	int BufferHeight;
 
 private:
 	void EnableDebugLayer();
 
 	void CreateDevice();
-	void CheckMSAAQualitySupport();
+	void CheckMsaaQualitySupport();
 
 	void CreateFenceAndGetDescriptorsSizes();
 
@@ -56,13 +56,13 @@ private:
 	void CreateDepthStencilBuffer();
 
 	void CreateResources();
-	
-	D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
-	D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
+
+	[[nodiscard]] D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView() const;
+	[[nodiscard]] D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView() const;
 
 	/* Creates an ID3D12InfoQueue to catch any error within the Command Queue.
 	Any error will break the code */
-	void DEBUG_CreateInfoQueue() const;
+	void Debug_CreateInfoQueue() const;
 
 private:
 	static D3DRenderer* m_pApp;
@@ -71,8 +71,8 @@ private:
 
 	ID3D12Debug* m_pDebugController;
 
-	bool m_4xMsaaState;	  // 4X MSAA (4.1.8) enabled. Default is false.
-	UINT m_4xMsaaQuality; // quality level of 4X MSAA
+	bool m_4XMsaaState;	  // 4X MSAA (4.1.8) enabled. Default is false.
+	UINT m_4XMsaaQuality; // quality level of 4X MSAA
 
 
 	/* D3D12 Factory : Used to create the swap chain */
@@ -80,7 +80,7 @@ private:
 
 	/* D3D12 Device : Represents a GPU device */
 	ID3D12Device* m_pDevice;
-	D3D_DRIVER_TYPE m_driveType;
+	D3D_DRIVER_TYPE m_DriveType;
 	/* D3D12 Fence : Used to synchronize the CPU and GPU
 	We use the fence to wait for the CPU or GPU to finish their work.
 	The other one will be put on hold */
@@ -104,20 +104,20 @@ private:
 	ID3D12DescriptorHeap* m_pCbvSrvHeap;
 
 	/* Speaks for itself I guess */
-	UINT m_rtvDescriptorSize;
-	UINT m_dsvDescriptorSize;
-	UINT m_cbvSrvUavDescriptorSize;
+	UINT m_RtvDescriptorSize;
+	UINT m_DsvDescriptorSize;
+	UINT m_CbvSrvUavDescriptorSize;
 
 	/* D3D12 SwapChain : Used to swap the back buffer */
 	IDXGISwapChain* m_pSwapChain;
 	/* Buffer used by the swap chain (contains our two buffers that will serve for the Present() method) */
 	ID3D12Resource* m_pSwapChainBuffer[SWAP_CHAIN_BUFFER_COUNT];
 	/* Index of the current back buffer */
-	int m_currBackBuffer;
-	DXGI_FORMAT m_backBufferFormat;
+	int m_CurrBackBuffer;
+	DXGI_FORMAT m_BackBufferFormat;
 
 	/* The depth stencil buffer is used to render perspective given the object position
 	This results with objects appearing to be behind each others */
 	ID3D12Resource* m_pDepthStencilBuffer;
-	DXGI_FORMAT m_depthStencilFormat;
+	DXGI_FORMAT m_DepthStencilFormat;
 };
