@@ -32,7 +32,7 @@ public:
 		resource->Load(path);
 		m_Resources[name] = resource;
 
-		AddToResourceHeap(resource, 0);
+		AddToResourceHeap(resource, resource->GetResType());
 
 		return resource;
 	}
