@@ -1,6 +1,6 @@
 ﻿#include "VECS_SkyRendererSystem.h"
 
-#include "D3D/Base/D3DRenderer.h"
+#include "D3D/Base/VGHandler.h"
 
 void VECS_SkyRendererSystem::Awake()
 {
@@ -22,7 +22,7 @@ void VECS_SkyRendererSystem::Update(float delta)
 
 void VECS_SkyRendererSystem::Render()
 {
-    ID3D12GraphicsCommandList* commandList = I(D3DRenderer)->GetCommandList();
+    ID3D12GraphicsCommandList* commandList = I(VGHandler)->GetCommandList();
     
     for (auto& entity : RegisteredEntities)
     {

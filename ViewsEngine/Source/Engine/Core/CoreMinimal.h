@@ -7,8 +7,8 @@
 #include "Common/Logger.h"
 #include "Common/Time.h"
 
-#include "D3D/Base/MeshType.h"
-#include "D3D/Base/MaterialType.h"
+#include "D3D\Base\VGMeshType.h"
+#include "D3D\Base\VGMaterialType.h"
 
 
 // Resources includes

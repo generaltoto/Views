@@ -8,7 +8,7 @@
 
 #include <ranges>
 
-#include "D3D/Base/D3DRenderer.h"
+#include "D3D/Base/VGHandler.h"
 
 std::unordered_map<MaterialType, ShaderBase*> Resource::m_Shaders;
 std::unordered_map<MaterialType, Material*> Resource::m_Materials;
@@ -113,7 +113,7 @@ int Resource::AddToResourceHeap(IResourceObject* resObj, int resType)
 	// To do so, we create a new descriptor handle and offset it by the number of textures already stored in the heap.
 	// The methods returns the index of the texture in the heap, which will be stored in the Texture class.
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
-	UINT heapSize = I(D3DRenderer)->GetCbvHeap(&cbvSrvHeap);
+	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE hDescriptor(cbvSrvHeap->GetCPUDescriptorHandleForHeapStart());
 	hDescriptor.Offset(m_TexIndex, heapSize);
 
@@ -125,7 +125,7 @@ int Resource::AddToResourceHeap(IResourceObject* resObj, int resType)
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = res->GetDesc().MipLevels;
 	srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
-	I(D3DRenderer)->GetDevice()->CreateShaderResourceView(res, &srvDesc, hDescriptor);
+	I(VGHandler)->GetDevice()->CreateShaderResourceView(res, &srvDesc, hDescriptor);
 
 	return m_TexIndex++;
 }

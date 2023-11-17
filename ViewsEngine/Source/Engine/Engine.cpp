@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-#include "D3D/Base/D3DRenderer.h"
+#include "D3D/Base/VGHandler.h"
 
 #include <numbers>
 
@@ -65,8 +65,8 @@ void Engine::Initialize(Win32::IApplication* game)
     m_InputHandler.Init(m_Window.GetHandle());
     OnApplicationFocus();
 
-    I(D3DRenderer)->SetState(D3DRenderer::D3DState::INIT);
-    I(D3DRenderer)->InitializeD3D12(&m_Window);
+    I(VGHandler)->SetState(VGHandler::D3DState::INIT);
+    I(VGHandler)->Init(&m_Window);
 }
 #pragma endregion
 
@@ -82,7 +82,7 @@ void Engine::Run()
     OnResize();
 
     m_EngineState = RUNTIME;
-    I(D3DRenderer)->SetState(D3DRenderer::D3DState::RUNTIME);
+    I(VGHandler)->SetState(VGHandler::D3DState::RUNTIME);
 
     while (!NeedsToClose())
     {
@@ -131,13 +131,13 @@ void Engine::Update(const float dt)
     m_Coordinator->UpdateComponents();
     m_Coordinator->LateUpdateComponents();
 
-    I(D3DRenderer)->Update(dt, m_TimeManager.GetTotalTime());
+    I(VGHandler)->Update(dt, m_TimeManager.GetTotalTime());
     CalculateFrameStats();
 }
 
 void Engine::Render()
 {
-    I(D3DRenderer)->Render();
+    I(VGHandler)->Render();
 }
 #pragma endregion
 
@@ -173,8 +173,8 @@ void Engine::CalculateFrameStats()
 
 void Engine::OnResize()
 {
-    if (const D3DRenderer::D3DState s = I(D3DRenderer)->GetState(); s == D3DRenderer::D3DState::RUNTIME)
-        I(D3DRenderer)->OnResize(m_Window.GetWidth(), m_Window.GetHeight());
+    if (const VGHandler::D3DState s = I(VGHandler)->GetState(); s == VGHandler::D3DState::RUNTIME)
+        I(VGHandler)->OnResize(m_Window.GetWidth(), m_Window.GetHeight());
 }
 
 void Engine::Shutdown() const
@@ -183,7 +183,7 @@ void Engine::Shutdown() const
 
     DELPTR(m_Instance);
 
-    delete I(D3DRenderer);
+    delete I(VGHandler);
 }
 
 void Engine::OnApplicationFocus()

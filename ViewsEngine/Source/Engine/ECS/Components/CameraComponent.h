@@ -1,7 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 
-#include "Engine/Core/D3D/Base/D3DUtils.h"
+#include "..\..\Core\D3D\Base\VGUtils.h"
 #include "Engine/ECS/Components/Component.h"
 
 

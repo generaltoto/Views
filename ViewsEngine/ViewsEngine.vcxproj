@@ -171,9 +171,8 @@
   <ItemGroup>
     <ClCompile Include="Source\Common\Logger.cpp" />
     <ClCompile Include="Source\Common\Time.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DMath.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DUtils.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Base\VGHandler.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Base\VGUtils.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\External\DDSTextureLoader.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Geometry\D3DMesh.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Geometry\GeometryHandler.cpp" />
@@ -459,11 +458,10 @@
     <ClInclude Include="Source\Engine\Core\Core.h" />
     <ClInclude Include="Source\Engine\Core\CoreDefinitions.h" />
     <ClInclude Include="Source\Engine\Core\CoreMinimal.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DMath.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DRenderer.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DUtils.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\MaterialType.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\MeshType.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\VGHandler.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\VGUtils.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\VGMaterialType.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\VGMeshType.h" />
     <ClInclude Include="Source\Engine\Core\D3D\External\d3dx12.h" />
     <ClInclude Include="Source\Engine\Core\D3D\External\DDSTextureLoader.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Geometry\D3DMesh.h" />

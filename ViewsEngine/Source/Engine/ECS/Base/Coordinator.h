@@ -10,7 +10,7 @@ class Coordinator
 {
 	friend class Engine;
 	friend class PhysicsWorld;
-	friend class D3DRenderer;
+	friend class VGHandler;
 public:
 	~Coordinator();
 

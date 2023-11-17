@@ -1,6 +1,6 @@
 
 
-#include "D3D/Base/D3DUtils.h"
+#include "..\Base\VGUtils.h"
 
 #include "Particle.h"
 

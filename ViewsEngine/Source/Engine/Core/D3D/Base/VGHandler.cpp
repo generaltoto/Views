@@ -6,19 +6,19 @@
 
 #include "Engine/Engine.h"
 
-#include "D3DRenderer.h"
+#include "VGHandler.h"
 
 #include <ranges>
 
 using namespace DirectX;
 
 #pragma region BASIC
-D3DRenderer* D3DRenderer::m_pApp = nullptr;
+VGHandler* VGHandler::m_pApp = nullptr;
 
-D3DRenderer::D3DRenderer()
-    : BufferWidth(DEFAULT_WIDTH), BufferHeight(DEFAULT_HEIGHT), m_State(D3DState::SLEEP), m_pInstance(nullptr), m_4XMsaaState(false),
-      m_4XMsaaQuality(0), m_DriveType(D3D_DRIVER_TYPE_HARDWARE), m_CurrentFenceValue(0), m_RtvDescriptorSize(0), m_DsvDescriptorSize(0),
-      m_CbvSrvUavDescriptorSize(0), m_CurrBackBuffer(0), m_BackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_DepthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT)
+VGHandler::VGHandler()
+    : m_State(D3DState::SLEEP), m_4XMsaaState(false), m_4XMsaaQuality(0), m_CurrentFenceValue(0), m_RtvDescriptorSize(0), m_DsvDescriptorSize(0),
+      m_CbvSrvUavDescriptorSize(0), m_BackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_CurrBackBuffer(0),
+      m_DepthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT), m_BufferWidth(DEFAULT_WIDTH), m_BufferHeight(DEFAULT_HEIGHT)
 {
     m_pDebugController = nullptr;
 
@@ -46,11 +46,9 @@ D3DRenderer::D3DRenderer()
     }
 
     m_pApp = this;
-
-    m_pInstance = HInstance();
 }
 
-D3DRenderer::~D3DRenderer()
+VGHandler::~VGHandler()
 {
     /*
     NOTE : DX12 objects are released in the reverse order of their creation
@@ -58,28 +56,29 @@ D3DRenderer::~D3DRenderer()
     We cannot store DX12 components ourselves because they are created by the API. An object will be active as long as its reference count is greater than 0.
     By calling the Release() method, we decrease the reference count by 1. When the reference count reaches 0, the object is destroyed.
     */
+    FlushCommandQueue();
+    
+    RELPTR(m_pDebugController)
+
     RELPTR(m_pDxgiFactory)
     RELPTR(m_pDevice)
-
-    RELPTR(m_pFence)
 
     RELPTR(m_pCommandList)
     RELPTR(m_pCommandAllocator)
     RELPTR(m_pCommandQueue)
+    RELPTR(m_pFence)
 
-    RELPTR(m_pRtvHeap)
-    RELPTR(m_pDsvHeap)
-    RELPTR(m_pCbvSrvHeap)
+    RELPTR(m_pDepthStencilBuffer)
 
     for (auto& i : m_pSwapChainBuffer)
         RELPTR(i)
 
     RELPTR(m_pSwapChain)
-
-    RELPTR(m_pDepthStencilBuffer)
-
-    RELPTR(m_pDebugController)
-
+    
+    RELPTR(m_pRtvHeap)
+    RELPTR(m_pDsvHeap)
+    RELPTR(m_pCbvSrvHeap)
+    
     // Delete all static meshes from GeometryHandler
     GeometryHandler::DestroyAllMeshes();
 
@@ -87,7 +86,7 @@ D3DRenderer::~D3DRenderer()
     Resource::ReleaseResources();
 }
 
-void D3DRenderer::Update(const float dt, const float totalTime)
+void VGHandler::Update(const float dt, const float totalTime)
 {
     Engine::GetMainCamera()->UpdateViewMatrix();
 
@@ -97,7 +96,7 @@ void D3DRenderer::Update(const float dt, const float totalTime)
     }
 }
 
-void D3DRenderer::Render()
+void VGHandler::Render()
 {
     // Reset the commandQueue and prepare it for the next frame
     BeginList();
@@ -110,8 +109,8 @@ void D3DRenderer::Render()
     m_pCommandList->ResourceBarrier(1, &bPresentToTarget);
 
     // Create Viewport and ScissorRect for the current back buffer rendering 
-    const D3D12_VIEWPORT viewport = {0.0f, 0.0f, static_cast<float>(BufferWidth), static_cast<float>(BufferHeight), 0.0f, 1.0f};
-    const D3D12_RECT scissorRect = {0, 0, BufferWidth, BufferHeight};
+    const D3D12_VIEWPORT viewport = {0.0f, 0.0f, static_cast<float>(m_BufferWidth), static_cast<float>(m_BufferHeight), 0.0f, 1.0f};
+    const D3D12_RECT scissorRect = {0, 0, m_BufferWidth, m_BufferHeight};
     m_pCommandList->RSSetViewports(1, &viewport);
     m_pCommandList->RSSetScissorRects(1, &scissorRect);
 
@@ -148,14 +147,14 @@ void D3DRenderer::Render()
     m_CurrBackBuffer = (m_CurrBackBuffer + 1) % SWAP_CHAIN_BUFFER_COUNT;
 }
 
-void D3DRenderer::OnResize(const int newWidth, const int newHeight)
+void VGHandler::OnResize(const int newWidth, const int newHeight)
 {
-    BufferWidth = newWidth;
-    BufferHeight = newHeight;
-    
+    m_BufferWidth = newWidth;
+    m_BufferHeight = newHeight;
+
     if (const auto cam = Engine::GetMainCamera(); cam != nullptr)
     {
-        cam->SetLens(70.f, static_cast<float>(BufferWidth) / static_cast<float>(BufferHeight), 1.0f, 5000.0f);
+        cam->SetLens(70.f, static_cast<float>(m_BufferWidth) / static_cast<float>(m_BufferHeight), 1.0f, 5000.0f);
     }
 
     // Flush before changing any resources.
@@ -170,7 +169,8 @@ void D3DRenderer::OnResize(const int newWidth, const int newHeight)
     RELPTR(m_pDepthStencilBuffer)
 
     // Resize the swap chain.
-    hr = m_pSwapChain->ResizeBuffers(SWAP_CHAIN_BUFFER_COUNT, BufferWidth, BufferHeight, m_BackBufferFormat, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
+    hr = m_pSwapChain->ResizeBuffers(SWAP_CHAIN_BUFFER_COUNT, m_BufferWidth, m_BufferHeight, m_BackBufferFormat,
+                                     DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
     ThrowIfFailed(hr)
 
     m_CurrBackBuffer = 0;
@@ -182,17 +182,17 @@ void D3DRenderer::OnResize(const int newWidth, const int newHeight)
     CreateDepthStencilBuffer();
 }
 
-D3DRenderer* D3DRenderer::GetInstance()
+VGHandler* VGHandler::GetInstance()
 {
     if (m_pApp == nullptr)
     {
-        m_pApp = new D3DRenderer();
+        m_pApp = new VGHandler();
     }
 
     return m_pApp;
 }
 
-void D3DRenderer::InitializeD3D12(const Win32::Window* window)
+void VGHandler::Init(const Win32::Window* window)
 {
     SetState(D3DState::INIT);
 #if defined(DEBUG) || defined(_DEBUG)
@@ -201,9 +201,9 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
     CreateDevice();
     CreateFenceAndGetDescriptorsSizes();
     CheckMsaaQualitySupport();
-    
+
     CreateCommandObjects();
-    
+
     CreateSwapChain(window->GetHandle());
     CreateRtvAndDsvDescriptorHeaps();
 
@@ -216,13 +216,13 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 #pragma endregion
 
 #pragma region COMMAND_LIST_PUBLIC
-UINT D3DRenderer::GetCbvHeap(ID3D12DescriptorHeap** heap) const
+UINT VGHandler::GetCbvHeap(ID3D12DescriptorHeap** heap) const
 {
     *heap = m_pCbvSrvHeap;
     return m_CbvSrvUavDescriptorSize;
 }
 
-void D3DRenderer::BeginList() const
+void VGHandler::BeginList() const
 {
     HRESULT hr = m_pCommandAllocator->Reset();
     ThrowIfFailed(hr)
@@ -230,7 +230,7 @@ void D3DRenderer::BeginList() const
     ThrowIfFailed(hr)
 }
 
-void D3DRenderer::EndList()
+void VGHandler::EndList()
 {
     // Close the command list (mandatory before calling ExecuteCommandLists)
     const HRESULT hr = m_pCommandList->Close();
@@ -245,14 +245,15 @@ void D3DRenderer::EndList()
 #pragma endregion
 
 #pragma region D3DX12_COMPONENTS
-void D3DRenderer::EnableDebugLayer()
+void VGHandler::EnableDebugLayer()
 {
     // Enable the D3D12 debug layer.
-    D3D12GetDebugInterface(IID_PPV_ARGS(&m_pDebugController));
-    //m_pDebugController->EnableDebugLayer();
+    const HRESULT hr = D3D12GetDebugInterface(IID_PPV_ARGS(&m_pDebugController));
+    ThrowIfFailed(hr)
+    m_pDebugController->EnableDebugLayer();
 }
 
-void D3DRenderer::CreateDevice()
+void VGHandler::CreateDevice()
 {
     HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&m_pDxgiFactory));
     ThrowIfFailed(hr)
@@ -279,7 +280,7 @@ void D3DRenderer::CreateDevice()
 #endif
 }
 
-void D3DRenderer::CreateFenceAndGetDescriptorsSizes()
+void VGHandler::CreateFenceAndGetDescriptorsSizes()
 {
     const HRESULT hr = m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence));
     ThrowIfFailed(hr)
@@ -289,7 +290,7 @@ void D3DRenderer::CreateFenceAndGetDescriptorsSizes()
     m_CbvSrvUavDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
-void D3DRenderer::CheckMsaaQualitySupport()
+void VGHandler::CheckMsaaQualitySupport()
 {
     D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msQualityLevels;
     msQualityLevels.Format = m_BackBufferFormat;
@@ -305,14 +306,14 @@ void D3DRenderer::CheckMsaaQualitySupport()
     assert(m_4XMsaaQuality > 0 && "Unexpected MSAA quality level.");
 }
 
-void D3DRenderer::CreateSwapChain(const HWND windowHandle)
+void VGHandler::CreateSwapChain(const HWND windowHandle)
 {
     // Release the previous swapchain we will be recreating.
     if (m_pSwapChain != nullptr) m_pSwapChain->Release();
 
     DXGI_SWAP_CHAIN_DESC sd;
-    sd.BufferDesc.Width = BufferWidth;
-    sd.BufferDesc.Height = BufferHeight;
+    sd.BufferDesc.Width = m_BufferWidth;
+    sd.BufferDesc.Height = m_BufferHeight;
     sd.BufferDesc.RefreshRate.Numerator = 60;
     sd.BufferDesc.RefreshRate.Denominator = 1;
     sd.BufferDesc.Format = m_BackBufferFormat;
@@ -332,7 +333,7 @@ void D3DRenderer::CreateSwapChain(const HWND windowHandle)
     ThrowIfFailed(hr)
 }
 
-void D3DRenderer::CreateRtvAndDsvDescriptorHeaps()
+void VGHandler::CreateRtvAndDsvDescriptorHeaps()
 {
     D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc;
     rtvHeapDesc.NumDescriptors = SWAP_CHAIN_BUFFER_COUNT;
@@ -362,14 +363,14 @@ void D3DRenderer::CreateRtvAndDsvDescriptorHeaps()
     ThrowIfFailed(hr)
 }
 
-void D3DRenderer::CreateDepthStencilBuffer()
+void VGHandler::CreateDepthStencilBuffer()
 {
     // Create the depth/stencil buffer and view.
     D3D12_RESOURCE_DESC depthStencilDesc;
     depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
     depthStencilDesc.Alignment = 0;
-    depthStencilDesc.Width = BufferWidth;
-    depthStencilDesc.Height = BufferHeight;
+    depthStencilDesc.Width = m_BufferWidth;
+    depthStencilDesc.Height = m_BufferHeight;
     depthStencilDesc.DepthOrArraySize = 1;
     depthStencilDesc.MipLevels = 1;
     depthStencilDesc.Format = m_DepthStencilFormat;
@@ -406,7 +407,7 @@ void D3DRenderer::CreateDepthStencilBuffer()
     EndList();
 }
 
-void D3DRenderer::CreateRenderTargetView()
+void VGHandler::CreateRenderTargetView()
 {
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle(m_pRtvHeap->GetCPUDescriptorHandleForHeapStart());
     for (UINT i = 0; i < SWAP_CHAIN_BUFFER_COUNT; i++)
@@ -425,7 +426,7 @@ void D3DRenderer::CreateRenderTargetView()
 #pragma endregion
 
 #pragma region COMMAND_LIST_PRIVATE
-void D3DRenderer::Debug_CreateInfoQueue() const
+void VGHandler::CreateInfoQueue() const
 {
     ID3D12InfoQueue* infoQueue = nullptr;
     HRESULT hr = m_pDevice->QueryInterface(IID_PPV_ARGS(&infoQueue));
@@ -438,7 +439,7 @@ void D3DRenderer::Debug_CreateInfoQueue() const
     ThrowIfFailed(hr)
 }
 
-void D3DRenderer::CreateCommandObjects()
+void VGHandler::CreateCommandObjects()
 {
     D3D12_COMMAND_QUEUE_DESC queueDesc = {};
     queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -462,7 +463,7 @@ void D3DRenderer::CreateCommandObjects()
     ThrowIfFailed(hr)
 }
 
-void D3DRenderer::FlushCommandQueue()
+void VGHandler::FlushCommandQueue()
 {
     // Advance the fence value to mark commands up to this fence point.
     m_CurrentFenceValue++;
@@ -490,7 +491,7 @@ void D3DRenderer::FlushCommandQueue()
 #pragma endregion
 
 #pragma region CREATE_INTERNAL_COMPONENTS
-void D3DRenderer::CreateResources()
+void VGHandler::CreateResources()
 {
     // Create all resources for our engine (shaders and materials)
     Resource::CreateResources(m_pDevice, m_pCbvSrvHeap, m_CbvSrvUavDescriptorSize);
@@ -504,7 +505,7 @@ void D3DRenderer::CreateResources()
 #pragma endregion
 
 #pragma region CONSTANTS
-D3D12_CPU_DESCRIPTOR_HANDLE D3DRenderer::CurrentBackBufferView() const
+D3D12_CPU_DESCRIPTOR_HANDLE VGHandler::CurrentBackBufferView() const
 {
     // CD3DX12 constructor to offset to the RTV of the current back buffer.
     return CD3DX12_CPU_DESCRIPTOR_HANDLE(m_pRtvHeap->GetCPUDescriptorHandleForHeapStart(), // handle start
@@ -513,7 +514,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE D3DRenderer::CurrentBackBufferView() const
     );
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE D3DRenderer::DepthStencilView() const
+D3D12_CPU_DESCRIPTOR_HANDLE VGHandler::DepthStencilView() const
 {
     return m_pDsvHeap->GetCPUDescriptorHandleForHeapStart();
 }

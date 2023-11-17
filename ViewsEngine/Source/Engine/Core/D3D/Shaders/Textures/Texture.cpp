@@ -2,7 +2,7 @@
 
 #include "Texture.h"
 
-#include "D3D/Base/D3DRenderer.h"
+#include "D3D/Base/VGHandler.h"
 
 #include "D3D/External/DDSTextureLoader.h"
 #include <wrl/client.h>
@@ -26,7 +26,7 @@ void Texture::Load(const std::string& filepath)
 
 void Texture::LoadTexture()
 {
-	const auto app = I(D3DRenderer);
+	const auto app = I(VGHandler);
 	ID3D12Device* device = app->GetDevice();
 	ID3D12GraphicsCommandList* cmdList = app->GetCommandList();
 

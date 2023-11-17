@@ -1,7 +1,7 @@
 
 
 #include "D3DMesh.h"
-#include "D3D/Base/D3DRenderer.h"
+#include "D3D/Base/VGHandler.h"
 
 using namespace DirectX;
 
@@ -59,9 +59,9 @@ void D3DMesh::DisposeUploaders()
 
 void D3DMesh::Create(const void* vData, UINT vStride, UINT vSize, const void* iData, UINT iStride, UINT iSize)
 {
-	I(D3DRenderer)->BeginList();
-	ID3D12Device* device = I(D3DRenderer)->GetDevice();
-	ID3D12GraphicsCommandList* cmdList = I(D3DRenderer)->GetCommandList();
+	I(VGHandler)->BeginList();
+	ID3D12Device* device = I(VGHandler)->GetDevice();
+	ID3D12GraphicsCommandList* cmdList = I(VGHandler)->GetCommandList();
 
 	const UINT iBufferSize = iStride * iSize;
 	const UINT vBufferSize = vStride * vSize;
@@ -80,7 +80,7 @@ void D3DMesh::Create(const void* vData, UINT vStride, UINT vSize, const void* iD
 	m_startIndexLocation = 0;
 	m_baseVertexLocation = 0;
 
-	I(D3DRenderer)->EndList();
+	I(VGHandler)->EndList();
 
 	DisposeUploaders();
 }

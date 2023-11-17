@@ -1,7 +1,7 @@
 ﻿#include "VECS_MeshRendererSystem.h"
 
 #include "Engine/Engine.h"
-#include "D3D/Base/D3DRenderer.h"
+#include "D3D/Base/VGHandler.h"
 
 void VECS_MeshRendererSystem::Awake()
 {
@@ -22,7 +22,7 @@ void VECS_MeshRendererSystem::Update(const float delta)
 
 void VECS_MeshRendererSystem::Render()
 {
-    ID3D12GraphicsCommandList* commandList = I(D3DRenderer)->GetCommandList();
+    ID3D12GraphicsCommandList* commandList = I(VGHandler)->GetCommandList();
     
     for (const auto& entity : RegisteredEntities)
     {

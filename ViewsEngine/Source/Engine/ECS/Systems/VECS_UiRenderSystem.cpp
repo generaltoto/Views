@@ -1,6 +1,6 @@
 ﻿#include "VECS_UiRenderSystem.h"
 
-#include "D3D/Base/D3DRenderer.h"
+#include "D3D/Base/VGHandler.h"
 
 void VECS_UiRenderSystem::Awake()
 {
@@ -22,7 +22,7 @@ void VECS_UiRenderSystem::Update(const float delta)
 
 void VECS_UiRenderSystem::Render()
 {
-    ID3D12GraphicsCommandList* commandList = I(D3DRenderer)->GetCommandList();
+    ID3D12GraphicsCommandList* commandList = I(VGHandler)->GetCommandList();
     for (const auto& entity : RegisteredEntities)
     {
         UIRenderer* uiRenderer = I(Coordinator)->GetComponent<UIRenderer>(entity);

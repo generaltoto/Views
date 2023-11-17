@@ -4,7 +4,7 @@
 #include "D3D/Shaders/Textures/Texture.h"
 #include "D3D/Renderers/MeshRenderer.h"
 #include "D3D/Renderers/ParticleRenderer.h"
-#include "D3D/Base/D3DRenderer.h"
+#include "D3D/Base/VGHandler.h"
 
 #include "ShaderBase.h"
 
@@ -352,7 +352,7 @@ void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMes
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
 
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
-	UINT heapSize = I(D3DRenderer)->GetCbvHeap(&cbvSrvHeap);
+	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
 	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_cbvDescriptorSize);
 
@@ -470,7 +470,7 @@ void ShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const Pa
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
 
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
-	UINT heapSize = I(D3DRenderer)->GetCbvHeap(&cbvSrvHeap);
+	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
 	cbvHandle.Offset(drawnMeshR->ObjectCBIndex, m_cbvDescriptorSize);
 
@@ -582,7 +582,7 @@ void ShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnM
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
 
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
-	UINT heapSize = I(D3DRenderer)->GetCbvHeap(&cbvSrvHeap);
+	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
 	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_cbvDescriptorSize);
 
