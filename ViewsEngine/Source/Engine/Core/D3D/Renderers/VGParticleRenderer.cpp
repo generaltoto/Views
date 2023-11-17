@@ -1,11 +1,11 @@
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/ShaderBase.h"
 
-#include "ParticleRenderer.h"
+#include "VGParticleRenderer.h"
 
 using namespace DirectX;
 
-ParticleRenderer::ParticleRenderer() : IRenderer()
+VGParticleRenderer::VGParticleRenderer() : VGIRenderer()
 {
 	srand(time(nullptr));
 	m_color2 = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
@@ -15,7 +15,7 @@ ParticleRenderer::ParticleRenderer() : IRenderer()
 	m_particleInstanceData.resize(0);
 }
 
-ParticleRenderer::~ParticleRenderer()
+VGParticleRenderer::~VGParticleRenderer()
 {
 	for (auto& p : m_particles)
 		DELPTR(p)
@@ -25,24 +25,24 @@ ParticleRenderer::~ParticleRenderer()
 }
 
 
-void ParticleRenderer::Init(const MeshType meshType, const MaterialType matType)
+void VGParticleRenderer::Init(const MeshType meshType, const MaterialType matType)
 {
-	IRenderer::Init(meshType, matType);
+	VGIRenderer::Init(meshType, matType);
 }
 
-void ParticleRenderer::Play() const
+void VGParticleRenderer::Play() const
 {
 	for (UINT i = 0; i < m_particleCount; i++)
 		m_particles[i]->Awake();
 }
 
-void ParticleRenderer::Pause() const
+void VGParticleRenderer::Pause() const
 {
 	for (UINT i = 0; i < m_particleCount; i++)
 		m_particles[i]->Sleep();
 }
 
-void ParticleRenderer::Stop()
+void VGParticleRenderer::Stop()
 {
 	for (UINT i = 0; i < MAX_PARTICLE_COUNT; i++)
 		DELPTR(m_particles[i])
@@ -50,19 +50,19 @@ void ParticleRenderer::Stop()
 	m_particles.clear();
 }
 
-void ParticleRenderer::AddParticles(UINT count)
+void VGParticleRenderer::AddParticles(UINT count)
 {
 	m_particleCount = (m_particleCount + count > MAX_PARTICLE_COUNT) ? MAX_PARTICLE_COUNT : m_particleCount + count;
 	Prepare();
 }
 
-UINT ParticleRenderer::GetParticleCount() const
+UINT VGParticleRenderer::GetParticleCount() const
 {
 	return m_particleCount;
 }
 
 
-void ParticleRenderer::Render(ID3D12GraphicsCommandList* cmdList)
+void VGParticleRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
 	if (!IsEnabled() || !Mat || !Mesh) return;
 
@@ -74,7 +74,7 @@ void ParticleRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 	shader->EndDraw(cmdList);
 }
 
-void ParticleRenderer::Update(float dt)
+void VGParticleRenderer::Update(float dt)
 {
 	if (!IsEnabled() || !Mat || !Mesh) return;
 
@@ -82,14 +82,14 @@ void ParticleRenderer::Update(float dt)
 }
 
 
-void ParticleRenderer::Prepare()
+void VGParticleRenderer::Prepare()
 {
 	CreateMissingParticles();
 
 	UpdateShaderBuffer();
 }
 
-void ParticleRenderer::CreateMissingParticles()
+void VGParticleRenderer::CreateMissingParticles()
 {
 	m_particles.resize(m_particleCount, nullptr);
 	m_particleInstanceData.resize(m_particleCount);
@@ -102,7 +102,7 @@ void ParticleRenderer::CreateMissingParticles()
 	}
 }
 
-void ParticleRenderer::CreateParticle()
+void VGParticleRenderer::CreateParticle()
 {
 	auto* p = new VGParticle();
 
@@ -128,7 +128,7 @@ void ParticleRenderer::CreateParticle()
 }
 
 
-void ParticleRenderer::UpdateParticles(const float dt)
+void VGParticleRenderer::UpdateParticles(const float dt)
 {
 	for (UINT i = 0; i < m_particleCount; i++)
 	{
@@ -173,7 +173,7 @@ void ParticleRenderer::UpdateParticles(const float dt)
 	UpdateShaderBuffer();
 }
 
-void ParticleRenderer::UpdateShaderBuffer() const
+void VGParticleRenderer::UpdateShaderBuffer() const
 {
 	// Make sure the shader is a ParticleShader, otherwise we can't update the InstanceData buffer
 	if (const auto shader = dynamic_cast<ShaderParticle*>(Mat->GetShader()))

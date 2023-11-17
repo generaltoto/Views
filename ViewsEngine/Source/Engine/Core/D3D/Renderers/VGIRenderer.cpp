@@ -9,24 +9,24 @@
 #include "D3D/Shaders/ShaderBase.h"
 #include "D3D/Shaders/Textures/Texture.h"
 
-#include "IRenderer.h"
+#include "VGIRenderer.h"
 
-IRenderer::IRenderer()
+VGIRenderer::VGIRenderer()
 {
 	Mesh = nullptr;
 	Mat = nullptr;
 }
 
-IRenderer::~IRenderer()
+VGIRenderer::~VGIRenderer()
 {
 	OnDelete();
 
 	Mesh = nullptr;
 	Mat = nullptr;
-	m_textures.clear();
+	m_Textures.clear();
 }
 
-void IRenderer::Init(const MeshType meshType, const MaterialType matType)
+void VGIRenderer::Init(const MeshType meshType, const MaterialType matType)
 {
 	Mesh = VGGeometryHandler::GetMesh(meshType);
 
@@ -34,21 +34,21 @@ void IRenderer::Init(const MeshType meshType, const MaterialType matType)
 	BindMaterial(mat);
 }
 
-void IRenderer::OnDelete() const
+void VGIRenderer::OnDelete() const
 {
 	if (Mat)
-		Mat->GetShader()->UnBind(ObjectCBIndex);
+		Mat->GetShader()->UnBind(ObjectCbIndex);
 }
 
-void IRenderer::RegisterTexture(Texture* tex)
+void VGIRenderer::RegisterTexture(Texture* tex)
 {
 	assert(tex != nullptr);
 
-	m_textures.push_back(tex);
+	m_Textures.push_back(tex);
 }
 
-void IRenderer::BindMaterial(Material* mat)
+void VGIRenderer::BindMaterial(Material* mat)
 {
 	Mat = mat;
-	ObjectCBIndex = Mat->GetShader()->Bind()->GetCreatedIndex();
+	ObjectCbIndex = Mat->GetShader()->Bind()->GetCreatedIndex();
 }

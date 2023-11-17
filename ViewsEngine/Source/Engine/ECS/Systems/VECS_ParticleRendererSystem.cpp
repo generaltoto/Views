@@ -14,7 +14,7 @@ void VECS_ParticleRendererSystem::Update(const float delta)
 {
     for (const auto& entity : RegisteredEntities)
     {
-        ParticleRenderer* particleRenderer = I(Coordinator)->GetComponent<ParticleRenderer>(entity);
+        VGParticleRenderer* particleRenderer = I(Coordinator)->GetComponent<VGParticleRenderer>(entity);
         particleRenderer->Update(delta);
     }
 }
@@ -25,7 +25,7 @@ void VECS_ParticleRendererSystem::Render()
     
     for (const auto& entity : RegisteredEntities)
     {
-        ParticleRenderer* particleRenderer = I(Coordinator)->GetComponent<ParticleRenderer>(entity);
+        VGParticleRenderer* particleRenderer = I(Coordinator)->GetComponent<VGParticleRenderer>(entity);
         particleRenderer->Render(commandList);
     }
 }

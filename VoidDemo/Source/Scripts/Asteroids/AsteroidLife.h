@@ -12,7 +12,7 @@ public:
 
 private:
 
-	ParticleRenderer* m_ParticleRenderer;
+	VGParticleRenderer* m_ParticleRenderer;
 
 };
 

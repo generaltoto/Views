@@ -6,7 +6,7 @@
 
 Digit::Digit()
 {
-	auto meshRenderer = AddComponent<UIRenderer>();
+	auto meshRenderer = AddComponent<VGUiRenderer>();
 	meshRenderer->Init(MeshType::SQUARE_UI_OFFSET_Y, MaterialType::TEXTURE_UI);
 	meshRenderer->RegisterTexture(Resource::Load<Texture>("Resources/Textures/number.dds"));
 

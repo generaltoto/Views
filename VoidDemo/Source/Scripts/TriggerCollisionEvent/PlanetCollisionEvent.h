@@ -15,7 +15,7 @@ class PlanetCollisionEvent : public TriggerCollisionEvent
 
 private:
 
-	ParticleRenderer * m_ParticleRenderer = nullptr;
+	VGParticleRenderer * m_ParticleRenderer = nullptr;
 	PlanetLife* m_PlanetLife = nullptr;
 
 };

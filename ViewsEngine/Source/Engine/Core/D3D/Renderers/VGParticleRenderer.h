@@ -1,6 +1,7 @@
 #pragma once
 
 #include "D3D/Geometry/VGParticle.h"
+#include "VGIRenderer.h"
 
 #define MAX_PARTICLE_COUNT 5000
 
@@ -8,12 +9,12 @@
 Particle Renderer is a component that renders particles.
 For now, it is used as a general renderer for all particles.
 */
-class ParticleRenderer final : public Component, public IRenderer
+class VGParticleRenderer final : public Component, public VGIRenderer
 {
 	friend class VECS_ParticleRendererSystem;
 public:
-	ParticleRenderer();
-	~ParticleRenderer() override;
+	VGParticleRenderer();
+	~VGParticleRenderer() override;
 
 	void Play() const;
 	void Pause() const;

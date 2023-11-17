@@ -4,8 +4,8 @@
 #include "UploadBuffer.h"
 
 class Texture;
-class ParticleRenderer;
-class MeshRenderer;
+class VGParticleRenderer;
+class VGMeshRenderer;
 struct InstanceData;
 
 enum VertexType { VERTEX };
@@ -87,7 +87,7 @@ public:
 	virtual void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) = 0;
 
 	virtual void BeginDraw(ID3D12GraphicsCommandList* cmdList) = 0;
-	virtual void Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR) = 0;
+	virtual void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) = 0;
 	virtual void EndDraw(ID3D12GraphicsCommandList* cmdList) = 0;
 
 	virtual UINT GetCreatedIndex() { return static_cast<UINT>(m_objectCBs.size()) - 1; }
@@ -123,7 +123,7 @@ public:
 	void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) override;
 
 	void BeginDraw(ID3D12GraphicsCommandList* cmdList) override;
-	void Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR) override;
+	void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
 	void EndDraw(ID3D12GraphicsCommandList* cmdList) override;
 };
 
@@ -137,7 +137,7 @@ public:
 	void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) override;
 
 	void BeginDraw(ID3D12GraphicsCommandList* cmdList) override;
-	void Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR) override;
+	void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
 	void EndDraw(ID3D12GraphicsCommandList* cmdList) override;
 };
 
@@ -151,12 +151,12 @@ public:
 	void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) override;
 
 	void BeginDraw(ID3D12GraphicsCommandList* cmdList) override;
-	void Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR) override;
+	void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
 	void EndDraw(ID3D12GraphicsCommandList* cmdList) override;
 
 	void UpdateParticleInstanceDataBuffer(int startIndex, const void* data) const;
 private:
-	void DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const ParticleRenderer* drawnMeshR);
+	void DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const VGParticleRenderer* drawnMeshR);
 
 	/*
 	To render particles with a minimum amount of draw calls, we need to use instancing.
@@ -193,7 +193,7 @@ public:
 
 	UINT GetCreatedIndex() override { return static_cast<UINT>(m_offSetCb.size()) - 1; }
 
-	void Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR) override;
+	void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
 	void UpdateAsOffset(const DirectX::XMFLOAT4X4* itemWorldMatrix, UINT cbIndex, float offSetY);
 
 protected:

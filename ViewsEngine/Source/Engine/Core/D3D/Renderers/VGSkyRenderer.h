@@ -4,13 +4,13 @@
 This class is responsible for rendering the skybox.
 It is not working yet.
 */
-class SkyRenderer final : public Component, public IRenderer
+class VGSkyRenderer final : public Component, public VGIRenderer
 {
 	friend class VECS_SkyRendererSystem;
 
 public:
-	SkyRenderer();
-	~SkyRenderer() override;
+	VGSkyRenderer();
+	~VGSkyRenderer() override;
 
 private:
 	void Render(ID3D12GraphicsCommandList* cmdList) override;

@@ -15,7 +15,7 @@ void VECS_UiRenderSystem::Update(const float delta)
     for (const auto& entity : RegisteredEntities)
     {
         // Get the UI renderer bound to the entity
-        UIRenderer* uiRenderer = I(Coordinator)->GetComponent<UIRenderer>(entity);
+        VGUiRenderer* uiRenderer = I(Coordinator)->GetComponent<VGUiRenderer>(entity);
         uiRenderer->Update(delta);
     }
 }
@@ -25,7 +25,7 @@ void VECS_UiRenderSystem::Render()
     ID3D12GraphicsCommandList* commandList = I(VGHandler)->GetCommandList();
     for (const auto& entity : RegisteredEntities)
     {
-        UIRenderer* uiRenderer = I(Coordinator)->GetComponent<UIRenderer>(entity);
+        VGUiRenderer* uiRenderer = I(Coordinator)->GetComponent<VGUiRenderer>(entity);
         uiRenderer->Render(commandList);
     }
 }

@@ -35,5 +35,5 @@ void AsteroidCollisionEvent::OnTriggerEnter(Collider* other)
 
 void AsteroidCollisionEvent::GetParticleRenderer()
 {
-	m_ParticleRenderer = GameObject::Find("Particles")->GetComponent<ParticleRenderer>();
+	m_ParticleRenderer = GameObject::Find("Particles")->GetComponent<VGParticleRenderer>();
 }

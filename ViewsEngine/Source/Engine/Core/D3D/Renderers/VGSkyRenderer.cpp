@@ -1,17 +1,17 @@
 #include "Engine/ECS/Components/Component.h"
-#include "IRenderer.h"
+#include "VGIRenderer.h"
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/ShaderBase.h"
 
-#include "SkyRenderer.h"
+#include "VGSkyRenderer.h"
 
-SkyRenderer::SkyRenderer() : IRenderer()
+VGSkyRenderer::VGSkyRenderer() : VGIRenderer()
 {
 }
 
-SkyRenderer::~SkyRenderer() = default;
+VGSkyRenderer::~VGSkyRenderer() = default;
 
-void SkyRenderer::Render(ID3D12GraphicsCommandList* cmdList)
+void VGSkyRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
 	if (!Mat || !Mesh) return;
 	const auto shader = Mat->GetShader();
@@ -23,14 +23,14 @@ void SkyRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 	shader->EndDraw(cmdList);
 }
 
-void SkyRenderer::Update(float dt)
+void VGSkyRenderer::Update(float dt)
 {
 	if (!IsEnabled() || !Mat || !Mesh) return;
 
 	if (transform->IsDirty())
 		transform->UpdateParentedWorldMatrix();
 
-	Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCBIndex);
+	Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
 }
 
 

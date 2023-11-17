@@ -10,22 +10,22 @@ struct ID3D12GraphicsCommandList;
 Base class for all Render components
 It manages to communication between Shader classes, Mesh classes and D3DRenderer class
 */
-class IRenderer
+class VGIRenderer
 {
 public:
-	IRenderer();
-	virtual ~IRenderer();
+	VGIRenderer();
+	virtual ~VGIRenderer();
 
 public:
 	virtual void Init(const MeshType meshType, const MaterialType matType);
 
-	[[nodiscard]] Texture* GetTexture(const UINT index) const { return m_textures[index]; }
-	[[nodiscard]] std::vector<Texture*> GetTextures() const { return m_textures; }
+	[[nodiscard]] Texture* GetTexture(const UINT index) const { return m_Textures[index]; }
+	[[nodiscard]] std::vector<Texture*> GetTextures() const { return m_Textures; }
 	void RegisterTexture(Texture* tex);
 
 public:
 	VGMesh* Mesh;
-	UINT ObjectCBIndex = -1;
+	UINT ObjectCbIndex = -1;
 
 	Material* Mat;
 
@@ -36,7 +36,7 @@ protected:
 	virtual void Render(ID3D12GraphicsCommandList* cmdList) = 0;
 	virtual void Update(float dt) = 0;
 protected:
-	std::vector<Texture*> m_textures{};
+	std::vector<Texture*> m_Textures{};
 
 private:
 

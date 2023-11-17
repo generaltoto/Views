@@ -23,7 +23,7 @@ void DigitBehavior::Start()
 {
 	float uvOffsetY = CalculateUVOffsetFromDigit();
 
-	m_uiRenderer = gameObject->GetComponent<UIRenderer>();
+	m_uiRenderer = gameObject->GetComponent<VGUiRenderer>();
 	m_uiRenderer->SetOffsetY(uvOffsetY);
 }
 

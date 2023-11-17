@@ -2,8 +2,8 @@
 
 #include "D3D/Geometry/VGMesh.h"
 #include "D3D/Shaders/Textures/Texture.h"
-#include "D3D/Renderers/MeshRenderer.h"
-#include "D3D/Renderers/ParticleRenderer.h"
+#include "D3D/Renderers/VGMeshRenderer.h"
+#include "D3D/Renderers/VGParticleRenderer.h"
 #include "D3D/Base/VGHandler.h"
 
 #include "ShaderBase.h"
@@ -228,17 +228,17 @@ void ShaderSimple::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void ShaderSimple::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR)
+void ShaderSimple::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
-	if (drawnMeshR->ObjectCBIndex >= m_objectCBs.size())
+	if (drawnMeshR->ObjectCbIndex >= m_objectCBs.size())
 		AddObjectCB();
 
-	assert(drawnMeshR->ObjectCBIndex <= m_objectCBs.size());
+	assert(drawnMeshR->ObjectCbIndex <= m_objectCBs.size());
 
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
 
-	cmdList->SetGraphicsRootConstantBufferView(0, m_objectCBs[drawnMeshR->ObjectCBIndex]->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(0, m_objectCBs[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
 
 	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), 1, 0, 0, 0);
 }
@@ -335,7 +335,7 @@ void ShaderTexture::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR)
+void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
 	// UINT are not supposed to be negative, it will only be negative if it is not initialized (debug only).
 	// ReSharper disable once CppUnsignedZeroComparison
@@ -343,10 +343,10 @@ void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMes
 
 	// If the object has no constant buffer index, we add one.
 	// This is not supposed to happen, but it is a security.
-	if (drawnMeshR->ObjectCBIndex >= m_objectCBs.size())
+	if (drawnMeshR->ObjectCbIndex >= m_objectCBs.size())
 		AddObjectCB();
 
-	assert(drawnMeshR->ObjectCBIndex <= m_objectCBs.size());
+	assert(drawnMeshR->ObjectCbIndex <= m_objectCBs.size());
 
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
@@ -357,7 +357,7 @@ void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMes
 	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_cbvDescriptorSize);
 
 	cmdList->SetGraphicsRootDescriptorTable(0, cbvHandle);
-	cmdList->SetGraphicsRootConstantBufferView(1, m_objectCBs[drawnMeshR->ObjectCBIndex]->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(1, m_objectCBs[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
 	
 	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), 1, 0, 0, 0);
 }
@@ -452,19 +452,19 @@ void ShaderParticle::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void ShaderParticle::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR)
+void ShaderParticle::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
-	auto* pr = dynamic_cast<ParticleRenderer*>(drawnMeshR);
+	auto* pr = dynamic_cast<VGParticleRenderer*>(drawnMeshR);
 	assert(pr);
 	DrawAsParticle(cmdList, pr);
 }
 
-void ShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const ParticleRenderer* drawnMeshR)
+void ShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const VGParticleRenderer* drawnMeshR)
 {
-	if (drawnMeshR->ObjectCBIndex >= m_objectCBs.size())
+	if (drawnMeshR->ObjectCbIndex >= m_objectCBs.size())
 		AddObjectCB();
 
-	assert(drawnMeshR->ObjectCBIndex <= m_objectCBs.size());
+	assert(drawnMeshR->ObjectCbIndex <= m_objectCBs.size());
 
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
@@ -472,7 +472,7 @@ void ShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const Pa
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
 	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
-	cbvHandle.Offset(drawnMeshR->ObjectCBIndex, m_cbvDescriptorSize);
+	cbvHandle.Offset(drawnMeshR->ObjectCbIndex, m_cbvDescriptorSize);
 
 	cmdList->SetGraphicsRootShaderResourceView(0, m_particleInstanceDataBuffer->GetResource()->GetGPUVirtualAddress());
 
@@ -567,16 +567,16 @@ ShaderTextureUI::~ShaderTextureUI()
 		DELPTR(cb)
 }
 
-void ShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnMeshR)
+void ShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
 	// UINT are not supposed to be negative, it will only be negative if it is not initialized (debug only).
 	// ReSharper disable once CppUnsignedZeroComparison
 	assert(drawnMeshR->GetTexture(0)->GetHeapIndex() >= 0);
 
-	if (drawnMeshR->ObjectCBIndex >= m_offSetCb.size())
+	if (drawnMeshR->ObjectCbIndex >= m_offSetCb.size())
 		AddObjectCB();
 
-	assert(drawnMeshR->ObjectCBIndex <= m_offSetCb.size());
+	assert(drawnMeshR->ObjectCbIndex <= m_offSetCb.size());
 
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
@@ -587,7 +587,7 @@ void ShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, IRenderer* drawnM
 	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_cbvDescriptorSize);
 
 	cmdList->SetGraphicsRootDescriptorTable(0, cbvHandle);
-	cmdList->SetGraphicsRootConstantBufferView(1, m_offSetCb[drawnMeshR->ObjectCBIndex]->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(1, m_offSetCb[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
 
 
 	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), 1, 0, 0, 0);

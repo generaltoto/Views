@@ -13,7 +13,7 @@ public:
 	float CalculateUVOffsetFromDigit();
 
 private:
-	UIRenderer* m_uiRenderer;
+	VGUiRenderer* m_uiRenderer;
 
 	bool m_isDigitDirty;
 

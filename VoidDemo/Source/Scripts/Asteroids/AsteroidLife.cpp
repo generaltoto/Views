@@ -8,7 +8,7 @@ void AsteroidLife::Awake()
 
 void AsteroidLife::Start()
 {
-	m_ParticleRenderer = GameObject::Find("Particles")->GetComponent<ParticleRenderer>();
+	m_ParticleRenderer = GameObject::Find("Particles")->GetComponent<VGParticleRenderer>();
 }
 
 void AsteroidLife::OnDeath()

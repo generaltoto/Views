@@ -2,7 +2,7 @@
 
 Wing::Wing()
 {
-	auto mr = AddComponent<MeshRenderer>();
+	auto mr = AddComponent<VGMeshRenderer>();
 	mr->Init(CUBE, SIMPLE);
 	mr->SetClippable(false);
 

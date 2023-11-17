@@ -15,7 +15,7 @@ void VECS_SkyRendererSystem::Update(float delta)
     // TODO : Update only the first sky renderer
     for (auto& entity : RegisteredEntities)
     {
-        SkyRenderer* skyRenderer = I(Coordinator)->GetComponent<SkyRenderer>(entity);
+        VGSkyRenderer* skyRenderer = I(Coordinator)->GetComponent<VGSkyRenderer>(entity);
         skyRenderer->Update(delta);
     }
 }
@@ -26,7 +26,7 @@ void VECS_SkyRendererSystem::Render()
     
     for (auto& entity : RegisteredEntities)
     {
-        SkyRenderer* skyRenderer = I(Coordinator)->GetComponent<SkyRenderer>(entity);
+        VGSkyRenderer* skyRenderer = I(Coordinator)->GetComponent<VGSkyRenderer>(entity);
         skyRenderer->Render(commandList);
     }
 }

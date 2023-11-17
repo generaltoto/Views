@@ -15,7 +15,7 @@ void VECS_MeshRendererSystem::Update(const float delta)
 {
     for (const auto& entity : RegisteredEntities)
     {
-        MeshRenderer* meshRenderer = I(Coordinator)->GetComponent<MeshRenderer>(entity);
+        VGMeshRenderer* meshRenderer = I(Coordinator)->GetComponent<VGMeshRenderer>(entity);
         meshRenderer->Update(delta);
     }
 }
@@ -26,7 +26,7 @@ void VECS_MeshRendererSystem::Render()
     
     for (const auto& entity : RegisteredEntities)
     {
-        MeshRenderer* meshRenderer = I(Coordinator)->GetComponent<MeshRenderer>(entity);
+        VGMeshRenderer* meshRenderer = I(Coordinator)->GetComponent<VGMeshRenderer>(entity);
 
         BoundingFrustum frustum = Engine::GetMainCamera()->GetFrustum();
 

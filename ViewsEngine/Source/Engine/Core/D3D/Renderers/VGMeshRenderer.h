@@ -1,17 +1,17 @@
 #pragma once
 
-#include "IRenderer.h"
+#include "VGIRenderer.h"
 
 /*
 Classic mesh renderer component, used to render a mesh with a material
 */
-class MeshRenderer final : public Component, public IRenderer
+class VGMeshRenderer final : public Component, public VGIRenderer
 {
 	friend class VECS_MeshRendererSystem;
 
 public:
-	MeshRenderer();
-	~MeshRenderer() override;
+	VGMeshRenderer();
+	~VGMeshRenderer() override;
 
 private:
 	void Render(ID3D12GraphicsCommandList* cmdList) override;

@@ -28,10 +28,10 @@
 #include "Engine/Managers/CameraManager.h"
 
 // D3D includes
-#include "D3D/Renderers/MeshRenderer.h"
-#include "D3D/Renderers/ParticleRenderer.h"
-#include "D3D/Renderers/SkyRenderer.h"
-#include "D3D/Renderers/UIRenderer.h"
+#include "D3D/Renderers/VGMeshRenderer.h"
+#include "D3D/Renderers/VGParticleRenderer.h"
+#include "D3D/Renderers/VGSkyRenderer.h"
+#include "D3D/Renderers/VGUiRenderer.h"
 #include "D3D/Shaders/Textures/Texture2D.h"
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/Textures/Cubemap.h"

@@ -11,7 +11,7 @@ Planet::Planet()
 	rb->SetMass(100.f);
 	rb->SetBodyType(BodyType::Static);
 
-	auto mesh = AddComponent<MeshRenderer>();
+	auto mesh = AddComponent<VGMeshRenderer>();
 	mesh->Init(SPHERE, TEXTURE);
 	mesh->RegisterTexture(Resource::Load<Texture>("Resources/Textures/mars.dds"));
 

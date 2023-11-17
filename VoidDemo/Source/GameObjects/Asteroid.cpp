@@ -13,7 +13,7 @@ Asteroid::Asteroid()
 	rb->SetMass(100.f);
 	rb->SetBodyType(BodyType::Dynamic);
 
-	auto mesh = AddComponent<MeshRenderer>();
+	auto mesh = AddComponent<VGMeshRenderer>();
 	mesh->Init(SPHERE, TEXTURE);
 	mesh->RegisterTexture(Resource::Load<Texture>("Resources/Textures/asteroid.dds"));
 

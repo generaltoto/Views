@@ -1,18 +1,18 @@
 #pragma once 
 #include "Engine/ECS/Components/Component.h"
-#include "IRenderer.h"
+#include "VGIRenderer.h"
 
 /*
 UIRenderer is a component that is used to render UI elements such as score, health, etc.
 Be careful to use shaders that supports UI rendering, such as ShaderTextureOffset.
 */
-class UIRenderer final : public Component, public IRenderer
+class VGUiRenderer final : public Component, public VGIRenderer
 {
 	friend class VECS_UiRenderSystem;
 
 public:
-	UIRenderer();
-	~UIRenderer() override;
+	VGUiRenderer();
+	~VGUiRenderer() override;
 
 	[[nodiscard]] float GetUVOffsetY() const { return m_uvOffsetY; }
 	void SetOffsetY(float offsetY);

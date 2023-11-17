@@ -18,7 +18,7 @@ private:
 
 	void GetParticleRenderer();
 	AsteroidLife* m_AsteroidLife;
-	ParticleRenderer* m_ParticleRenderer;
+	VGParticleRenderer* m_ParticleRenderer;
 
 };
 

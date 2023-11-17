@@ -2,39 +2,39 @@
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/ShaderBase.h"
 
-#include "UIRenderer.h"
+#include "VGUiRenderer.h"
 
 using namespace DirectX;
 
-UIRenderer::UIRenderer() : IRenderer(), m_uvOffsetY(0)
+VGUiRenderer::VGUiRenderer() : VGIRenderer(), m_uvOffsetY(0)
 {
 }
 
-UIRenderer::~UIRenderer() = default;
+VGUiRenderer::~VGUiRenderer() = default;
 
-void UIRenderer::SetOffsetY(const float offsetY)
+void VGUiRenderer::SetOffsetY(const float offsetY)
 {
 	m_uvOffsetY = offsetY;
 	UpdateShader();
 }
 
-void UIRenderer::AddOffsetY(const float offsetY)
+void VGUiRenderer::AddOffsetY(const float offsetY)
 {
 	SetOffsetY(m_uvOffsetY + offsetY);
 }
 
-void UIRenderer::UpdateShader() const
+void VGUiRenderer::UpdateShader() const
 {
 	if (!IsEnabled() || !Mat || !Mesh) return;
 
 	if (const auto offsetShader = dynamic_cast<ShaderTextureUI*>(Mat->GetShader()))
 	{
 		transform->UpdateParentedWorldMatrix();
-		offsetShader->UpdateAsOffset(transform->GetTransposedParentedWorldMatrix(), ObjectCBIndex, m_uvOffsetY);
+		offsetShader->UpdateAsOffset(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex, m_uvOffsetY);
 	}
 }
 
-void UIRenderer::Render(ID3D12GraphicsCommandList* cmdList)
+void VGUiRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
 	if (!IsEnabled() || !Mat || !Mesh) return;
 	const auto shader = Mat->GetShader();
@@ -47,11 +47,11 @@ void UIRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 
 }
 
-void UIRenderer::Update(float dt)
+void VGUiRenderer::Update(float dt)
 {
 	if (!IsEnabled() || !Mat || !Mesh) return;
 
 	transform->UpdateParentedWorldMatrix();
 
-	Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCBIndex);
+	Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
 }

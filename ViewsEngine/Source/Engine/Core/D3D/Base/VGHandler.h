@@ -6,8 +6,8 @@ static constexpr int SWAP_CHAIN_BUFFER_COUNT = 2;
 
 #pragma endregion
 
-class MeshRenderer;
-class ParticleRenderer;
+class VGMeshRenderer;
+class VGParticleRenderer;
 class Texture;
 
 /*
