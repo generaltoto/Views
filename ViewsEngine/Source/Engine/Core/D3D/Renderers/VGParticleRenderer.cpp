@@ -1,5 +1,5 @@
-#include "D3D/Shaders/Material.h"
-#include "D3D/Shaders/ShaderBase.h"
+#include "D3D/Shaders/VGMaterial.h"
+#include "D3D/Shaders/VGShaderBase.h"
 
 #include "VGParticleRenderer.h"
 
@@ -176,7 +176,7 @@ void VGParticleRenderer::UpdateParticles(const float dt)
 void VGParticleRenderer::UpdateShaderBuffer() const
 {
 	// Make sure the shader is a ParticleShader, otherwise we can't update the InstanceData buffer
-	if (const auto shader = dynamic_cast<ShaderParticle*>(Mat->GetShader()))
+	if (const auto shader = dynamic_cast<VGShaderParticle*>(Mat->GetShader()))
 	{
 		// Update the InstanceData buffer for each particle
 		for (int i = 0; i < static_cast<int>(m_particleInstanceData.size()); i++)

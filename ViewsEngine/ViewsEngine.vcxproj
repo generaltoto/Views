@@ -182,9 +182,9 @@
     <ClCompile Include="Source\Engine\Core\D3D\Renderers\VGParticleRenderer.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Renderers\VGSkyRenderer.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Renderers\VGUiRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Material.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\ShaderBase.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\Cubemap.cpp">
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\VGMaterial.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\VGShaderBase.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\VGCubemap.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
@@ -261,7 +261,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\Texture.cpp">
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
@@ -338,8 +338,8 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\Texture2D.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\UpdloadBuffer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture2D.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\VGUpdloadBuffer.cpp" />
     <ClCompile Include="Source\Engine\Core\DebugUtils.cpp" />
     <ClCompile Include="Source\Engine\Core\PerGameSettings.cpp" />
     <ClCompile Include="Source\Engine\ECS\Base\ComponentManager.cpp" />
@@ -472,12 +472,12 @@
     <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGParticleRenderer.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGSkyRenderer.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGUiRenderer.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Material.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\ShaderBase.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\Cubemap.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\Texture.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\Texture2D.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\UploadBuffer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\VGMaterial.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\VGShaderBase.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\VGCubemap.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture2D.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\VGUploadBuffer.h" />
     <ClInclude Include="Source\Engine\Core\DebugUtils.h" />
     <ClInclude Include="Source\Engine\Core\PerGameSettings.h" />
     <ClInclude Include="Source\Engine\ECS\Base\ComponentArray.h" />

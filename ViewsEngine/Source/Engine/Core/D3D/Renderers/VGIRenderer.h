@@ -1,8 +1,8 @@
 #pragma once
 
-class Material;
+class VGMaterial;
 class VGMesh;
-class Texture;
+class VGTexture;
 
 struct ID3D12GraphicsCommandList;
 
@@ -19,24 +19,24 @@ public:
 public:
 	virtual void Init(const MeshType meshType, const MaterialType matType);
 
-	[[nodiscard]] Texture* GetTexture(const UINT index) const { return m_Textures[index]; }
-	[[nodiscard]] std::vector<Texture*> GetTextures() const { return m_Textures; }
-	void RegisterTexture(Texture* tex);
+	[[nodiscard]] VGTexture* GetTexture(const UINT index) const { return m_Textures[index]; }
+	[[nodiscard]] std::vector<VGTexture*> GetTextures() const { return m_Textures; }
+	void RegisterTexture(VGTexture* tex);
 
 public:
 	VGMesh* Mesh;
 	UINT ObjectCbIndex = -1;
 
-	Material* Mat;
+	VGMaterial* Mat;
 
 protected:
 	void OnDelete() const;
-	void BindMaterial(Material* mat);
+	void BindMaterial(VGMaterial* mat);
 
 	virtual void Render(ID3D12GraphicsCommandList* cmdList) = 0;
 	virtual void Update(float dt) = 0;
 protected:
-	std::vector<Texture*> m_Textures{};
+	std::vector<VGTexture*> m_Textures{};
 
 private:
 

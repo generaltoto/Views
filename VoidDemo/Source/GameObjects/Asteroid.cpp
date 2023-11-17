@@ -15,7 +15,7 @@ Asteroid::Asteroid()
 
 	auto mesh = AddComponent<VGMeshRenderer>();
 	mesh->Init(SPHERE, TEXTURE);
-	mesh->RegisterTexture(Resource::Load<Texture>("Resources/Textures/asteroid.dds"));
+	mesh->RegisterTexture(Resource::Load<VGTexture>("Resources/Textures/asteroid.dds"));
 
 
 	transform->SetScale(20.f);

@@ -1,6 +1,6 @@
 #include "Engine/ECS/Components/Component.h"
-#include "D3D/Shaders/Material.h"
-#include "D3D/Shaders/ShaderBase.h"
+#include "D3D/Shaders/VGMaterial.h"
+#include "D3D/Shaders/VGShaderBase.h"
 
 #include "VGUiRenderer.h"
 
@@ -27,7 +27,7 @@ void VGUiRenderer::UpdateShader() const
 {
 	if (!IsEnabled() || !Mat || !Mesh) return;
 
-	if (const auto offsetShader = dynamic_cast<ShaderTextureUI*>(Mat->GetShader()))
+	if (const auto offsetShader = dynamic_cast<VGShaderTextureUI*>(Mat->GetShader()))
 	{
 		transform->UpdateParentedWorldMatrix();
 		offsetShader->UpdateAsOffset(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex, m_uvOffsetY);
@@ -53,5 +53,5 @@ void VGUiRenderer::Update(float dt)
 
 	transform->UpdateParentedWorldMatrix();
 
-	Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
+	Mat->GetShader()->UpdateObjectCb(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
 }

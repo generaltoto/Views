@@ -1,6 +1,6 @@
 #include "Engine/IResourceObject.h"
 
-#include "Texture.h"
+#include "VGTexture.h"
 
 #include "D3D/Base/VGHandler.h"
 
@@ -10,21 +10,21 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-Texture::Texture(const std::string& filename) : IResourceObject(filename)
+VGTexture::VGTexture(const std::string& filename) : IResourceObject(filename)
 {
 	m_ResType = D3D12_SRV_DIMENSION_TEXTURE2D;
 }
 
-Texture::~Texture() = default;
+VGTexture::~VGTexture() = default;
 
-void Texture::Load(const std::string& filepath)
+void VGTexture::Load(const std::string& filepath)
 {
 	m_Filepath = filepath;
 
 	LoadTexture();
 }
 
-void Texture::LoadTexture()
+void VGTexture::LoadTexture()
 {
 	const auto app = I(VGHandler);
 	ID3D12Device* device = app->GetDevice();

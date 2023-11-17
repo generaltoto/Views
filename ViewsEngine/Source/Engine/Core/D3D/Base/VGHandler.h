@@ -8,7 +8,7 @@ static constexpr int SWAP_CHAIN_BUFFER_COUNT = 2;
 
 class VGMeshRenderer;
 class VGParticleRenderer;
-class Texture;
+class VGTexture;
 
 /*
 Base render class for the D3D12 API.

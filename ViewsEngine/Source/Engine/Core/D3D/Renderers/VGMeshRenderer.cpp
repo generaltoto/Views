@@ -1,7 +1,7 @@
 #include "Engine/ECS/Components/Component.h"
 
-#include "D3D/Shaders/Material.h"
-#include "D3D/Shaders/ShaderBase.h"
+#include "D3D/Shaders/VGMaterial.h"
+#include "D3D/Shaders/VGShaderBase.h"
 
 #include "VGMeshRenderer.h"
 
@@ -31,5 +31,5 @@ void VGMeshRenderer::Update(float dt)
 
     transform->UpdateParentedWorldMatrix();
 
-    Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
+    Mat->GetShader()->UpdateObjectCb(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
 }

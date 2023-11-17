@@ -1,64 +1,64 @@
 
 
 #include "D3D/Geometry/VGMesh.h"
-#include "D3D/Shaders/Textures/Texture.h"
+#include "D3D/Shaders/Textures/VGTexture.h"
 #include "D3D/Renderers/VGMeshRenderer.h"
 #include "D3D/Renderers/VGParticleRenderer.h"
 #include "D3D/Base/VGHandler.h"
 
-#include "ShaderBase.h"
+#include "VGShaderBase.h"
 
 using namespace DirectX;
 
 #pragma region SHADER BASE
-ShaderBase::ShaderBase(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvDescriptorSize, const std::wstring& filepath)
-	: m_filepath(filepath), m_generalDevice(device), m_cbvDescriptorSize(cbvDescriptorSize)
+VGShaderBase::VGShaderBase(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvDescriptorSize, const std::wstring& filepath)
+	: m_Filepath(filepath), m_GeneralDevice(device), m_CbvDescriptorSize(cbvDescriptorSize)
 {
-	m_passCB = nullptr;
+	m_PassCb = nullptr;
 
-	m_rootSignature = nullptr;
-	m_pipelineState = nullptr;
+	m_RootSignature = nullptr;
+	m_PipelineState = nullptr;
 
-	m_vsByteCode = nullptr;
-	m_psByteCode = nullptr;
+	m_VsByteCode = nullptr;
+	m_PsByteCode = nullptr;
 }
 
-ShaderBase::~ShaderBase()
+VGShaderBase::~VGShaderBase()
 {
-	NULLPTR(m_generalDevice)
+	NULLPTR(m_GeneralDevice)
 
-	RELPTR(m_pipelineState)
-	RELPTR(m_rootSignature)
+	RELPTR(m_PipelineState)
+	RELPTR(m_RootSignature)
 
-	RELPTR(m_vsByteCode)
-	RELPTR(m_psByteCode)
+	RELPTR(m_VsByteCode)
+	RELPTR(m_PsByteCode)
 
-	for (auto& cb : m_objectCBs)
+	for (auto& cb : m_ObjectCBs)
 		DELPTR(cb)
 
-	m_objectCBs.clear();
-	DELPTR(m_passCB)
+	m_ObjectCBs.clear();
+	DELPTR(m_PassCb)
 }
 
-void ShaderBase::Init()
+void VGShaderBase::Init()
 {
-	CreatePassCB();
+	CreatePassCb();
 
-	CompileShader(nullptr, "vs_main", "vs_5_1", &m_vsByteCode);
-	CompileShader(nullptr, "ps_main", "ps_5_1", &m_psByteCode);
+	CompileShader(nullptr, "vs_main", "vs_5_1", &m_VsByteCode);
+	CompileShader(nullptr, "ps_main", "ps_5_1", &m_PsByteCode);
 }
 
-void ShaderBase::SetInputLayout(VertexType vertexType)
+void VGShaderBase::SetInputLayout(VertexType vertexType)
 {
 	// Input Layout represents the data we are sending to the shader via the VS_INPUT struct.
-	m_inputLayout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
-	m_inputLayout.push_back({ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
-	m_inputLayout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
-	m_inputLayout.push_back({ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 40, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
-	m_inputLayout.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 52, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+	m_InputLayout.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+	m_InputLayout.push_back({ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+	m_InputLayout.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+	m_InputLayout.push_back({ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 40, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
+	m_InputLayout.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 52, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 });
 }
 
-std::array<const CD3DX12_STATIC_SAMPLER_DESC, 2> ShaderBase::GetStaticSamplers()
+std::array<const CD3DX12_STATIC_SAMPLER_DESC, 2> VGShaderBase::GetStaticSamplers()
 {
 	const CD3DX12_STATIC_SAMPLER_DESC pointWrap(
 		0, // shaderRegister
@@ -78,38 +78,38 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 2> ShaderBase::GetStaticSamplers()
 	return { pointWrap, linearWrap };
 }
 
-void ShaderBase::UnBind(const UINT index)
+void VGShaderBase::UnBind(const UINT index)
 {
-	DELPTR(m_objectCBs[index])
-	m_freeIndices.push(index);
+	DELPTR(m_ObjectCBs[index])
+	m_FreeIndices.push(index);
 }
 
-ShaderBase* ShaderBase::Bind()
+VGShaderBase* VGShaderBase::Bind()
 {
-	AddObjectCB();
+	AddObjectCb();
 	return this;
 }
 
-void ShaderBase::AddObjectCB() 
+void VGShaderBase::AddObjectCb() 
 { 
-	auto ub = new UploadBuffer<ObjConstants>(m_generalDevice, 1, true);
-	m_objectCBs.push_back(ub);
+	auto ub = new VGUploadBuffer<ObjConstants>(m_GeneralDevice, 1, true);
+	m_ObjectCBs.push_back(ub);
 	NULLPTR(ub)
 }
 
-void ShaderBase::UpdateObjectCB(DirectX::XMFLOAT4X4* itemWorldMatrix, UINT cbIndex)
+void VGShaderBase::UpdateObjectCb(DirectX::XMFLOAT4X4* itemWorldMatrix, UINT cbIndex)
 {
-	if (cbIndex >= m_objectCBs.size())
-		AddObjectCB();
+	if (cbIndex >= m_ObjectCBs.size())
+		AddObjectCb();
 
 	ObjConstants objConstants;
 	objConstants.World = *itemWorldMatrix;
-	m_objectCBs[cbIndex]->CopyData(0, &objConstants);
+	m_ObjectCBs[cbIndex]->CopyData(0, &objConstants);
 }
 
-void ShaderBase::CreatePassCB() { m_passCB = new UploadBuffer<PassConstants>(m_generalDevice, 1, true); }
+void VGShaderBase::CreatePassCb() { m_PassCb = new VGUploadBuffer<PassConstants>(m_GeneralDevice, 1, true); }
 
-void ShaderBase::UpdatePassCB(const float dt, const float totalTime) const
+void VGShaderBase::UpdatePassCb(const float dt, const float totalTime) const
 {
 	const XMMATRIX camView = CameraManager::GetMainCamera()->GetView();
 	const XMMATRIX camOrthoProj = CameraManager::GetMainCamera()->GetOrthoProj();
@@ -127,10 +127,10 @@ void ShaderBase::UpdatePassCB(const float dt, const float totalTime) const
 	mainPassCB.TotalTime = totalTime;
 	mainPassCB.DeltaTime = dt;
 
-	m_passCB->CopyData(0, &mainPassCB);
+	m_PassCb->CopyData(0, &mainPassCB);
 }
 
-void ShaderBase::CompileShader(const D3D_SHADER_MACRO* defines, const std::string& entrypoint, const std::string& target, ID3DBlob** uploader) const
+void VGShaderBase::CompileShader(const D3D_SHADER_MACRO* defines, const std::string& entrypoint, const std::string& target, ID3DBlob** uploader) const
 {
 	UINT compileFlags = 0;
 #if defined(DEBUG) || defined(_DEBUG)
@@ -140,7 +140,7 @@ void ShaderBase::CompileShader(const D3D_SHADER_MACRO* defines, const std::strin
 	ID3DBlob* errors = nullptr;
 
 	const HRESULT hr =
-		D3DCompileFromFile(m_filepath.c_str(), defines, D3D_COMPILE_STANDARD_FILE_INCLUDE, entrypoint.c_str(), target.c_str(), compileFlags, 0, uploader, &errors);
+		D3DCompileFromFile(m_Filepath.c_str(), defines, D3D_COMPILE_STANDARD_FILE_INCLUDE, entrypoint.c_str(), target.c_str(), compileFlags, 0, uploader, &errors);
 	ThrowIfFailed(hr)
 	
 	if (errors != nullptr)
@@ -153,20 +153,20 @@ void ShaderBase::CompileShader(const D3D_SHADER_MACRO* defines, const std::strin
 #pragma endregion 
 
 #pragma region SHADER SIMPLE
-ShaderSimple::ShaderSimple(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
-	: ShaderBase(device, cbvHeap, cbvDescriptorSize, filepath)
+VGShaderSimple::VGShaderSimple(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
+	: VGShaderBase(device, cbvHeap, cbvDescriptorSize, filepath)
 {
 }
 
-ShaderSimple::~ShaderSimple()
+VGShaderSimple::~VGShaderSimple()
 = default;
 
-void ShaderSimple::Init()
+void VGShaderSimple::Init()
 {
-	ShaderBase::Init();
+	VGShaderBase::Init();
 }
 
-void ShaderSimple::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
+void VGShaderSimple::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
 {
 	SetInputLayout(vertexType);
 
@@ -185,15 +185,15 @@ void ShaderSimple::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT&
 
 	HRESULT hr = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &serializedRootSignature, &errorBlob);
 	ThrowIfFailed(hr)
-	hr = m_generalDevice->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature));
+	hr = m_GeneralDevice->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature));
 	ThrowIfFailed(hr)
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
 	ZeroMemory(&psoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-	psoDesc.InputLayout = { m_inputLayout.data(), static_cast<UINT>(m_inputLayout.size()) };
-	psoDesc.pRootSignature = m_rootSignature;
-	psoDesc.VS = { reinterpret_cast<BYTE*>(m_vsByteCode->GetBufferPointer()), m_vsByteCode->GetBufferSize() };
-	psoDesc.PS = { reinterpret_cast<BYTE*>(m_psByteCode->GetBufferPointer()), m_psByteCode->GetBufferSize() };
+	psoDesc.InputLayout = { m_InputLayout.data(), static_cast<UINT>(m_InputLayout.size()) };
+	psoDesc.pRootSignature = m_RootSignature;
+	psoDesc.VS = { reinterpret_cast<BYTE*>(m_VsByteCode->GetBufferPointer()), m_VsByteCode->GetBufferSize() };
+	psoDesc.PS = { reinterpret_cast<BYTE*>(m_PsByteCode->GetBufferPointer()), m_PsByteCode->GetBufferSize() };
 	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
@@ -206,64 +206,64 @@ void ShaderSimple::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT&
 	psoDesc.SampleDesc.Quality = 0;
 	psoDesc.DSVFormat = dsvFormat;
 
-	hr = m_generalDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState));
+	hr = m_GeneralDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_PipelineState));
 	ThrowIfFailed(hr)
 
 	RELPTR(serializedRootSignature)
 	RELPTR(errorBlob)
 }
 
-void ShaderSimple::BeginDraw(ID3D12GraphicsCommandList* cmdList)
+void VGShaderSimple::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	// Bind the root signature to the command list
-	cmdList->SetGraphicsRootSignature(m_rootSignature);
+	cmdList->SetGraphicsRootSignature(m_RootSignature);
 
 	// Bind the pass constant buffer to the pipeline at b1
-	cmdList->SetGraphicsRootConstantBufferView(1, m_passCB->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(1, m_PassCb->GetResource()->GetGPUVirtualAddress());
 
 	// Bind the pipeline state to the command list
-	cmdList->SetPipelineState(m_pipelineState);
+	cmdList->SetPipelineState(m_PipelineState);
 
 	// Set the primitive topology
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void ShaderSimple::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
+void VGShaderSimple::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
-	if (drawnMeshR->ObjectCbIndex >= m_objectCBs.size())
-		AddObjectCB();
+	if (drawnMeshR->ObjectCbIndex >= m_ObjectCBs.size())
+		AddObjectCb();
 
-	assert(drawnMeshR->ObjectCbIndex <= m_objectCBs.size());
+	assert(drawnMeshR->ObjectCbIndex <= m_ObjectCBs.size());
 
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
 
-	cmdList->SetGraphicsRootConstantBufferView(0, m_objectCBs[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(0, m_ObjectCBs[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
 
 	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), 1, 0, 0, 0);
 }
 
-void ShaderSimple::EndDraw(ID3D12GraphicsCommandList* cmdList)
+void VGShaderSimple::EndDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
 }
 #pragma endregion
 
 #pragma region SHADER TEXTURE
-ShaderTexture::ShaderTexture(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
-	: ShaderBase(device, cbvHeap, cbvDescriptorSize, filepath)
+VGShaderTexture::VGShaderTexture(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
+	: VGShaderBase(device, cbvHeap, cbvDescriptorSize, filepath)
 {
 }
 
-ShaderTexture::~ShaderTexture()
+VGShaderTexture::~VGShaderTexture()
 = default;
 
-void ShaderTexture::Init()
+void VGShaderTexture::Init()
 {
-	ShaderBase::Init();
+	VGShaderBase::Init();
 }
 
-void ShaderTexture::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
+void VGShaderTexture::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
 {
 	SetInputLayout(vertexType);
 
@@ -291,7 +291,7 @@ void ShaderTexture::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT
 
 	HRESULT hr = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &serializedRootSignature, &errorBlob);
 	ThrowIfFailed(hr)
-	hr = m_generalDevice->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature));
+	hr = m_GeneralDevice->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature));
 	ThrowIfFailed(hr)
 
 	if (errorBlob != nullptr)
@@ -303,10 +303,10 @@ void ShaderTexture::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
 	ZeroMemory(&psoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-	psoDesc.InputLayout = { m_inputLayout.data(), static_cast<UINT>(m_inputLayout.size()) };
-	psoDesc.pRootSignature = m_rootSignature;
-	psoDesc.VS = { reinterpret_cast<BYTE*>(m_vsByteCode->GetBufferPointer()), m_vsByteCode->GetBufferSize() };
-	psoDesc.PS = { reinterpret_cast<BYTE*>(m_psByteCode->GetBufferPointer()), m_psByteCode->GetBufferSize() };
+	psoDesc.InputLayout = { m_InputLayout.data(), static_cast<UINT>(m_InputLayout.size()) };
+	psoDesc.pRootSignature = m_RootSignature;
+	psoDesc.VS = { reinterpret_cast<BYTE*>(m_VsByteCode->GetBufferPointer()), m_VsByteCode->GetBufferSize() };
+	psoDesc.PS = { reinterpret_cast<BYTE*>(m_PsByteCode->GetBufferPointer()), m_PsByteCode->GetBufferSize() };
 	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 	psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
@@ -318,24 +318,24 @@ void ShaderTexture::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT
 	psoDesc.SampleDesc.Quality = 0;
 	psoDesc.DSVFormat = dsvFormat;
 
-	hr = m_generalDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState));
+	hr = m_GeneralDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_PipelineState));
 	ThrowIfFailed(hr)
 
 	RELPTR(serializedRootSignature)
 }
 
-void ShaderTexture::BeginDraw(ID3D12GraphicsCommandList* cmdList)
+void VGShaderTexture::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	cmdList->SetGraphicsRootSignature(m_rootSignature);
+	cmdList->SetGraphicsRootSignature(m_RootSignature);
 
-	cmdList->SetGraphicsRootConstantBufferView(2, m_passCB->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(2, m_PassCb->GetResource()->GetGPUVirtualAddress());
 
-	cmdList->SetPipelineState(m_pipelineState);
+	cmdList->SetPipelineState(m_PipelineState);
 
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
+void VGShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
 	// UINT are not supposed to be negative, it will only be negative if it is not initialized (debug only).
 	// ReSharper disable once CppUnsignedZeroComparison
@@ -343,10 +343,10 @@ void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnM
 
 	// If the object has no constant buffer index, we add one.
 	// This is not supposed to happen, but it is a security.
-	if (drawnMeshR->ObjectCbIndex >= m_objectCBs.size())
-		AddObjectCB();
+	if (drawnMeshR->ObjectCbIndex >= m_ObjectCBs.size())
+		AddObjectCb();
 
-	assert(drawnMeshR->ObjectCbIndex <= m_objectCBs.size());
+	assert(drawnMeshR->ObjectCbIndex <= m_ObjectCBs.size());
 
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
@@ -354,39 +354,39 @@ void ShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnM
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
 	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
-	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_cbvDescriptorSize);
+	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_CbvDescriptorSize);
 
 	cmdList->SetGraphicsRootDescriptorTable(0, cbvHandle);
-	cmdList->SetGraphicsRootConstantBufferView(1, m_objectCBs[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(1, m_ObjectCBs[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
 	
 	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), 1, 0, 0, 0);
 }
 
-void ShaderTexture::EndDraw(ID3D12GraphicsCommandList* cmdList)
+void VGShaderTexture::EndDraw(ID3D12GraphicsCommandList* cmdList)
 {
 }
 #pragma endregion
 
 #pragma region SHADER PARTICLE
-ShaderParticle::ShaderParticle(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
-	: ShaderBase(device, cbvHeap, cbvDescriptorSize, filepath)
+VGShaderParticle::VGShaderParticle(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
+	: VGShaderBase(device, cbvHeap, cbvDescriptorSize, filepath)
 {
-	m_particleInstanceDataBuffer = nullptr;
+	m_ParticleInstanceDataBuffer = nullptr;
 }
 
-ShaderParticle::~ShaderParticle()
+VGShaderParticle::~VGShaderParticle()
 {
-	DELPTR(m_particleInstanceDataBuffer);
+	DELPTR(m_ParticleInstanceDataBuffer);
 }
 
-void ShaderParticle::Init()
+void VGShaderParticle::Init()
 {
-	ShaderBase::Init();
+	VGShaderBase::Init();
 
-	m_particleInstanceDataBuffer = new UploadBuffer<InstanceData>(m_generalDevice, MAX_PARTICLE_COUNT, false);
+	m_ParticleInstanceDataBuffer = new VGUploadBuffer<InstanceData>(m_GeneralDevice, MAX_PARTICLE_COUNT, false);
 }
 
-void ShaderParticle::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
+void VGShaderParticle::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
 {
 	SetInputLayout(vertexType);
 
@@ -401,15 +401,15 @@ void ShaderParticle::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMA
 
 	HRESULT hr = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &serializedRootSignature, &errorBlob);
 	ThrowIfFailed(hr)
-	hr = m_generalDevice->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature));
+	hr = m_GeneralDevice->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature));
 	ThrowIfFailed(hr)
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
 	ZeroMemory(&psoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-	psoDesc.InputLayout = { m_inputLayout.data(), (UINT)m_inputLayout.size() };
-	psoDesc.pRootSignature = m_rootSignature;
-	psoDesc.VS = { reinterpret_cast<BYTE*>(m_vsByteCode->GetBufferPointer()), m_vsByteCode->GetBufferSize() };
-	psoDesc.PS = { reinterpret_cast<BYTE*>(m_psByteCode->GetBufferPointer()), m_psByteCode->GetBufferSize() };
+	psoDesc.InputLayout = { m_InputLayout.data(), (UINT)m_InputLayout.size() };
+	psoDesc.pRootSignature = m_RootSignature;
+	psoDesc.VS = { reinterpret_cast<BYTE*>(m_VsByteCode->GetBufferPointer()), m_VsByteCode->GetBufferSize() };
+	psoDesc.PS = { reinterpret_cast<BYTE*>(m_PsByteCode->GetBufferPointer()), m_PsByteCode->GetBufferSize() };
 	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 
 	// We need to enable blending for our particles so we use alpha blending.
@@ -434,37 +434,37 @@ void ShaderParticle::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMA
 	psoDesc.SampleDesc.Quality = 0;
 	psoDesc.DSVFormat = dsvFormat;
 
-	hr = m_generalDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState));
+	hr = m_GeneralDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_PipelineState));
 	ThrowIfFailed(hr);
 
 	RELPTR(serializedRootSignature);
 	RELPTR(errorBlob);
 }
 
-void ShaderParticle::BeginDraw(ID3D12GraphicsCommandList* cmdList)
+void VGShaderParticle::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	cmdList->SetGraphicsRootSignature(m_rootSignature);
+	cmdList->SetGraphicsRootSignature(m_RootSignature);
 
-	cmdList->SetGraphicsRootConstantBufferView(1, m_passCB->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(1, m_PassCb->GetResource()->GetGPUVirtualAddress());
 
-	cmdList->SetPipelineState(m_pipelineState);
+	cmdList->SetPipelineState(m_PipelineState);
 
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void ShaderParticle::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
+void VGShaderParticle::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
 	auto* pr = dynamic_cast<VGParticleRenderer*>(drawnMeshR);
 	assert(pr);
 	DrawAsParticle(cmdList, pr);
 }
 
-void ShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const VGParticleRenderer* drawnMeshR)
+void VGShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const VGParticleRenderer* drawnMeshR)
 {
-	if (drawnMeshR->ObjectCbIndex >= m_objectCBs.size())
-		AddObjectCB();
+	if (drawnMeshR->ObjectCbIndex >= m_ObjectCBs.size())
+		AddObjectCb();
 
-	assert(drawnMeshR->ObjectCbIndex <= m_objectCBs.size());
+	assert(drawnMeshR->ObjectCbIndex <= m_ObjectCBs.size());
 
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
@@ -472,34 +472,34 @@ void ShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const VG
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
 	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
-	cbvHandle.Offset(drawnMeshR->ObjectCbIndex, m_cbvDescriptorSize);
+	cbvHandle.Offset(drawnMeshR->ObjectCbIndex, m_CbvDescriptorSize);
 
-	cmdList->SetGraphicsRootShaderResourceView(0, m_particleInstanceDataBuffer->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootShaderResourceView(0, m_ParticleInstanceDataBuffer->GetResource()->GetGPUVirtualAddress());
 
 	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), drawnMeshR->GetParticleCount(), 0, 0, 0);
 }
 
-void ShaderParticle::EndDraw(ID3D12GraphicsCommandList* cmdList)
+void VGShaderParticle::EndDraw(ID3D12GraphicsCommandList* cmdList)
 {
 
 }
 
-void ShaderParticle::UpdateParticleInstanceDataBuffer(const int startIndex, const void* data) const
+void VGShaderParticle::UpdateParticleInstanceDataBuffer(const int startIndex, const void* data) const
 {
-	m_particleInstanceDataBuffer->CopyData(startIndex, data);
+	m_ParticleInstanceDataBuffer->CopyData(startIndex, data);
 }
 #pragma endregion
 
 #pragma region SHADER SKYBOX
-ShaderSkybox::ShaderSkybox(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
-	: ShaderTexture(device, cbvHeap, cbvDescriptorSize, filepath)
+VGShaderSkybox::VGShaderSkybox(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
+	: VGShaderTexture(device, cbvHeap, cbvDescriptorSize, filepath)
 {
 }
 
-ShaderSkybox::~ShaderSkybox()
+VGShaderSkybox::~VGShaderSkybox()
 = default;
 
-void ShaderSkybox::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
+void VGShaderSkybox::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
 {
 	SetInputLayout(vertexType);
 
@@ -520,7 +520,7 @@ void ShaderSkybox::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT&
 
 	HRESULT hr = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &serializedRootSignature, &errorBlob);
 	ThrowIfFailed(hr)
-	hr = m_generalDevice->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(&m_rootSignature));
+	hr = m_GeneralDevice->CreateRootSignature(0, serializedRootSignature->GetBufferPointer(), serializedRootSignature->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature));
 	ThrowIfFailed(hr)
 
 	if (errorBlob != nullptr)
@@ -531,10 +531,10 @@ void ShaderSkybox::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT&
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
 	ZeroMemory(&psoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
-	psoDesc.InputLayout = { m_inputLayout.data(), static_cast<UINT>(m_inputLayout.size()) };
-	psoDesc.pRootSignature = m_rootSignature;
-	psoDesc.VS = { reinterpret_cast<BYTE*>(m_vsByteCode->GetBufferPointer()), m_vsByteCode->GetBufferSize() };
-	psoDesc.PS = { reinterpret_cast<BYTE*>(m_psByteCode->GetBufferPointer()), m_psByteCode->GetBufferSize() };
+	psoDesc.InputLayout = { m_InputLayout.data(), static_cast<UINT>(m_InputLayout.size()) };
+	psoDesc.pRootSignature = m_RootSignature;
+	psoDesc.VS = { reinterpret_cast<BYTE*>(m_VsByteCode->GetBufferPointer()), m_VsByteCode->GetBufferSize() };
+	psoDesc.PS = { reinterpret_cast<BYTE*>(m_PsByteCode->GetBufferPointer()), m_PsByteCode->GetBufferSize() };
 	psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
@@ -548,7 +548,7 @@ void ShaderSkybox::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT&
 	psoDesc.SampleDesc.Quality = 0;
 	psoDesc.DSVFormat = dsvFormat;
 
-	hr = m_generalDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState));
+	hr = m_GeneralDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_PipelineState));
 	ThrowIfFailed(hr)
 
 	RELPTR(serializedRootSignature)
@@ -556,27 +556,27 @@ void ShaderSkybox::CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT&
 #pragma endregion
 
 #pragma region SHADER TEXTURE OFFSET
-ShaderTextureUI::ShaderTextureUI(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvDescriptorSize, std::wstring& filepath)
-	: ShaderTexture(device, cbvHeap, cbvDescriptorSize, filepath)
+VGShaderTextureUI::VGShaderTextureUI(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvDescriptorSize, std::wstring& filepath)
+	: VGShaderTexture(device, cbvHeap, cbvDescriptorSize, filepath)
 {
 }
 
-ShaderTextureUI::~ShaderTextureUI()
+VGShaderTextureUI::~VGShaderTextureUI()
 {
-	for (auto& cb : m_offSetCb)
+	for (auto& cb : m_OffSetCb)
 		DELPTR(cb)
 }
 
-void ShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
+void VGShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
 	// UINT are not supposed to be negative, it will only be negative if it is not initialized (debug only).
 	// ReSharper disable once CppUnsignedZeroComparison
 	assert(drawnMeshR->GetTexture(0)->GetHeapIndex() >= 0);
 
-	if (drawnMeshR->ObjectCbIndex >= m_offSetCb.size())
-		AddObjectCB();
+	if (drawnMeshR->ObjectCbIndex >= m_OffSetCb.size())
+		AddObjectCb();
 
-	assert(drawnMeshR->ObjectCbIndex <= m_offSetCb.size());
+	assert(drawnMeshR->ObjectCbIndex <= m_OffSetCb.size());
 
 	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
 	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
@@ -584,33 +584,33 @@ void ShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* draw
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
 	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
-	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_cbvDescriptorSize);
+	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_CbvDescriptorSize);
 
 	cmdList->SetGraphicsRootDescriptorTable(0, cbvHandle);
-	cmdList->SetGraphicsRootConstantBufferView(1, m_offSetCb[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(1, m_OffSetCb[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
 
 
 	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), 1, 0, 0, 0);
 }
 
-void ShaderTextureUI::AddObjectCB()
+void VGShaderTextureUI::AddObjectCb()
 {
-	auto ub = new UploadBuffer<OffSetConstants>(m_generalDevice, 1, true);
-	m_offSetCb.push_back(ub);
+	auto ub = new VGUploadBuffer<OffSetConstants>(m_GeneralDevice, 1, true);
+	m_OffSetCb.push_back(ub);
 	NULLPTR(ub)
 
-	ShaderBase::AddObjectCB();
+	VGShaderBase::AddObjectCb();
 }
 
-void ShaderTextureUI::UpdateAsOffset(const DirectX::XMFLOAT4X4* itemWorldMatrix, const UINT cbIndex, const float offSetY)
+void VGShaderTextureUI::UpdateAsOffset(const DirectX::XMFLOAT4X4* itemWorldMatrix, const UINT cbIndex, const float offSetY)
 {
-	if (cbIndex >= m_offSetCb.size())
-		AddObjectCB();
+	if (cbIndex >= m_OffSetCb.size())
+		AddObjectCb();
 
 	OffSetConstants offSetConstants;
 	offSetConstants.World = *itemWorldMatrix;
 	offSetConstants.UVOffsetY = offSetY;
-	m_offSetCb[cbIndex]->CopyData(0, &offSetConstants);
+	m_OffSetCb[cbIndex]->CopyData(0, &offSetConstants);
 }
 
 #pragma endregion

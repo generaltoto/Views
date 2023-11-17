@@ -1,6 +1,6 @@
 #include "Engine/Resource.h"
 
-#include "D3D/Shaders/ShaderBase.h"
+#include "D3D/Shaders/VGShaderBase.h"
 
 #include "D3D/Geometry/VGGeometryHandler.h"
 
@@ -92,7 +92,7 @@ void VGHandler::Update(const float dt, const float totalTime)
 
     for (const auto& shader : Resource::GetShaders() | std::views::values)
     {
-        shader->UpdatePassCB(dt, totalTime);
+        shader->UpdatePassCb(dt, totalTime);
     }
 }
 

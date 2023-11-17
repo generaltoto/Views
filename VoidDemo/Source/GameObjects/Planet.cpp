@@ -13,7 +13,7 @@ Planet::Planet()
 
 	auto mesh = AddComponent<VGMeshRenderer>();
 	mesh->Init(SPHERE, TEXTURE);
-	mesh->RegisterTexture(Resource::Load<Texture>("Resources/Textures/mars.dds"));
+	mesh->RegisterTexture(Resource::Load<VGTexture>("Resources/Textures/mars.dds"));
 
 	transform->SetScale(50);
 

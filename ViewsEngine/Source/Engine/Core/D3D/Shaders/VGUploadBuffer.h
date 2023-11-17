@@ -4,14 +4,14 @@
 This class serves as a wrapper for the ID3D12Resource that is used to upload data to the GPU.
 */
 template<typename T>
-class UploadBuffer
+class VGUploadBuffer
 {
 public:
-	UploadBuffer(ID3D12Device* device, UINT elementCount, BOOL isConstantBuffer);
-	~UploadBuffer();
+	VGUploadBuffer(ID3D12Device* device, UINT elementCount, BOOL isConstantBuffer);
+	~VGUploadBuffer();
 
-	UploadBuffer(const UploadBuffer& rhs) = delete;
-	UploadBuffer& operator=(const UploadBuffer& rhs) = delete;
+	VGUploadBuffer(const VGUploadBuffer& rhs) = delete;
+	VGUploadBuffer& operator=(const VGUploadBuffer& rhs) = delete;
 
 	[[nodiscard]] UINT GetElementByteSize() const { return m_elementByteSize; }
 	[[nodiscard]] ID3D12Resource* GetResource() const { return m_uploadBuffer; }
@@ -27,7 +27,7 @@ private:
 };
 
 template<typename T>
-UploadBuffer<T>::UploadBuffer(ID3D12Device* device, UINT elementCount, BOOL isConstantBuffer) :
+VGUploadBuffer<T>::VGUploadBuffer(ID3D12Device* device, UINT elementCount, BOOL isConstantBuffer) :
 	m_elementByteSize(0), m_mappedData(nullptr), m_isConstantBuffer(isConstantBuffer)
 {
 	m_elementByteSize = sizeof(T);
@@ -47,7 +47,7 @@ UploadBuffer<T>::UploadBuffer(ID3D12Device* device, UINT elementCount, BOOL isCo
 
 
 template<typename T>
-UploadBuffer<T>::~UploadBuffer()
+VGUploadBuffer<T>::~VGUploadBuffer()
 {
 	if (m_uploadBuffer != nullptr)
 		m_uploadBuffer->Unmap(0, nullptr);
@@ -56,7 +56,7 @@ UploadBuffer<T>::~UploadBuffer()
 }
 
 template<typename T>
-void UploadBuffer<T>::CopyData(int elementIndex, const void* data) const
+void VGUploadBuffer<T>::CopyData(int elementIndex, const void* data) const
 {
 	memcpy(&m_mappedData[elementIndex * m_elementByteSize], data, sizeof(T));
 }

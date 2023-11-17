@@ -6,7 +6,7 @@ SkyBox::SkyBox()
 
 	auto mr = AddComponent<VGMeshRenderer>();
 	mr->Init(MeshType::SPHERE, MaterialType::SKYBOX);
-	mr->RegisterTexture(Resource::Load<Cubemap>("Resources/Textures/cubemap.dds"));
+	mr->RegisterTexture(Resource::Load<VGCubemap>("Resources/Textures/cubemap.dds"));
 	mr->SetClippable(false);
 	
 

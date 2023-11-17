@@ -1,7 +1,7 @@
 #include "Engine/ECS/Components/Component.h"
 #include "VGIRenderer.h"
-#include "D3D/Shaders/Material.h"
-#include "D3D/Shaders/ShaderBase.h"
+#include "D3D/Shaders/VGMaterial.h"
+#include "D3D/Shaders/VGShaderBase.h"
 
 #include "VGSkyRenderer.h"
 
@@ -30,7 +30,7 @@ void VGSkyRenderer::Update(float dt)
 	if (transform->IsDirty())
 		transform->UpdateParentedWorldMatrix();
 
-	Mat->GetShader()->UpdateObjectCB(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
+	Mat->GetShader()->UpdateObjectCb(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
 }
 
 

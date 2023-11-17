@@ -2,11 +2,11 @@
 
 #include "Engine/IResourceObject.h"
 
-class Texture : public IResourceObject
+class VGTexture : public IResourceObject
 {
 public:
-	explicit Texture(const std::string& name);
-	~Texture() override;
+	explicit VGTexture(const std::string& name);
+	~VGTexture() override;
 
 	void Load(const std::string& filepath) final;
 
