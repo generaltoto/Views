@@ -1,6 +1,5 @@
 #include "Planet.h"
 
-#include "Scripts/Asteroids/PlanetLife.h"
 #include "Scripts/TriggerCollisionEvent/PlanetCollisionEvent.h"
 
 Planet::Planet()
@@ -11,17 +10,15 @@ Planet::Planet()
 	rb->SetMass(100.f);
 	rb->SetBodyType(BodyType::Static);
 
-	auto mesh = AddComponent<MeshRenderer>();
+	auto mesh = AddComponent<VGMeshRenderer>();
 	mesh->Init(SPHERE, TEXTURE);
-	mesh->RegisterTexture(Resource::Load<Texture>("Resources/Textures/mars.dds"));
+	mesh->RegisterTexture(Resource::Load<VGTexture>("Resources/Textures/mars.dds"));
 
 	transform->SetScale(50);
 
 	auto sc = AddComponent<SphereCollider>();
 	sc->SetRadius(50);
-
-	AddComponent<PlanetLife>();
-
+	
 	m_CategoryBitmask.SetLayer(LayerID::OBSTACLE);
 	m_CollisionBitmask.SetLayer(LayerID::PLAYER);
 	m_CollisionBitmask.AddLayer(LayerID::ASTEROID);

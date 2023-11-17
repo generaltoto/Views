@@ -1,10 +1,10 @@
 
 #include "Coordinator.h"
 
-#include "D3D/Renderers/MeshRenderer.h"
-#include "D3D/Renderers/ParticleRenderer.h"
-#include "D3D/Renderers/SkyRenderer.h"
-#include "D3D/Renderers/UIRenderer.h"
+#include "D3D/Renderers/VGMeshRenderer.h"
+#include "D3D/Renderers/VGParticleRenderer.h"
+#include "D3D/Renderers/VGSkyRenderer.h"
+#include "D3D/Renderers/VGUiRenderer.h"
 #include "Engine/ECS/Components/Collision/Collider.h"
 #include "Engine/ECS/Components/Collision/RigidBody.h"
 
@@ -44,13 +44,13 @@ void Coordinator::RegisterComponents()
 	// TODO: Automatize this
 
 	RegisterComponent<Transform>();
-	RegisterComponent<MeshRenderer>();
+	RegisterComponent<VGMeshRenderer>();
 	RegisterComponent<Rigidbody>();
 	RegisterComponent<SphereCollider>();
 	RegisterComponent<CameraComponent>();
-	RegisterComponent<ParticleRenderer>();
-	RegisterComponent<SkyRenderer>();
-	RegisterComponent<UIRenderer>();
+	RegisterComponent<VGParticleRenderer>();
+	RegisterComponent<VGSkyRenderer>();
+	RegisterComponent<VGUiRenderer>();
 }
 
 void Coordinator::RegisterSystems()
@@ -58,7 +58,7 @@ void Coordinator::RegisterSystems()
 	RegisterSystem<VECS_UiRenderSystem>();
 	{
 		Signature signature;
-		signature.set(GetComponentType<UIRenderer>());
+		signature.set(GetComponentType<VGUiRenderer>());
 
 		SetSystemSignature<VECS_UiRenderSystem>(signature);
 	}
@@ -66,7 +66,7 @@ void Coordinator::RegisterSystems()
 	RegisterSystem<VECS_MeshRendererSystem>();
 	{
 		Signature signature;
-		signature.set(GetComponentType<MeshRenderer>());
+		signature.set(GetComponentType<VGMeshRenderer>());
 
 		SetSystemSignature<VECS_MeshRendererSystem>(signature);
 	}
@@ -74,7 +74,7 @@ void Coordinator::RegisterSystems()
 	RegisterSystem<VECS_ParticleRendererSystem>();
 	{
 		Signature signature;
-		signature.set(GetComponentType<ParticleRenderer>());
+		signature.set(GetComponentType<VGParticleRenderer>());
 
 		SetSystemSignature<VECS_ParticleRendererSystem>(signature);
 	}
@@ -82,7 +82,7 @@ void Coordinator::RegisterSystems()
 	RegisterSystem<VECS_SkyRendererSystem>();
 	{
 		Signature signature;
-		signature.set(GetComponentType<SkyRenderer>());
+		signature.set(GetComponentType<VGSkyRenderer>());
 
 		SetSystemSignature<VECS_SkyRendererSystem>(signature);
 	}

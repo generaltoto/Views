@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-class ShaderBase;
-class Material;
+class VGShaderBase;
+class VGMaterial;
 class IResourceObject;
 struct ID3D12Device;
 struct ID3D12DescriptorHeap;
@@ -37,24 +37,24 @@ public:
 		return resource;
 	}
 
-	static Material* LoadMaterial(MaterialType matType);
+	static VGMaterial* LoadMaterial(MaterialType matType);
 
 	static void CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize);
 	static void ReleaseResources();
 	static int AddToResourceHeap(IResourceObject* resObj, int resType);
 
-	static std::unordered_map<MaterialType, ShaderBase*>& GetShaders() { return m_Shaders; }
+	static std::unordered_map<MaterialType, VGShaderBase*>& GetShaders() { return m_Shaders; }
 	static std::unordered_map<std::string, IResourceObject*>& GetResources() { return m_Resources; }
 	static IResourceObject* GetResource(const std::string& name) { return m_Resources[name]; }
 
 private:
-	static std::unordered_map<MaterialType, ShaderBase*> m_Shaders;
-	static std::unordered_map<MaterialType, Material*> m_Materials;
+	static std::unordered_map<MaterialType, VGShaderBase*> m_Shaders;
+	static std::unordered_map<MaterialType, VGMaterial*> m_Materials;
 	static std::unordered_map<std::string, IResourceObject*> m_Resources;
 
 	static int m_TexIndex;
 
-	static ShaderBase* FindShader(MaterialType& id);
+	static VGShaderBase* FindShader(const MaterialType& id);
 
 	static void CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize);
 

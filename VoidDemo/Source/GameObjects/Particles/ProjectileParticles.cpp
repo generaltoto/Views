@@ -4,7 +4,7 @@ ProjectileParticles::ProjectileParticles()
 {
 	m_Name = "Particles";
 
-	const auto pr = AddComponent<ParticleRenderer>();
+	const auto pr = AddComponent<VGParticleRenderer>();
 	pr->Init(MeshType::CUBE, MaterialType::PARTICLE);
 }
 

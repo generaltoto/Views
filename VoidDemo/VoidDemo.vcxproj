@@ -174,10 +174,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\GameObjects\Asteroid.cpp" />
-    <ClCompile Include="Source\GameObjects\AsteroidLarge.cpp" />
-    <ClCompile Include="Source\GameObjects\AsteroidMedium.cpp" />
-    <ClCompile Include="Source\GameObjects\AsteroidSmall.cpp" />
     <ClCompile Include="Source\GameObjects\Camera.cpp" />
     <ClCompile Include="Source\GameObjects\Particles\ProjectileParticles.cpp" />
     <ClCompile Include="Source\GameObjects\Planet.cpp" />
@@ -185,34 +181,18 @@
     <ClCompile Include="Source\GameObjects\Projectile.cpp" />
     <ClCompile Include="Source\GameObjects\Skybox.cpp" />
     <ClCompile Include="Source\GameObjects\UI\CrossAir.cpp" />
-    <ClCompile Include="Source\GameObjects\UI\Digit.cpp" />
-    <ClCompile Include="Source\GameObjects\UI\Score.cpp" />
     <ClCompile Include="Source\GameObjects\Wing.cpp" />
-    <ClCompile Include="Source\Scripts\Asteroids\AsteroidBehaviour.cpp" />
-    <ClCompile Include="Source\Scripts\Asteroids\AsteroidLargeBehaviour.cpp" />
-    <ClCompile Include="Source\Scripts\Asteroids\AsteroidLife.cpp" />
-    <ClCompile Include="Source\Scripts\Asteroids\AsteroidMediumBehaviour.cpp" />
-    <ClCompile Include="Source\Scripts\Asteroids\AsteroidSmallBehaviour.cpp" />
-    <ClCompile Include="Source\Scripts\Asteroids\AsteroidSpawner.cpp" />
-    <ClCompile Include="Source\Scripts\Asteroids\PlanetLife.cpp" />
     <ClCompile Include="Source\Scripts\LifeComponent.cpp" />
     <ClCompile Include="Source\Scripts\Player\PlayerLife.cpp" />
     <ClCompile Include="Source\Scripts\Player\PlayerMovement.cpp" />
     <ClCompile Include="Source\Scripts\Player\PlayerShoot.cpp" />
     <ClCompile Include="Source\Scripts\ProjectileBehavior.cpp" />
-    <ClCompile Include="Source\Scripts\TriggerCollisionEvent\AsteroidCollisionEvent.cpp" />
     <ClCompile Include="Source\Scripts\TriggerCollisionEvent\PlanetCollisionEvent.cpp" />
     <ClCompile Include="Source\Scripts\TriggerCollisionEvent\PlayerCollisionEvent.cpp" />
-    <ClCompile Include="Source\Scripts\UI\DigitBehavior.cpp" />
-    <ClCompile Include="Source\Scripts\UI\ScoreBehavior.cpp" />
     <ClCompile Include="Source\VoidDemo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Source\GameObjects\Asteroid.h" />
-    <ClInclude Include="Source\GameObjects\AsteroidLarge.h" />
-    <ClInclude Include="Source\GameObjects\AsteroidMedium.h" />
-    <ClInclude Include="Source\GameObjects\AsteroidSmall.h" />
     <ClInclude Include="Source\GameObjects\Camera.h" />
     <ClInclude Include="Source\GameObjects\Particles\ProjectileParticles.h" />
     <ClInclude Include="Source\GameObjects\Planet.h" />
@@ -220,26 +200,14 @@
     <ClInclude Include="Source\GameObjects\Projectile.h" />
     <ClInclude Include="Source\GameObjects\SkyBox.h" />
     <ClInclude Include="Source\GameObjects\UI\CrossAir.h" />
-    <ClInclude Include="Source\GameObjects\UI\Digit.h" />
-    <ClInclude Include="Source\GameObjects\UI\Score.h" />
     <ClInclude Include="Source\GameObjects\Wing.h" />
-    <ClInclude Include="Source\Scripts\Asteroids\AsteroidBehaviour.h" />
-    <ClInclude Include="Source\Scripts\Asteroids\AsteroidLargeBehaviour.h" />
-    <ClInclude Include="Source\Scripts\Asteroids\AsteroidLife.h" />
-    <ClInclude Include="Source\Scripts\Asteroids\AsteroidMediumBehaviour.h" />
-    <ClInclude Include="Source\Scripts\Asteroids\AsteroidSmallBehaviour.h" />
-    <ClInclude Include="Source\Scripts\Asteroids\AsteroidSpawner.h" />
-    <ClInclude Include="Source\Scripts\Asteroids\PlanetLife.h" />
     <ClInclude Include="Source\Scripts\LifeComponent.h" />
     <ClInclude Include="Source\Scripts\Player\PlayerLife.h" />
     <ClInclude Include="Source\Scripts\Player\PlayerMovement.h" />
     <ClInclude Include="Source\Scripts\Player\PlayerShoot.h" />
     <ClInclude Include="Source\Scripts\ProjectileBehavior.h" />
-    <ClInclude Include="Source\Scripts\TriggerCollisionEvent\AsteroidCollisionEvent.h" />
     <ClInclude Include="Source\Scripts\TriggerCollisionEvent\PlanetCollisionEvent.h" />
     <ClInclude Include="Source\Scripts\TriggerCollisionEvent\PlayerCollisionEvent.h" />
-    <ClInclude Include="Source\Scripts\UI\DigitBehavior.h" />
-    <ClInclude Include="Source\Scripts\UI\ScoreBehavior.h" />
     <ClInclude Include="Source\VoidDemo.h" />
   </ItemGroup>
   <ItemGroup>

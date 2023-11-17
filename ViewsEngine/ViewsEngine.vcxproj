@@ -171,21 +171,18 @@
   <ItemGroup>
     <ClCompile Include="Source\Common\Logger.cpp" />
     <ClCompile Include="Source\Common\Time.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DMath.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Base\D3DUtils.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Base\VGHandler.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Base\VGUtils.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\External\DDSTextureLoader.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Geometry\D3DMesh.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Geometry\GeometryHandler.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Geometry\Particle.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Renderers\IRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Renderers\MeshRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Renderers\ParticleRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Renderers\SkyRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Renderers\UIRenderer.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Material.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\ShaderBase.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\Cubemap.cpp">
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\VGMesh.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\VGGeometryHandler.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\VGParticle.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\VGIRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\VGMeshRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\VGParticleRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\VGSkyRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Renderers\VGUiRenderer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Base\VGMaterial.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
@@ -262,7 +259,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\Texture.cpp">
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Base\VGUpdloadBuffer.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
@@ -339,8 +336,243 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\Texture2D.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Shaders\UpdloadBuffer.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderBase.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>false</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ForcedIncludeFiles>ViewsEngine.h</ForcedIncludeFiles>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>C:\Users\thoma\workspaces\PERSO\Views\\Build\ViewsEngine\Debug\ViewsEngine.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>ViewsEngine.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\ViewsEngine.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\ViewsEngine.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\thoma\workspaces\PERSO\Views\ViewsEngine\Source/Engine/Core;C:\Users\thoma\workspaces\PERSO\Views\ViewsEngine\Source;</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LibCompiled>true</LibCompiled>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderColor.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderParticle.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderSkybox.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderTexture.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderTextureUI.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\VGCubemap.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>false</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ForcedIncludeFiles>ViewsEngine.h</ForcedIncludeFiles>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>C:\Users\thoma\workspaces\PERSO\Views\\Build\ViewsEngine\Debug\ViewsEngine.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>ViewsEngine.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\ViewsEngine.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\ViewsEngine.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\thoma\workspaces\PERSO\Views\ViewsEngine\Source/Engine/Core;C:\Users\thoma\workspaces\PERSO\Views\ViewsEngine\Source;</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LibCompiled>true</LibCompiled>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>false</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <ForcedIncludeFiles>ViewsEngine.h</ForcedIncludeFiles>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>C:\Users\thoma\workspaces\PERSO\Views\\Build\ViewsEngine\Debug\ViewsEngine.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>ViewsEngine.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\ViewsEngine.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\ViewsEngine.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>C:\Users\thoma\workspaces\PERSO\Views\\ViewsEngine\Intermediate\Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\thoma\workspaces\PERSO\Views\ViewsEngine\Source/Engine/Core;C:\Users\thoma\workspaces\PERSO\Views\ViewsEngine\Source;</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LibCompiled>true</LibCompiled>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture2D.cpp" />
     <ClCompile Include="Source\Engine\Core\DebugUtils.cpp" />
     <ClCompile Include="Source\Engine\Core\PerGameSettings.cpp" />
     <ClCompile Include="Source\Engine\ECS\Base\ComponentManager.cpp" />
@@ -459,27 +691,31 @@
     <ClInclude Include="Source\Engine\Core\Core.h" />
     <ClInclude Include="Source\Engine\Core\CoreDefinitions.h" />
     <ClInclude Include="Source\Engine\Core\CoreMinimal.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DMath.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DRenderer.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\D3DUtils.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\MaterialType.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Base\MeshType.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\VGHandler.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\VGUtils.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\VGMaterialType.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Base\VGMeshType.h" />
     <ClInclude Include="Source\Engine\Core\D3D\External\d3dx12.h" />
     <ClInclude Include="Source\Engine\Core\D3D\External\DDSTextureLoader.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Geometry\D3DMesh.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Geometry\GeometryHandler.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Geometry\Particle.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Renderers\IRenderer.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Renderers\MeshRenderer.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Renderers\ParticleRenderer.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Renderers\SkyRenderer.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Renderers\UIRenderer.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Material.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\ShaderBase.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\Cubemap.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\Texture.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\Texture2D.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Shaders\UploadBuffer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\VGMesh.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\VGGeometryHandler.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\VGParticle.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGIRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGMeshRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGParticleRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGSkyRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGUiRenderer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Base\VGMaterial.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Base\VGUploadBuffer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderBase.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderColor.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderParticle.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderSkybox.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderTexture.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Shaders\VGShaderTextureUI.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\VGCubemap.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture2D.h" />
     <ClInclude Include="Source\Engine\Core\DebugUtils.h" />
     <ClInclude Include="Source\Engine\Core\PerGameSettings.h" />
     <ClInclude Include="Source\Engine\ECS\Base\ComponentArray.h" />
