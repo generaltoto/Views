@@ -1,7 +1,7 @@
 #pragma once
 #include <stack>
 
-#include "VGUploadBuffer.h"
+#include "D3D/Shaders/Base/VGUploadBuffer.h"
 
 class VGTexture;
 class VGParticleRenderer;

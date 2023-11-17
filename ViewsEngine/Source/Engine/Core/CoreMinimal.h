@@ -33,7 +33,7 @@
 #include "D3D/Renderers/VGSkyRenderer.h"
 #include "D3D/Renderers/VGUiRenderer.h"
 #include "D3D/Shaders/Textures/VGTexture2D.h"
-#include "D3D/Shaders/VGMaterial.h"
+#include "D3D/Shaders/Base/VGMaterial.h"
 #include "D3D/Shaders/Textures/VGCubemap.h"
 
 #include "Engine/Managers/InputHandler.h"

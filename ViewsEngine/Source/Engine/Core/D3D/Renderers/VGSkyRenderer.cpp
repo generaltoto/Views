@@ -1,6 +1,6 @@
 #include "Engine/ECS/Components/Component.h"
 #include "VGIRenderer.h"
-#include "D3D/Shaders/VGMaterial.h"
+#include "D3D/Shaders/Base/VGMaterial.h"
 #include "D3D/Shaders/VGShaderBase.h"
 
 #include "VGSkyRenderer.h"
