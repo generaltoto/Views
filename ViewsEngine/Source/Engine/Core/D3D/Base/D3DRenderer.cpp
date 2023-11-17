@@ -1,12 +1,6 @@
 #include "Engine/Resource.h"
 
-#include "D3D/Shaders/Textures/Texture.h"
 #include "D3D/Shaders/ShaderBase.h"
-
-#include "D3D/Renderers/MeshRenderer.h"
-#include "D3D/Renderers/ParticleRenderer.h"
-#include "D3D/Renderers/SkyRenderer.h"
-#include "D3D/Renderers/UIRenderer.h"
 
 #include "D3D/Geometry/GeometryHandler.h"
 
@@ -22,9 +16,9 @@ using namespace DirectX;
 D3DRenderer* D3DRenderer::m_pApp = nullptr;
 
 D3DRenderer::D3DRenderer()
-    : BufferWidth(DEFAULT_WIDTH), BufferHeight(DEFAULT_HEIGHT), m_pInstance(nullptr), m_4XMsaaState(false), m_4XMsaaQuality(0),
-      m_DriveType(D3D_DRIVER_TYPE_HARDWARE), m_CurrentFenceValue(0), m_RtvDescriptorSize(0), m_DsvDescriptorSize(0), m_CbvSrvUavDescriptorSize(0),
-      m_CurrBackBuffer(0), m_BackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_DepthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT)
+    : BufferWidth(DEFAULT_WIDTH), BufferHeight(DEFAULT_HEIGHT), m_State(D3DState::SLEEP), m_pInstance(nullptr), m_4XMsaaState(false),
+      m_4XMsaaQuality(0), m_DriveType(D3D_DRIVER_TYPE_HARDWARE), m_CurrentFenceValue(0), m_RtvDescriptorSize(0), m_DsvDescriptorSize(0),
+      m_CbvSrvUavDescriptorSize(0), m_CurrBackBuffer(0), m_BackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM), m_DepthStencilFormat(DXGI_FORMAT_D24_UNORM_S8_UINT)
 {
     m_pDebugController = nullptr;
 
@@ -93,7 +87,7 @@ D3DRenderer::~D3DRenderer()
     Resource::ReleaseResources();
 }
 
-void D3DRenderer::Update(const float dt, const float totalTime) const
+void D3DRenderer::Update(const float dt, const float totalTime)
 {
     Engine::GetMainCamera()->UpdateViewMatrix();
 
@@ -159,9 +153,10 @@ void D3DRenderer::OnResize(const int newWidth, const int newHeight)
     BufferWidth = newWidth;
     BufferHeight = newHeight;
     
-    const auto cam = Engine::GetMainCamera();
-    cam->SetLens(0.25f * XM_PI, BufferWidth / BufferHeight, 1.0f, 1000.0f);
-    cam->Upd
+    if (const auto cam = Engine::GetMainCamera(); cam != nullptr)
+    {
+        cam->SetLens(70.f, static_cast<float>(BufferWidth) / static_cast<float>(BufferHeight), 1.0f, 5000.0f);
+    }
 
     // Flush before changing any resources.
     FlushCommandQueue();
@@ -190,7 +185,7 @@ void D3DRenderer::OnResize(const int newWidth, const int newHeight)
     dsvDesc.Format = m_DepthStencilFormat;
     dsvDesc.Texture2D.MipSlice = 0;
 
-    CreateDepthStencilBuffer(&dsvDesc);
+    CreateDepthStencilBuffer(false, &dsvDesc);
 }
 
 D3DRenderer* D3DRenderer::GetInstance()
@@ -205,6 +200,7 @@ D3DRenderer* D3DRenderer::GetInstance()
 
 void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 {
+    SetState(D3DState::INIT);
 #if defined(DEBUG) || defined(_DEBUG)
     EnableDebugLayer();
 #endif
@@ -220,7 +216,7 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 
     CreateRtvAndDsvDescriptorHeaps();
     CreateRenderTargetView();
-    CreateDepthStencilBuffer(nullptr);
+    CreateDepthStencilBuffer(true, nullptr);
 
     GeometryHandler::CreateAllMeshes();
 
@@ -375,9 +371,9 @@ void D3DRenderer::CreateRtvAndDsvDescriptorHeaps()
     ThrowIfFailed(hr)
 }
 
-void D3DRenderer::CreateDepthStencilBuffer(const D3D12_DEPTH_STENCIL_VIEW_DESC* dsvDesc)
+void D3DRenderer::CreateDepthStencilBuffer(const bool beginList, const D3D12_DEPTH_STENCIL_VIEW_DESC* dsvDesc)
 {
-    BeginList();
+    if (beginList) BeginList();
 
     // Create the depth/stencil buffer and view.
     D3D12_RESOURCE_DESC depthStencilDesc;

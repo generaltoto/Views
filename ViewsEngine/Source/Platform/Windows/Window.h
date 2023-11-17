@@ -3,47 +3,49 @@
 
 namespace Win32
 {
-	class Window
-	{
-	public:
+    class Window
+    {
+    public:
+        enum WindowState
+        {
+            MINIMISED,
+            MAXIMISED,
+            RESTORED
+        };
+    public:
+        Window();
+        ~Window();
+        
+        static void SetNewSize(int newWidth, int newHeight);
+        static void SetState(const WindowState state);
 
-		Window();
-		~Window();
+        void CreateNewWindow(int width, int height, const WSTRING& title, HICON icon = nullptr, WindowType type = RESIZABLE);
+        void PollEvent() const;
+        [[nodiscard]] bool NeedsToClose() const { return m_NeedsToClose; }
 
-		void CreateNewWindow(int width, int height, const WSTRING& title, HICON icon = nullptr, WindowType type = RESIZABLE);
-		void PollEvent();
-		bool NeedsToClose() const { return needsToClose; }
+        [[nodiscard]] int GetWidth() const { return m_Width; }
+        [[nodiscard]] int GetHeight() const { return m_Height; }
 
-	protected:
+        [[nodiscard]] HWND GetHandle() const { return m_Hwnd; }
+    protected:
+        static LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-		static LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+    protected:
+        inline static int m_Width = DEFAULT_WIDTH;
+        inline static int m_Height = DEFAULT_HEIGHT;
 
-	private:
+        inline static WindowState m_State = WindowState::RESTORED;
+        inline static bool m_Resizing = false;
 
-		void RegisterNewClass();
-
-	protected:
-
-		int m_Width;
-		int m_Height;
-
-		WindowType 	m_Type;
-		HWND		m_Hwnd;
-		WSTRING		m_Title;
-		HICON 		m_hIcon;
-
-	private:
-
-		bool			needsToClose = false;
-
-	public:
-
-		int			GetWidth() const { return m_Width; }
-		int			GetHeight() const { return m_Height; }
-
-		HWND 		GetHandle() const { return m_Hwnd; }
-
-		void SetNewSize(int newWidth, int newHeight);
-
-	};
+        WindowType m_Type;
+        HWND m_Hwnd;
+        WSTRING m_Title;
+        HICON m_HIcon;
+        
+    private:
+        void RegisterNewClass() const;
+    
+    private:
+        bool m_NeedsToClose = false;
+    };
 }

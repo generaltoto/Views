@@ -26,33 +26,30 @@ public:
 
 	void Initialize(Win32::IApplication* game);
 	void Run();
-	void Shutdown();
+	void Shutdown() const;
 
 	void OnApplicationFocus();
 	void OnApplicationLostFocus();
 
-	EngineState GetEngineState() const { return m_EngineState; }
-
+	[[nodiscard]] EngineState GetEngineState() const { return m_EngineState; }
+	
+	virtual void OnResize();
 private:
 
 	Engine();
 
 	void PreInitialize();
-	void InitComponents();
+	void InitComponents() const;
 	
 	void TogglePause();
 
 	void Update(float dt);
 
-	virtual void OnResize();
-
-private:
-
-	void Render();
+	static void Render();
 	void CalculateFrameStats();
-	bool NeedsToClose();
+	bool NeedsToClose() const;
 
-	float GetAspectRatio() const { return m_Window.GetWidth() / static_cast<float>(m_Window.GetHeight()); }
+	[[nodiscard]] float GetAspectRatio() const { return static_cast<float>(m_Window.GetWidth()) / static_cast<float>(m_Window.GetHeight()); }
 
 private:
 
@@ -69,5 +66,4 @@ private:
 	bool m_IsPaused = false;
 
 	EngineState m_EngineState;
-
 };
