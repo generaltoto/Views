@@ -18,6 +18,13 @@ This class is a singleton, you can get any DX12 component from it.
 class D3DRenderer
 {
 public:
+	enum class D3DState
+	{
+		SLEEP,
+		INIT,
+		RUNTIME
+	};
+public:
 	D3DRenderer();
 	~D3DRenderer();
 
@@ -26,7 +33,7 @@ public:
 
 	void InitializeD3D12(const Win32::Window* window);
 	void OnResize(int, int);
-	void Update(const float dt, const float totalTime) const;
+	static void Update(const float dt, const float totalTime);
 	void Render();
 
 	[[nodiscard]] ID3D12Device* GetDevice() const { return m_pDevice; }
@@ -34,6 +41,9 @@ public:
 	UINT GetCbvHeap(ID3D12DescriptorHeap** heap) const;
 	void BeginList() const;
 	void EndList();
+
+	[[nodiscard]] D3DState GetState() const { return m_State; }
+	void SetState(const D3DState state) { m_State = state; }
 	
 	int BufferWidth;
 	int BufferHeight;
@@ -66,6 +76,8 @@ private:
 
 private:
 	static D3DRenderer* m_pApp;
+
+	D3DState m_State;
 
 	HINSTANCE m_pInstance;
 

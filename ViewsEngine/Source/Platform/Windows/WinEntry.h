@@ -17,7 +17,7 @@ int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 
 	try
 	{
-		PerGameSettings GameSettings;
+		PerGameSettings gameSettings;
 
 		const auto engine = Engine::GetInstance();
 		auto game = EntryApplication();

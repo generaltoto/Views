@@ -6,10 +6,11 @@
 
 using namespace DirectX;
 
-CameraComponent::CameraComponent()
-	: m_ViewDirty(true)
+CameraComponent::CameraComponent() : m_ViewDirty(true)
 {
-	SetLens(70.0F, 1.0f, 1.0f, 5000);
+	const float winW = static_cast<float>(Engine::GetWindow()->GetWidth());
+	const float winH = static_cast<float>(Engine::GetWindow()->GetHeight());
+	SetLens(70.0F, winW / winH, 1.0f, 5000);
 }
 
 CameraComponent::~CameraComponent()
@@ -128,7 +129,7 @@ void CameraComponent::SetZRange(float zn, float zf)
 	UpdateProjectionMatrix();
 }
 
-void CameraComponent::SetLens(float fovY, float aspect, float zn, float zf)
+void CameraComponent::SetLens(const float fovY, const float aspect, const float zn, const float zf)
 {
 	// cache properties
 	m_FovY = fovY;
@@ -227,8 +228,8 @@ void CameraComponent::UpdateProjectionMatrix()
 
 	BoundingFrustum::CreateFromMatrix(m_Frustum, XMLoadFloat4x4(&m_Proj));
 
-	float winWidth = Engine::GetWindow()->GetWidth();
-	float winHeight = Engine::GetWindow()->GetHeight();
+	const auto winWidth = static_cast<float>(Engine::GetWindow()->GetWidth());
+	const auto winHeight = static_cast<float>(Engine::GetWindow()->GetHeight());
 	XMStoreFloat4x4(&m_OrthoProj, XMMatrixOrthographicLH(winWidth, winHeight, m_NearZ, m_FarZ));
 }
 
@@ -242,8 +243,8 @@ void CameraComponent::UpdateViewMatrix()
 		m_ViewDirty = false;
 
 		// Orthographic view
-		XMFLOAT3 pos = transform->m_pParent->GetPosition();
-		XMFLOAT3 target = transform->m_pParent->GetForward();
+		const XMFLOAT3 pos = transform->m_pParent->GetPosition();
+		const XMFLOAT3 target = transform->m_pParent->GetForward();
 		XMStoreFloat4x4(&m_OthoView, XMMatrixLookAtLH(XMLoadFloat3(&pos), XMLoadFloat3(&target), XMLoadFloat3(&transform->GetUp())));
 	}
 }
