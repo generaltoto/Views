@@ -10,11 +10,11 @@ struct InstanceData
 
 // ParticleTransform class that holds the position, rotation and scale of a particle
 // Note that we do not used the Transform class, we do not need to component part of the transform
-class ParticleTransform
+class VGParticleTransform
 {
 public:
-	ParticleTransform();
-	~ParticleTransform();
+	VGParticleTransform();
+	~VGParticleTransform();
 
 public:
 	void Translate(float x, float y, float z);
@@ -36,13 +36,13 @@ public:
 	void SetScale(float x, float y, float z);
 	void SetScale(DirectX::XMFLOAT3 scale);
 
-	DirectX::XMFLOAT3 GetPosition() const {return m_position;}
-	DirectX::XMFLOAT3 GetScale() const { return m_scale; }
-	DirectX::XMFLOAT4 GetQuaternion() const { return m_rotationQuaternion; }
+	DirectX::XMFLOAT3 GetPosition() const {return m_Position;}
+	DirectX::XMFLOAT3 GetScale() const { return m_Scale; }
+	DirectX::XMFLOAT4 GetQuaternion() const { return m_RotationQuaternion; }
 
-	DirectX::XMFLOAT4X4* GetWorldMatrix() { return &m_worldMatrix ;}
+	DirectX::XMFLOAT4X4* GetWorldMatrix() { return &m_WorldMatrix ;}
 
-	bool IsDirty() const { return m_dirty; }
+	[[nodiscard]] bool IsDirty() const { return m_Dirty; }
 
 	void UpdateWorldMatrix();
 
@@ -54,52 +54,50 @@ private:
 	void UpdateRotationMatrix();
 	void UpdateScaleMatrix();
 
-	bool m_dirty;
+	bool m_Dirty;
 
-	DirectX::XMFLOAT3 m_right;
-	DirectX::XMFLOAT3 m_up;
-	DirectX::XMFLOAT3 m_forward;
+	DirectX::XMFLOAT3 m_Right;
+	DirectX::XMFLOAT3 m_Up;
+	DirectX::XMFLOAT3 m_Forward;
 
-	DirectX::XMFLOAT3 m_position;
-	DirectX::XMFLOAT4X4 m_positionMatrix;
+	DirectX::XMFLOAT3 m_Position;
+	DirectX::XMFLOAT4X4 m_PositionMatrix;
 
-	DirectX::XMFLOAT3 m_scale;
-	DirectX::XMFLOAT4X4 m_scaleMatrix;
+	DirectX::XMFLOAT3 m_Scale;
+	DirectX::XMFLOAT4X4 m_ScaleMatrix;
 
-	DirectX::XMFLOAT4X4 m_rotationMatrix;
-	DirectX::XMFLOAT4 m_rotationQuaternion;
+	DirectX::XMFLOAT4X4 m_RotationMatrix;
+	DirectX::XMFLOAT4 m_RotationQuaternion;
 
-	DirectX::XMFLOAT4X4 m_worldMatrix;
+	DirectX::XMFLOAT4X4 m_WorldMatrix;
 };
 
 // Particle class that holds all the data for a single particle
 // This class is only used by the ParticleRenderer class 
-class Particle
+class VGParticle
 {
 public:
-	Particle();
-	~Particle();
+	VGParticle();
+	~VGParticle();
 
 	void Update(float deltaTime);
 
-	bool IsAlive() const { return CurrentLifeTime < LifeTime; }
-	bool IsActive() const { return m_isActive; }
+	[[nodiscard]] bool IsAlive() const { return CurrentLifeTime < LifeTime; }
+	[[nodiscard]] bool IsActive() const { return m_isActive; }
 
 	void Sleep() { m_isActive = false; }
 	void Awake() { m_isActive = true; }
 
 	void Reset();
 	void Init(float rLifeTime, DirectX::XMFLOAT3 rVel, DirectX::XMFLOAT3 rAngVel, DirectX::XMFLOAT3 parentPos);
-
-
-
+	
 	float CurrentLifeTime;
 	float LifeTime;
 
 	DirectX::XMFLOAT3 Velocity;
 	DirectX::XMFLOAT3 AngularVelocity;
 
-	ParticleTransform* Transform;
+	VGParticleTransform* Transform;
 
 private:
 	bool m_isActive;

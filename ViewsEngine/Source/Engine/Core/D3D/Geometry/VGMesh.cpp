@@ -1,13 +1,13 @@
 
 
-#include "D3DMesh.h"
+#include "VGMesh.h"
 #include "D3D/Base/VGHandler.h"
 
 using namespace DirectX;
 
-Vertex::Vertex() : Position(0.0f, 0.0f, 0.0f), Color(0.0f, 0.0f, 0.0f, 0.0f), Normal(0.0f, 0.0f, 0.0f), TangentU(0.0f, 0.0f, 0.0f), TexC(0.0f, 0.0f) { }
-Vertex::Vertex(const DirectX::XMFLOAT3& p, const DirectX::XMFLOAT4 c, const DirectX::XMFLOAT3& n, const DirectX::XMFLOAT3& t, const DirectX::XMFLOAT2& uv) : Position(p), Color(c), Normal(n), TangentU(t), TexC(uv) { }
-Vertex::Vertex(
+VGVertex::VGVertex() : Position(0.0f, 0.0f, 0.0f), Color(0.0f, 0.0f, 0.0f, 0.0f), Normal(0.0f, 0.0f, 0.0f), TangentU(0.0f, 0.0f, 0.0f), TexC(0.0f, 0.0f) { }
+VGVertex::VGVertex(const DirectX::XMFLOAT3& p, const DirectX::XMFLOAT4 c, const DirectX::XMFLOAT3& n, const DirectX::XMFLOAT3& t, const DirectX::XMFLOAT2& uv) : Position(p), Color(c), Normal(n), TangentU(t), TexC(uv) { }
+VGVertex::VGVertex(
 	float px, float py, float pz,
 	float cr, float cg, float cb, float ca,
 	float nx, float ny, float nz,
@@ -15,8 +15,8 @@ Vertex::Vertex(
 	float u, float v
 ) : Position(px, py, pz), Color(cr, cg, cb, ca), Normal(nx, ny, nz), TangentU(tx, ty, tz), TexC(u, v) { }
 
-D3DMesh::D3DMesh()
-	: m_vertexByteStride(0), m_vertexBufferByteSize(0), m_indexFormat(DXGI_FORMAT_R16_UINT), m_indexBufferByteSize(0)
+VGMesh::VGMesh()
+	: m_VertexByteStride(0), m_VertexBufferByteSize(0), m_IndexFormat(DXGI_FORMAT_R16_UINT), m_IndexBufferByteSize(0)
 {
 	m_pVertexBufferGpu = nullptr;
 	m_pIndexBufferGpu = nullptr;
@@ -25,39 +25,39 @@ D3DMesh::D3DMesh()
 	m_pIndexBufferUploader = nullptr;
 }
 
-D3DMesh::~D3DMesh()
+VGMesh::~VGMesh()
 {
-	DisposeUploaders();
+	DisposeUploader();
 
 	RELPTR(m_pVertexBufferGpu);
 	RELPTR(m_pIndexBufferGpu);
 }
 
-D3D12_VERTEX_BUFFER_VIEW D3DMesh::VertexBufferView() const {
+D3D12_VERTEX_BUFFER_VIEW VGMesh::VertexBufferView() const {
 	D3D12_VERTEX_BUFFER_VIEW vbv;
 	vbv.BufferLocation = m_pVertexBufferGpu->GetGPUVirtualAddress();
-	vbv.StrideInBytes = m_vertexByteStride;
-	vbv.SizeInBytes = m_vertexBufferByteSize;
+	vbv.StrideInBytes = m_VertexByteStride;
+	vbv.SizeInBytes = m_VertexBufferByteSize;
 
 	return vbv;
 }
 
-D3D12_INDEX_BUFFER_VIEW D3DMesh::IndexBufferView() const {
+D3D12_INDEX_BUFFER_VIEW VGMesh::IndexBufferView() const {
 	D3D12_INDEX_BUFFER_VIEW ibv;
 	ibv.BufferLocation = m_pIndexBufferGpu->GetGPUVirtualAddress();
-	ibv.Format = m_indexFormat;
-	ibv.SizeInBytes = m_indexBufferByteSize;
+	ibv.Format = m_IndexFormat;
+	ibv.SizeInBytes = m_IndexBufferByteSize;
 
 	return ibv;
 }
 
-void D3DMesh::DisposeUploaders()
+void VGMesh::DisposeUploader()
 {
 	RELPTR(m_pVertexBufferUploader);
 	RELPTR(m_pIndexBufferUploader);
 }
 
-void D3DMesh::Create(const void* vData, UINT vStride, UINT vSize, const void* iData, UINT iStride, UINT iSize)
+void VGMesh::Create(const void* vData, UINT vStride, UINT vSize, const void* iData, UINT iStride, UINT iSize)
 {
 	I(VGHandler)->BeginList();
 	ID3D12Device* device = I(VGHandler)->GetDevice();
@@ -66,26 +66,26 @@ void D3DMesh::Create(const void* vData, UINT vStride, UINT vSize, const void* iD
 	const UINT iBufferSize = iStride * iSize;
 	const UINT vBufferSize = vStride * vSize;
 
-	Name = typeid(D3DMesh).name();
+	Name = typeid(VGMesh).name();
 
 	m_pVertexBufferGpu = CreateDefaultBuffer(device, cmdList, vData, vBufferSize, m_pVertexBufferUploader);
-	m_vertexByteStride = vStride;
-	m_vertexBufferByteSize = vBufferSize;
+	m_VertexByteStride = vStride;
+	m_VertexBufferByteSize = vBufferSize;
 
 	m_pIndexBufferGpu = CreateDefaultBuffer(device, cmdList, iData, iBufferSize, m_pIndexBufferUploader);
-	m_indexFormat = DXGI_FORMAT_R32_UINT;
-	m_indexBufferByteSize = iBufferSize;
+	m_IndexFormat = DXGI_FORMAT_R32_UINT;
+	m_IndexBufferByteSize = iBufferSize;
 
-	m_indexCount = iSize;
-	m_startIndexLocation = 0;
-	m_baseVertexLocation = 0;
+	m_IndexCount = iSize;
+	m_StartIndexLocation = 0;
+	m_BaseVertexLocation = 0;
 
 	I(VGHandler)->EndList();
 
-	DisposeUploaders();
+	DisposeUploader();
 }
 
-ID3D12Resource* D3DMesh::CreateDefaultBuffer(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, const void* initData, UINT64 byteSize, ID3D12Resource*& uploadBuffer)
+ID3D12Resource* VGMesh::CreateDefaultBuffer(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, const void* initData, UINT64 byteSize, ID3D12Resource*& uploadBuffer)
 {
 	ID3D12Resource* defaultBuffer = nullptr;
 

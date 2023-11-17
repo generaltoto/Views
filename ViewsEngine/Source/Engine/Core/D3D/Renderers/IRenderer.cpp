@@ -2,8 +2,8 @@
 
 #include "Engine/Resource.h"
 
-#include "D3D/Geometry/D3DMesh.h"
-#include "D3D/Geometry/GeometryHandler.h"
+#include "D3D/Geometry/VGMesh.h"
+#include "D3D/Geometry/VGGeometryHandler.h"
 
 #include "D3D/Shaders/Material.h"
 #include "D3D/Shaders/ShaderBase.h"
@@ -28,7 +28,7 @@ IRenderer::~IRenderer()
 
 void IRenderer::Init(const MeshType meshType, const MaterialType matType)
 {
-	Mesh = GeometryHandler::GetMesh(meshType);
+	Mesh = VGGeometryHandler::GetMesh(meshType);
 
 	Material* mat = Resource::LoadMaterial(matType);
 	BindMaterial(mat);

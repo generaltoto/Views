@@ -1,6 +1,6 @@
 #pragma once
 
-#include "D3D/Geometry/Particle.h"
+#include "D3D/Geometry/VGParticle.h"
 
 #define MAX_PARTICLE_COUNT 5000
 
@@ -28,7 +28,7 @@ public:
 	DirectX::XMFLOAT4 GetColor2() const { return m_color2; }
 
 private:
-	std::vector<Particle*> m_particles{};
+	std::vector<VGParticle*> m_particles{};
 	std::vector<InstanceData> m_particleInstanceData{};
 
 	UINT m_particleCount = 0;

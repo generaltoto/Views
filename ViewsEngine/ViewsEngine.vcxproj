@@ -174,9 +174,9 @@
     <ClCompile Include="Source\Engine\Core\D3D\Base\VGHandler.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Base\VGUtils.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\External\DDSTextureLoader.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Geometry\D3DMesh.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Geometry\GeometryHandler.cpp" />
-    <ClCompile Include="Source\Engine\Core\D3D\Geometry\Particle.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\VGMesh.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\VGGeometryHandler.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Geometry\VGParticle.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Renderers\IRenderer.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Renderers\MeshRenderer.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Renderers\ParticleRenderer.cpp" />
@@ -464,9 +464,9 @@
     <ClInclude Include="Source\Engine\Core\D3D\Base\VGMeshType.h" />
     <ClInclude Include="Source\Engine\Core\D3D\External\d3dx12.h" />
     <ClInclude Include="Source\Engine\Core\D3D\External\DDSTextureLoader.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Geometry\D3DMesh.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Geometry\GeometryHandler.h" />
-    <ClInclude Include="Source\Engine\Core\D3D\Geometry\Particle.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\VGMesh.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\VGGeometryHandler.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Geometry\VGParticle.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Renderers\IRenderer.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Renderers\MeshRenderer.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Renderers\ParticleRenderer.h" />

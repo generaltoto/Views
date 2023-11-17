@@ -104,7 +104,7 @@ void ParticleRenderer::CreateMissingParticles()
 
 void ParticleRenderer::CreateParticle()
 {
-	auto* p = new Particle();
+	auto* p = new VGParticle();
 
 	const float rLiftTime = rand() % 3 + 1.0f;
 
@@ -132,7 +132,7 @@ void ParticleRenderer::UpdateParticles(const float dt)
 {
 	for (UINT i = 0; i < m_particleCount; i++)
 	{
-		Particle* p = m_particles[i];
+		VGParticle* p = m_particles[i];
 
 		// Since some particles might be deleted, we need to check if the pointer is still valid
 		if (p == nullptr) continue;

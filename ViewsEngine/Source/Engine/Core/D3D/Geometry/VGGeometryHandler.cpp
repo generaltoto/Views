@@ -1,71 +1,71 @@
 
 
-#include "GeometryHandler.h"
+#include "VGGeometryHandler.h"
 
 using namespace DirectX;
 
-D3DMesh* GeometryHandler::m_meshes[5];
+VGMesh* VGGeometryHandler::m_Meshes[5];
 
-void GeometryHandler::CreateAllMeshes()
+void VGGeometryHandler::CreateAllMeshes()
 {
-	m_meshes[0] = CreateCube();
-	m_meshes[1] = CreateGeoSphere();
-	m_meshes[2] = CreatePyramid();
-	m_meshes[3] = CreateUISquare(1.0f, 0.1f);
-	m_meshes[4] = CreateUISquare(1.0f, 1.0f);
+	m_Meshes[0] = CreateCube();
+	m_Meshes[1] = CreateGeoSphere();
+	m_Meshes[2] = CreatePyramid();
+	m_Meshes[3] = CreateUISquare(1.0f, 0.1f);
+	m_Meshes[4] = CreateUISquare(1.0f, 1.0f);
 }
 
-void GeometryHandler::DestroyAllMeshes()
+void VGGeometryHandler::DestroyAllMeshes()
 {
-	for (auto& mesh : m_meshes)
+	for (auto& mesh : m_Meshes)
 	{
 		DELPTR(mesh)
 	}
 }
 
-D3DMesh* GeometryHandler::CreateCube()
+VGMesh* VGGeometryHandler::CreateCube()
 {
-	Vertex v[24];
+	VGVertex v[24];
 
 	constexpr float width = 0.5f;
 	constexpr float height = 0.5f;
 	constexpr float depth = 0.5f;
 
 	// Fill in the front face vertex data.
-	v[0] = Vertex(-width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-	v[1] = Vertex(-width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	v[2] = Vertex(+width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-	v[3] = Vertex(+width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+	v[0] = VGVertex(-width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	v[1] = VGVertex(-width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	v[2] = VGVertex(+width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	v[3] = VGVertex(+width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 
 	// Fill in the back face vertex data.
-	v[4] = Vertex(-width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
-	v[5] = Vertex(+width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-	v[6] = Vertex(+width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	v[7] = Vertex(-width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	v[4] = VGVertex(-width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+	v[5] = VGVertex(+width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	v[6] = VGVertex(+width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	v[7] = VGVertex(-width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 	// Fill in the top face vertex data.
-	v[8] = Vertex(-width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-	v[9] = Vertex(-width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	v[10] = Vertex(+width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-	v[11] = Vertex(+width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+	v[8] = VGVertex(-width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	v[9] = VGVertex(-width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	v[10] = VGVertex(+width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	v[11] = VGVertex(+width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 
 	// Fill in the bottom face vertex data.
-	v[12] = Vertex(-width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
-	v[13] = Vertex(+width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-	v[14] = Vertex(+width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	v[15] = Vertex(-width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+	v[12] = VGVertex(-width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+	v[13] = VGVertex(+width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	v[14] = VGVertex(+width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	v[15] = VGVertex(-width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 0.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 	// Fill in the left face vertex data.
-	v[16] = Vertex(-width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f);
-	v[17] = Vertex(-width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f);
-	v[18] = Vertex(-width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f);
-	v[19] = Vertex(-width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f);
+	v[16] = VGVertex(-width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f);
+	v[17] = VGVertex(-width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f);
+	v[18] = VGVertex(-width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f);
+	v[19] = VGVertex(-width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f);
 
 	// Fill in the right face vertex data.
-	v[20] = Vertex(+width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
-	v[21] = Vertex(+width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-	v[22] = Vertex(+width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
-	v[23] = Vertex(+width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+	v[20] = VGVertex(+width, -height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f);
+	v[21] = VGVertex(+width, +height, -depth, 0.15f, 0.1f, 0.15f, 1.0F, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+	v[22] = VGVertex(+width, +height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
+	v[23] = VGVertex(+width, -height, +depth, 0.15f, 0.1f, 0.15f, 1.0F, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 
 	UINT i[36] =
 	{
@@ -82,19 +82,19 @@ D3DMesh* GeometryHandler::CreateCube()
 		20, 21, 22, 20, 22, 23
 	};
 
-	auto* mesh = new D3DMesh();
-	mesh->Create(v, sizeof(Vertex), _countof(v), i, sizeof(UINT), _countof(i));
+	auto* mesh = new VGMesh();
+	mesh->Create(v, sizeof(VGVertex), _countof(v), i, sizeof(UINT), _countof(i));
 
 	return mesh;
 }
 
-D3DMesh* GeometryHandler::CreateUVSphere()
+VGMesh* VGGeometryHandler::CreateUVSphere()
 {
 	constexpr float radius = 1.0F;
 	constexpr UINT slices = 20;
 	constexpr UINT stacks = 20;
 
-	std::vector<Vertex> vertices;
+	std::vector<VGVertex> vertices;
 	std::vector<UINT> indices;
 
 	//
@@ -104,8 +104,8 @@ D3DMesh* GeometryHandler::CreateUVSphere()
 	// Poles: note that there will be texture coordinate distortion as there is
 	// not a unique point on the texture map to assign to the pole when mapping
 	// a rectangular texture onto a sphere.
-	Vertex topVertex(0.0f, +radius, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	Vertex bottomVertex(0.0f, -radius, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	VGVertex topVertex(0.0f, +radius, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, +1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	VGVertex bottomVertex(0.0f, -radius, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
 	vertices.push_back(topVertex);
 
@@ -122,7 +122,7 @@ D3DMesh* GeometryHandler::CreateUVSphere()
 		{
 			float theta = static_cast<float>(j) * thetaStep;
 
-			Vertex v;
+			VGVertex v;
 
 			// spherical to cartesian
 			v.Position.x = radius * sinf(phi) * cosf(theta);
@@ -203,18 +203,18 @@ D3DMesh* GeometryHandler::CreateUVSphere()
 		indices.push_back(baseIndex + i + 1);
 	}
 
-	auto mesh = new D3DMesh();
-	mesh->Create(vertices.data(), sizeof(Vertex), (UINT)vertices.size(), indices.data(), sizeof(UINT), (UINT)indices.size());
+	auto mesh = new VGMesh();
+	mesh->Create(vertices.data(), sizeof(VGVertex), (UINT)vertices.size(), indices.data(), sizeof(UINT), (UINT)indices.size());
 
 	return mesh;
 }
 
-D3DMesh* GeometryHandler::CreateGeoSphere()
+VGMesh* VGGeometryHandler::CreateGeoSphere()
 {
 	const float radius = 1;
 	constexpr UINT subDivisions = 6;
 
-	std::vector<Vertex> vertices;
+	std::vector<VGVertex> vertices;
 	std::vector<UINT> indices;
 
 	// Approximate a sphere by tessellating an icosahedron.
@@ -285,16 +285,16 @@ D3DMesh* GeometryHandler::CreateGeoSphere()
 		vertex.Color = XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f);
 	}
 
-	auto* mesh = new D3DMesh();
-	mesh->Create(vertices.data(), sizeof(Vertex), (UINT)vertices.size(), indices.data(), sizeof(UINT), (UINT)indices.size());
+	auto* mesh = new VGMesh();
+	mesh->Create(vertices.data(), sizeof(VGVertex), (UINT)vertices.size(), indices.data(), sizeof(UINT), (UINT)indices.size());
 
 	return mesh;
 }
 
-void GeometryHandler::Subdivide(std::vector<Vertex>& vertices, std::vector<UINT>& indices)
+void VGGeometryHandler::Subdivide(std::vector<VGVertex>& vertices, std::vector<UINT>& indices)
 {
 	// Save a copy of the input geometry.
-	std::vector<Vertex> copyVertices = vertices;
+	std::vector<VGVertex> copyVertices = vertices;
 	std::vector<UINT> copyIndices = indices;
 
 
@@ -314,17 +314,17 @@ void GeometryHandler::Subdivide(std::vector<Vertex>& vertices, std::vector<UINT>
 	UINT numTris = static_cast<UINT>(copyIndices.size()) / 3;
 	for (UINT i = 0; i < numTris; ++i)
 	{
-		Vertex v0 = copyVertices[copyIndices[i * 3 + 0]];
-		Vertex v1 = copyVertices[copyIndices[i * 3 + 1]];
-		Vertex v2 = copyVertices[copyIndices[i * 3 + 2]];
+		VGVertex v0 = copyVertices[copyIndices[i * 3 + 0]];
+		VGVertex v1 = copyVertices[copyIndices[i * 3 + 1]];
+		VGVertex v2 = copyVertices[copyIndices[i * 3 + 2]];
 
 		//
 		// Generate the midpoints.
 		//
 
-		Vertex m0 = MidPoint(v0, v1);
-		Vertex m1 = MidPoint(v1, v2);
-		Vertex m2 = MidPoint(v0, v2);
+		VGVertex m0 = MidPoint(v0, v1);
+		VGVertex m1 = MidPoint(v1, v2);
+		VGVertex m2 = MidPoint(v0, v2);
 
 		//
 		// Add new geometry.
@@ -355,7 +355,7 @@ void GeometryHandler::Subdivide(std::vector<Vertex>& vertices, std::vector<UINT>
 	}
 }
 
-Vertex GeometryHandler::MidPoint(const Vertex& v0, const Vertex& v1)
+VGVertex VGGeometryHandler::MidPoint(const VGVertex& v0, const VGVertex& v1)
 {
 	XMVECTOR p0 = XMLoadFloat3(&v0.Position);
 	XMVECTOR p1 = XMLoadFloat3(&v1.Position);
@@ -376,7 +376,7 @@ Vertex GeometryHandler::MidPoint(const Vertex& v0, const Vertex& v1)
 	XMVECTOR tangent = XMVector3Normalize(0.5f * (tan0 + tan1));
 	XMVECTOR tex = 0.5f * (tex0 + tex1);
 
-	Vertex v;
+	VGVertex v;
 	XMStoreFloat3(&v.Position, pos);
 	XMStoreFloat3(&v.Normal, normal);
 	XMStoreFloat3(&v.TangentU, tangent);
@@ -385,33 +385,33 @@ Vertex GeometryHandler::MidPoint(const Vertex& v0, const Vertex& v1)
 	return v;
 }
 
-D3DMesh* GeometryHandler::CreatePyramid()
+VGMesh* VGGeometryHandler::CreatePyramid()
 {
-	Vertex vList[18];
+	VGVertex vList[18];
 
-	vList[0] = Vertex(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
-	vList[1] = Vertex(XMFLOAT3(-0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
-	vList[2] = Vertex(XMFLOAT3(-0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
+	vList[0] = VGVertex(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
+	vList[1] = VGVertex(XMFLOAT3(-0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
+	vList[2] = VGVertex(XMFLOAT3(-0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
 
-	vList[3] = Vertex(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
-	vList[4] = Vertex(XMFLOAT3(-0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
-	vList[5] = Vertex(XMFLOAT3(0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
+	vList[3] = VGVertex(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
+	vList[4] = VGVertex(XMFLOAT3(-0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
+	vList[5] = VGVertex(XMFLOAT3(0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
 
-	vList[6] = Vertex(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
-	vList[7] = Vertex(XMFLOAT3(0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
-	vList[8] = Vertex(XMFLOAT3(0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
+	vList[6] = VGVertex(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
+	vList[7] = VGVertex(XMFLOAT3(0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
+	vList[8] = VGVertex(XMFLOAT3(0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
 
-	vList[9] = Vertex(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
-	vList[10] = Vertex(XMFLOAT3(0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
-	vList[11] = Vertex(XMFLOAT3(-0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
+	vList[9] = VGVertex(XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
+	vList[10] = VGVertex(XMFLOAT3(0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
+	vList[11] = VGVertex(XMFLOAT3(-0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(1.0f, 1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
 
-	vList[12] = Vertex(XMFLOAT3(-0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
-	vList[13] = Vertex(XMFLOAT3(-0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
-	vList[14] = Vertex(XMFLOAT3(0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
+	vList[12] = VGVertex(XMFLOAT3(-0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
+	vList[13] = VGVertex(XMFLOAT3(-0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
+	vList[14] = VGVertex(XMFLOAT3(0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
 
-	vList[15] = Vertex(XMFLOAT3(0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
-	vList[16] = Vertex(XMFLOAT3(0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
-	vList[17] = Vertex(XMFLOAT3(-0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
+	vList[15] = VGVertex(XMFLOAT3(0.5f, 0.0f, 0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.5f, 0.0f));
+	vList[16] = VGVertex(XMFLOAT3(0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f));
+	vList[17] = VGVertex(XMFLOAT3(-0.5f, 0.0f, -0.5f), XMFLOAT4(0.8f, 0.1f, 0.1f, 1.0f), XMFLOAT3(0.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f));
 	
 	UINT iList[] =
 	{
@@ -424,20 +424,20 @@ D3DMesh* GeometryHandler::CreatePyramid()
 		15, 16, 17
 	};
 
-	auto* mesh = new D3DMesh();
-	mesh->Create(vList, sizeof(Vertex), _countof(vList), iList, sizeof(UINT), _countof(iList));
+	auto* mesh = new VGMesh();
+	mesh->Create(vList, sizeof(VGVertex), _countof(vList), iList, sizeof(UINT), _countof(iList));
 
 	return mesh;
 }
 
-D3DMesh* GeometryHandler::CreateUISquare(const float uvOffsetX, const float uvOffsetY)
+VGMesh* VGGeometryHandler::CreateUISquare(const float uvOffsetX, const float uvOffsetY)
 {
-	Vertex vList[4];
+	VGVertex vList[4];
 
 	constexpr float width = 0.5f;
 	constexpr float height = 0.5f;
 
-	vList[0] = Vertex(
+	vList[0] = VGVertex(
 		XMFLOAT3(-width, height, 0.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 		XMFLOAT3(0.0f, 0.0f, 1.0f),
@@ -445,7 +445,7 @@ D3DMesh* GeometryHandler::CreateUISquare(const float uvOffsetX, const float uvOf
 		XMFLOAT2(0.0f, 0.0f)
 	);
 
-	vList[1] = Vertex(
+	vList[1] = VGVertex(
 		XMFLOAT3(-width, -height, 0.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 		XMFLOAT3(0.0f, 0.0f, 1.0f),
@@ -453,7 +453,7 @@ D3DMesh* GeometryHandler::CreateUISquare(const float uvOffsetX, const float uvOf
 		XMFLOAT2(0.0f, uvOffsetY)
 	);
 
-	vList[2] = Vertex(
+	vList[2] = VGVertex(
 		XMFLOAT3(width, height, 0.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 		XMFLOAT3(0.0f, 0.0f, 1.0f),
@@ -461,7 +461,7 @@ D3DMesh* GeometryHandler::CreateUISquare(const float uvOffsetX, const float uvOf
 		XMFLOAT2(uvOffsetX, 0.0f)
 	);
 
-	vList[3] = Vertex(
+	vList[3] = VGVertex(
 		XMFLOAT3(width, -height, 0.0f),
 		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 		XMFLOAT3(0.0f, 0.0f, 1.0f),
@@ -475,8 +475,8 @@ D3DMesh* GeometryHandler::CreateUISquare(const float uvOffsetX, const float uvOf
 		2, 3, 1
 	};
 
-	auto* mesh = new D3DMesh();
-	mesh->Create(vList, sizeof(Vertex), _countof(vList), iList, sizeof(UINT), _countof(iList));
+	auto* mesh = new VGMesh();
+	mesh->Create(vList, sizeof(VGVertex), _countof(vList), iList, sizeof(UINT), _countof(iList));
 
 	return mesh;
 }

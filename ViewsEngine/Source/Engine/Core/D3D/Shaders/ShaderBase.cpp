@@ -1,6 +1,6 @@
 
 
-#include "D3D/Geometry/D3DMesh.h"
+#include "D3D/Geometry/VGMesh.h"
 #include "D3D/Shaders/Textures/Texture.h"
 #include "D3D/Renderers/MeshRenderer.h"
 #include "D3D/Renderers/ParticleRenderer.h"

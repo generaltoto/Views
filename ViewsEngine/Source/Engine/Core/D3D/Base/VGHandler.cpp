@@ -2,7 +2,7 @@
 
 #include "D3D/Shaders/ShaderBase.h"
 
-#include "D3D/Geometry/GeometryHandler.h"
+#include "D3D/Geometry/VGGeometryHandler.h"
 
 #include "Engine/Engine.h"
 
@@ -80,7 +80,7 @@ VGHandler::~VGHandler()
     RELPTR(m_pCbvSrvHeap)
     
     // Delete all static meshes from GeometryHandler
-    GeometryHandler::DestroyAllMeshes();
+    VGGeometryHandler::DestroyAllMeshes();
 
     // Delete all resources
     Resource::ReleaseResources();
@@ -209,7 +209,7 @@ void VGHandler::Init(const Win32::Window* window)
 
     OnResize(window->GetWidth(), window->GetHeight());
 
-    GeometryHandler::CreateAllMeshes();
+    VGGeometryHandler::CreateAllMeshes();
 
     CreateResources();
 }

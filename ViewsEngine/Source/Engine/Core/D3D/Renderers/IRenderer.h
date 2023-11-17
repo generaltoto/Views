@@ -1,7 +1,7 @@
 #pragma once
 
 class Material;
-class D3DMesh;
+class VGMesh;
 class Texture;
 
 struct ID3D12GraphicsCommandList;
@@ -24,7 +24,7 @@ public:
 	void RegisterTexture(Texture* tex);
 
 public:
-	D3DMesh* Mesh;
+	VGMesh* Mesh;
 	UINT ObjectCBIndex = -1;
 
 	Material* Mat;
