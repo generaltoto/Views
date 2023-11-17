@@ -179,13 +179,7 @@ void D3DRenderer::OnResize(const int newWidth, const int newHeight)
     CreateRenderTargetView();
 
     // Create the depth/stencil buffer and view.
-    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
-    dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
-    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-    dsvDesc.Format = m_DepthStencilFormat;
-    dsvDesc.Texture2D.MipSlice = 0;
-
-    CreateDepthStencilBuffer(false, &dsvDesc);
+    CreateDepthStencilBuffer();
 }
 
 D3DRenderer* D3DRenderer::GetInstance()
@@ -216,7 +210,9 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 
     CreateRtvAndDsvDescriptorHeaps();
     CreateRenderTargetView();
-    CreateDepthStencilBuffer(true, nullptr);
+
+    BeginList();
+    CreateDepthStencilBuffer();
 
     GeometryHandler::CreateAllMeshes();
 
@@ -371,10 +367,8 @@ void D3DRenderer::CreateRtvAndDsvDescriptorHeaps()
     ThrowIfFailed(hr)
 }
 
-void D3DRenderer::CreateDepthStencilBuffer(const bool beginList, const D3D12_DEPTH_STENCIL_VIEW_DESC* dsvDesc)
+void D3DRenderer::CreateDepthStencilBuffer()
 {
-    if (beginList) BeginList();
-
     // Create the depth/stencil buffer and view.
     D3D12_RESOURCE_DESC depthStencilDesc;
     depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
@@ -401,7 +395,12 @@ void D3DRenderer::CreateDepthStencilBuffer(const bool beginList, const D3D12_DEP
 
     // Create descriptor to mip level 0 of entire resource using the
     // format of the resource.
-    m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer, dsvDesc, DepthStencilView());
+    D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+    dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+    dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+    dsvDesc.Format = m_DepthStencilFormat;
+    dsvDesc.Texture2D.MipSlice = 0;
+    m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer, &dsvDesc, DepthStencilView());
 
     // Apply a resource barrier transition to write a new resource as a depth-stencil buffer.
     // We call this methods before executing the command list to make sure the resource is in the correct state
