@@ -1,6 +1,5 @@
 #include "Planet.h"
 
-#include "Scripts/Asteroids/PlanetLife.h"
 #include "Scripts/TriggerCollisionEvent/PlanetCollisionEvent.h"
 
 Planet::Planet()
@@ -19,9 +18,7 @@ Planet::Planet()
 
 	auto sc = AddComponent<SphereCollider>();
 	sc->SetRadius(50);
-
-	AddComponent<PlanetLife>();
-
+	
 	m_CategoryBitmask.SetLayer(LayerID::OBSTACLE);
 	m_CollisionBitmask.SetLayer(LayerID::PLAYER);
 	m_CollisionBitmask.AddLayer(LayerID::ASTEROID);

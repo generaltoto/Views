@@ -1,5 +1,4 @@
 #pragma once
-#include "Scripts/Asteroids/PlanetLife.h"
 
 class PlanetCollisionEvent : public TriggerCollisionEvent
 {
@@ -16,7 +15,5 @@ class PlanetCollisionEvent : public TriggerCollisionEvent
 private:
 
 	VGParticleRenderer * m_ParticleRenderer = nullptr;
-	PlanetLife* m_PlanetLife = nullptr;
-
 };
 
