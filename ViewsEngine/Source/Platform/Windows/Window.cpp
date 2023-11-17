@@ -93,7 +93,6 @@ namespace Win32
             // Update the width and height of the window
             SetNewSize(LOWORD(lParam), HIWORD(lParam));
             
-
             switch (wParam)
             {
             // If the window is maximized, we need to resize our render target

@@ -198,21 +198,16 @@ void D3DRenderer::InitializeD3D12(const Win32::Window* window)
 #if defined(DEBUG) || defined(_DEBUG)
     EnableDebugLayer();
 #endif
-
-    BufferWidth = window->GetWidth();
-    BufferHeight = window->GetHeight();
-
     CreateDevice();
     CreateFenceAndGetDescriptorsSizes();
     CheckMsaaQualitySupport();
+    
     CreateCommandObjects();
+    
     CreateSwapChain(window->GetHandle());
-
     CreateRtvAndDsvDescriptorHeaps();
-    CreateRenderTargetView();
 
-    BeginList();
-    CreateDepthStencilBuffer();
+    OnResize(window->GetWidth(), window->GetHeight());
 
     GeometryHandler::CreateAllMeshes();
 

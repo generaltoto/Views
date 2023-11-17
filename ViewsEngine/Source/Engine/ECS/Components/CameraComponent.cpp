@@ -6,10 +6,11 @@
 
 using namespace DirectX;
 
-CameraComponent::CameraComponent()
-	: m_ViewDirty(true)
+CameraComponent::CameraComponent() : m_ViewDirty(true)
 {
-	SetLens(70.0F, 1.0f, 1.0f, 5000);
+	const float winW = static_cast<float>(Engine::GetWindow()->GetWidth());
+	const float winH = static_cast<float>(Engine::GetWindow()->GetHeight());
+	SetLens(70.0F, winW / winH, 1.0f, 5000);
 }
 
 CameraComponent::~CameraComponent()
