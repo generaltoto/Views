@@ -1,6 +1,6 @@
 #include "Engine/Resource.h"
 
-#include "D3D/Shaders/VGShaderBase.h"
+#include "D3D/Shaders/Shaders/VGShaderBase.h"
 
 #include "D3D/Geometry/VGGeometryHandler.h"
 
@@ -499,7 +499,7 @@ void VGHandler::CreateResources()
     // Now that all resources are created, we can create the PSO and Root Signature for each shader
     for (const auto& shader : Resource::GetShaders() | std::views::values)
     {
-        shader->CreatePsoAndRootSignature(VertexType::VERTEX, m_BackBufferFormat, m_DepthStencilFormat);
+        shader->CreatePsoAndRootSignature(m_BackBufferFormat, m_DepthStencilFormat);
     }
 }
 #pragma endregion

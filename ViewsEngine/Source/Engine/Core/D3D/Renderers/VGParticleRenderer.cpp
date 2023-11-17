@@ -1,5 +1,6 @@
 #include "D3D/Shaders/Base/VGMaterial.h"
-#include "D3D/Shaders/VGShaderBase.h"
+#include "D3D/Shaders/Shaders/VGShaderBase.h"
+#include "D3D/Shaders/Shaders/VGShaderParticle.h"
 
 #include "VGParticleRenderer.h"
 

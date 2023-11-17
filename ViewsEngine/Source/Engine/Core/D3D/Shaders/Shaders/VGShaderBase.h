@@ -8,12 +8,10 @@ class VGParticleRenderer;
 class VGMeshRenderer;
 struct InstanceData;
 
-enum VertexType { VERTEX };
-
 class VGShaderBase
 {
 public:
-	VGShaderBase(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, const std::wstring& filepath);
+	VGShaderBase(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring filepath);
 	virtual ~VGShaderBase();
 
 protected:
@@ -84,7 +82,7 @@ protected:
 
 public:
 	virtual void Init() = 0;
-	virtual void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) = 0;
+	virtual void CreatePsoAndRootSignature(DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) = 0;
 
 	virtual void BeginDraw(ID3D12GraphicsCommandList* cmdList) = 0;
 	virtual void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) = 0;
@@ -105,100 +103,10 @@ public:
 	void CompileShader(const D3D_SHADER_MACRO* defines, const std::string& entrypoint, const std::string& target, ID3DBlob** uploader) const;
 
 protected:
-	void SetInputLayout(VertexType vertexType);
+	void SetInputLayout();
 
 	/* Samplers defines how we want to parse our texture in our shader.
 	Creating multiple Samplers allows us to have access to different parse mode in our shader later on. This is useful on big engines.
 	Note that will certainly do not need that much samplers, but it was juste to learn how to use them. */
 	static std::array<const CD3DX12_STATIC_SAMPLER_DESC, 2> GetStaticSamplers();
-};
-
-class VGShaderSimple final : public VGShaderBase
-{
-public:
-	VGShaderSimple(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath);
-	~VGShaderSimple() override;
-
-	void Init() override;
-	void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) override;
-
-	void BeginDraw(ID3D12GraphicsCommandList* cmdList) override;
-	void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
-	void EndDraw(ID3D12GraphicsCommandList* cmdList) override;
-};
-
-class VGShaderTexture : public VGShaderBase
-{
-public:
-	VGShaderTexture(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath);
-	~VGShaderTexture() override;
-
-	void Init() override;
-	void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) override;
-
-	void BeginDraw(ID3D12GraphicsCommandList* cmdList) override;
-	void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
-	void EndDraw(ID3D12GraphicsCommandList* cmdList) override;
-};
-
-class VGShaderParticle final : public VGShaderBase
-{
-public:
-	VGShaderParticle(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath);
-	~VGShaderParticle() override;
-
-	void Init() override;
-	void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) override;
-
-	void BeginDraw(ID3D12GraphicsCommandList* cmdList) override;
-	void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
-	void EndDraw(ID3D12GraphicsCommandList* cmdList) override;
-
-	void UpdateParticleInstanceDataBuffer(int startIndex, const void* data) const;
-private:
-	void DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const VGParticleRenderer* drawnMeshR);
-
-	/*
-	To render particles with a minimum amount of draw calls, we need to use instancing.
-	Instancing allows us to draw multiple instances of the same mesh with only one draw call.
-	
-	To do so, we need to create a buffer that will store the data of each instance.
-	We can then give the buffer to the shader that will catch it in a StructuredBuffer. We also pass the instanceID to the shader via the vs_main method.
-	See Texture_UI.hlsl and chapter 16.1 for more information.
-	*/
-	VGUploadBuffer<InstanceData>* m_ParticleInstanceDataBuffer;
-};
-
-class VGShaderSkybox final : public VGShaderTexture
-{
-public:
-	VGShaderSkybox(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath);
-	~VGShaderSkybox() override;
-
-	void CreatePsoAndRootSignature(VertexType vertexType, DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat) override;
-};
-
-class VGShaderTextureUI final : public VGShaderTexture
-{
-public:
-	struct OffSetConstants
-	{
-		DirectX::XMFLOAT4X4 World = Identity4X4();
-		float UVOffsetY = 0.0f;
-	};
-
-public:
-	VGShaderTextureUI(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath);
-	~VGShaderTextureUI() override;
-
-	UINT GetCreatedIndex() override { return static_cast<UINT>(m_OffSetCb.size()) - 1; }
-
-	void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
-	void UpdateAsOffset(const DirectX::XMFLOAT4X4* itemWorldMatrix, UINT cbIndex, float offSetY);
-
-protected:
-	void AddObjectCb() override;
-
-	/* We created a new object constant buffer to store the offset value of the UI element. */
-	std::vector<VGUploadBuffer<OffSetConstants>*> m_OffSetCb;
 };

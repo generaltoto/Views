@@ -1,6 +1,10 @@
+#include "D3D/Shaders/Shaders/VGShaderBase.h"
+#include "D3D/Shaders/Shaders/VGShaderColor.h"
+#include "D3D/Shaders/Shaders/VGShaderTexture.h"
+#include "D3D/Shaders/Shaders/VGShaderTextureUI.h"
+#include "D3D/Shaders/Shaders/VGShaderParticle.h"
+#include "D3D/Shaders/Shaders/VGShaderSkybox.h"
 
-
-#include "D3D/Shaders/VGShaderBase.h"
 #include "D3D/Shaders/Base/VGMaterial.h"
 #include "IResourceObject.h"
 
@@ -19,12 +23,12 @@ int Resource::m_TexIndex = 0;
 Resource::~Resource()
 = default;
 
-VGMaterial* Resource::LoadMaterial(MaterialType matType)
+VGMaterial* Resource::LoadMaterial(const MaterialType matType)
 {
 	return m_Materials[matType];
 }
 
-void Resource::CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize)
+void Resource::CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvSrvDescriptorSize)
 {
 	CreateShaders(device, cbvHeap, cbvSrvDescriptorSize);
 	CreateMaterials();
@@ -32,44 +36,40 @@ void Resource::CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHe
 
 void Resource::ReleaseResources()
 {
-	for (auto& mat : m_Materials)
+	for (auto& mat : m_Materials | std::views::values)
 	{
-		DELPTR(mat.second)
+		DELPTR(mat)
 	}
 
-	for (auto& shader : m_Shaders)
+	for (auto& shader : m_Shaders | std::views::values)
 	{
-		DELPTR(shader.second)
+		DELPTR(shader)
 	}
 
-	for (auto& resource : m_Resources)
+	for (auto& res : m_Resources | std::views::values)
 	{
-		DELPTR(resource.second)
+		DELPTR(res)
 	}
-
-
+	
 	m_Shaders.clear();
 	m_Materials.clear();
 	m_Resources.clear();
 }
 
-VGShaderBase* Resource::FindShader(MaterialType& id)
+VGShaderBase* Resource::FindShader(const MaterialType& id)
 {
-	auto iter = m_Shaders.find(id);
-	if (iter != m_Shaders.end())
+	if (const auto iter = m_Shaders.find(id); iter != m_Shaders.end())
 	{
 		return iter->second;
 	}
-	else
-	{
-		return nullptr;
-	}
+
+	return nullptr;
 }
 
-void Resource::CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize)
+void Resource::CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvSrvDescriptorSize)
 {
 	std::wstring shaderPathSimple = L"Shader/Simple.hlsl";
-	m_Shaders[SIMPLE] = new VGShaderSimple(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSimple);
+	m_Shaders[SIMPLE] = new VGShaderColor(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSimple);
 	m_Shaders[SIMPLE]->Init();
 
 	std::wstring shaderPathTex = L"Shader/Texture.hlsl";

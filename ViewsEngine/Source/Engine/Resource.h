@@ -54,7 +54,7 @@ private:
 
 	static int m_TexIndex;
 
-	static VGShaderBase* FindShader(MaterialType& id);
+	static VGShaderBase* FindShader(const MaterialType& id);
 
 	static void CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize);
 

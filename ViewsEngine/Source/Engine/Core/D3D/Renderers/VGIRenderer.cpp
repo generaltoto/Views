@@ -1,12 +1,10 @@
-
-
 #include "Engine/Resource.h"
 
 #include "D3D/Geometry/VGMesh.h"
 #include "D3D/Geometry/VGGeometryHandler.h"
 
 #include "D3D/Shaders/Base/VGMaterial.h"
-#include "D3D/Shaders/VGShaderBase.h"
+#include "D3D/Shaders/Shaders/VGShaderBase.h"
 #include "D3D/Shaders/Textures/VGTexture.h"
 
 #include "VGIRenderer.h"
