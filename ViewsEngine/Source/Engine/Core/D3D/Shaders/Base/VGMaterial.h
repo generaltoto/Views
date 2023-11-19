@@ -1,6 +1,6 @@
 #pragma once
 
-class VGShaderBase;
+#include "D3D/Shaders/Shaders/VGShaderBase.h"
 
 class VGMaterial
 {
@@ -10,9 +10,9 @@ public:
 
 	std::string Name;
 
-	void SetShader(VGShaderBase* shader);
-	[[nodiscard]] VGShaderBase* GetShader() const { return m_shader; }
+	void SetShader(VGShaderBase<>* shader);
+	[[nodiscard]] VGShaderBase<>* GetShader() const { return m_Shader; }
 
 private:
-	VGShaderBase* m_shader;
+	VGShaderBase<>* m_Shader;
 };

@@ -90,9 +90,25 @@ void VGHandler::Update(const float dt, const float totalTime)
 {
     Engine::GetMainCamera()->UpdateViewMatrix();
 
-    for (const auto& shader : Resource::GetShaders() | std::views::values)
+    for (const VGShaderBase<>* shader : Resource::GetShaders() | std::views::values)
     {
-        shader->UpdatePassCb(dt, totalTime);
+        const XMMATRIX camView = CameraManager::GetMainCamera()->GetView();
+        const XMMATRIX camOrthoProj = CameraManager::GetMainCamera()->GetOrthoProj();
+        const XMMATRIX camViewProj = CameraManager::GetMainCamera()->GetViewProj();
+
+        auto mainPassCb = shader->GetNewPassData();
+
+        XMStoreFloat4x4(&mainPassCb.View, XMMatrixTranspose(camView));
+        XMStoreFloat4x4(&mainPassCb.OrthoProj, XMMatrixTranspose(camOrthoProj));
+        XMStoreFloat4x4(&mainPassCb.ViewProj, XMMatrixTranspose(camViewProj));
+
+        mainPassCb.LightColor = XMFLOAT4(0.9f, 0.7f, 0.7f, 1.0f);
+        mainPassCb.LightDirection = XMFLOAT3(0.0f, 0.0f, 1.0f);
+        mainPassCb.EyePosW = CameraManager::GetMainCamera()->transform->m_pParent->GetPosition();
+        mainPassCb.TotalTime = totalTime;
+        mainPassCb.DeltaTime = dt;
+
+        shader->UpdatePassCb(mainPassCb);
     }
 }
 

@@ -1,14 +1,6 @@
 #pragma once
 
-#pragma region GLOBAL VARIABLES
-
 static constexpr int SWAP_CHAIN_BUFFER_COUNT = 2;
-
-#pragma endregion
-
-class VGMeshRenderer;
-class VGParticleRenderer;
-class VGTexture;
 
 /*
 Base render class for the D3D12 API.

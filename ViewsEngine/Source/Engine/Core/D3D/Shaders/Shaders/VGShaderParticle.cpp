@@ -18,7 +18,7 @@ void VGShaderParticle::Init()
 {
 	VGShaderBase::Init();
 
-	m_ParticleInstanceDataBuffer = new VGUploadBuffer<InstanceData>(m_GeneralDevice, MAX_PARTICLE_COUNT, false);
+	m_ParticleInstanceDataBuffer = new VGUploadBuffer<ParticleObjConstants>(m_GeneralDevice, MAX_PARTICLE_COUNT, false);
 }
 
 void VGShaderParticle::CreatePsoAndRootSignature(DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)

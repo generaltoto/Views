@@ -187,7 +187,7 @@ void VGParticleTransform::UpdateWorldMatrix()
 
 #pragma region Particle
 VGParticle::VGParticle()
-	: LifeTime(0.0f), CurrentLifeTime(0.0f), Velocity(XMFLOAT3(0.0f, 0.0f, 0.0f)), AngularVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f)), m_isActive(false)
+	: LifeTime(0.0f), CurrentLifeTime(0.0f), Velocity(XMFLOAT3(0.0f, 0.0f, 0.0f)), AngularVelocity(XMFLOAT3(0.0f, 0.0f, 0.0f)), m_IsActive(false)
 {
 	Transform = new VGParticleTransform();
 }

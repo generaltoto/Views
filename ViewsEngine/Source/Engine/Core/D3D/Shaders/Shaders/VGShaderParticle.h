@@ -2,7 +2,14 @@
 
 #include "VGShaderBase.h"
 
-class VGShaderParticle final : public VGShaderBase
+struct ParticleObjConstants : ObjConstants
+{
+    DirectX::XMFLOAT4 Color1 = DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+    DirectX::XMFLOAT4 Color2 = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+    float AgeRatio = 0.0f;
+};
+
+class VGShaderParticle final : public VGShaderBase<ParticleObjConstants>
 {
     public:
     VGShaderParticle(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath);
@@ -27,5 +34,5 @@ class VGShaderParticle final : public VGShaderBase
     We can then give the buffer to the shader that will catch it in a StructuredBuffer. We also pass the instanceID to the shader via the vs_main method.
     See Texture_UI.hlsl and chapter 16.1 for more information.
     */
-    VGUploadBuffer<InstanceData>* m_ParticleInstanceDataBuffer;
+    VGUploadBuffer<ParticleObjConstants>* m_ParticleInstanceDataBuffer;
 };

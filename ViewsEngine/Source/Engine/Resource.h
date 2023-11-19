@@ -1,9 +1,8 @@
 #pragma once
 
 #include <unordered_map>
+#include "D3D/Shaders/Base/VGMaterial.h"
 
-class VGShaderBase;
-class VGMaterial;
 class IResourceObject;
 struct ID3D12Device;
 struct ID3D12DescriptorHeap;
@@ -43,18 +42,18 @@ public:
 	static void ReleaseResources();
 	static int AddToResourceHeap(IResourceObject* resObj, int resType);
 
-	static std::unordered_map<MaterialType, VGShaderBase*>& GetShaders() { return m_Shaders; }
+	static std::unordered_map<MaterialType, VGShaderBase<>*>& GetShaders() { return m_Shaders; }
 	static std::unordered_map<std::string, IResourceObject*>& GetResources() { return m_Resources; }
 	static IResourceObject* GetResource(const std::string& name) { return m_Resources[name]; }
 
 private:
-	static std::unordered_map<MaterialType, VGShaderBase*> m_Shaders;
+	static std::unordered_map<MaterialType, VGShaderBase<>*> m_Shaders;
 	static std::unordered_map<MaterialType, VGMaterial*> m_Materials;
 	static std::unordered_map<std::string, IResourceObject*> m_Resources;
 
 	static int m_TexIndex;
 
-	static VGShaderBase* FindShader(const MaterialType& id);
+	static VGShaderBase<>* FindShader(const MaterialType& id);
 
 	static void CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize);
 

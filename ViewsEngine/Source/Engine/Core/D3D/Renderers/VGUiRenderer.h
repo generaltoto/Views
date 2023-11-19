@@ -21,8 +21,6 @@ public:
 private:
 	void Render(ID3D12GraphicsCommandList* cmdList) override;
 	void Update(float dt) override;
-
-	void UpdateShader() const;
-
+	
 	float m_uvOffsetY;
 };

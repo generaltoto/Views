@@ -2,7 +2,12 @@
 
 #include "VGShaderBase.h"
 
-class VGShaderColor final : public VGShaderBase
+struct ColorObjConstants : public ObjConstants
+{
+    XMFLOAT4 Color = {1.0f, 1.0f, 1.0f, 1.0f};
+};
+
+class VGShaderColor final : public VGShaderBase<ColorObjConstants>
 {
 public:
     VGShaderColor(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath);

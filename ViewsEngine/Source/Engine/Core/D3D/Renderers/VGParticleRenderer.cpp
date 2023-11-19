@@ -9,20 +9,18 @@ using namespace DirectX;
 VGParticleRenderer::VGParticleRenderer() : VGIRenderer()
 {
 	srand(time(nullptr));
-	m_color2 = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	m_color1 = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	m_Color2 = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
+	m_Color1 = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
-	m_particles.resize(0);
-	m_particleInstanceData.resize(0);
+	m_Particles.resize(0);
 }
 
 VGParticleRenderer::~VGParticleRenderer()
 {
-	for (auto& p : m_particles)
+	for (auto& p : m_Particles)
 		DELPTR(p)
 
-	m_particles.clear();
-	m_particleInstanceData.clear();
+	m_Particles.clear();
 }
 
 
@@ -33,33 +31,33 @@ void VGParticleRenderer::Init(const MeshType meshType, const MaterialType matTyp
 
 void VGParticleRenderer::Play() const
 {
-	for (UINT i = 0; i < m_particleCount; i++)
-		m_particles[i]->Awake();
+	for (UINT i = 0; i < m_ParticleCount; i++)
+		m_Particles[i]->Awake();
 }
 
 void VGParticleRenderer::Pause() const
 {
-	for (UINT i = 0; i < m_particleCount; i++)
-		m_particles[i]->Sleep();
+	for (UINT i = 0; i < m_ParticleCount; i++)
+		m_Particles[i]->Sleep();
 }
 
 void VGParticleRenderer::Stop()
 {
 	for (UINT i = 0; i < MAX_PARTICLE_COUNT; i++)
-		DELPTR(m_particles[i])
+		DELPTR(m_Particles[i])
 
-	m_particles.clear();
+	m_Particles.clear();
 }
 
-void VGParticleRenderer::AddParticles(UINT count)
+void VGParticleRenderer::AddParticles(const UINT count)
 {
-	m_particleCount = (m_particleCount + count > MAX_PARTICLE_COUNT) ? MAX_PARTICLE_COUNT : m_particleCount + count;
+	m_ParticleCount = (m_ParticleCount + count > MAX_PARTICLE_COUNT) ? MAX_PARTICLE_COUNT : m_ParticleCount + count;
 	Prepare();
 }
 
 UINT VGParticleRenderer::GetParticleCount() const
 {
-	return m_particleCount;
+	return m_ParticleCount;
 }
 
 
@@ -92,12 +90,11 @@ void VGParticleRenderer::Prepare()
 
 void VGParticleRenderer::CreateMissingParticles()
 {
-	m_particles.resize(m_particleCount, nullptr);
-	m_particleInstanceData.resize(m_particleCount);
+	m_Particles.resize(m_ParticleCount, nullptr);
 	
-	for (UINT i = 0; i < m_particleCount; i++)
+	for (UINT i = 0; i < m_ParticleCount; i++)
 	{
-		if (m_particles[i] != nullptr) continue;
+		if (m_Particles[i] != nullptr) continue;
 
 		CreateParticle();
 	}
@@ -125,15 +122,15 @@ void VGParticleRenderer::CreateParticle()
 	p->Init(rLiftTime, rVel, rAngVel, transform->GetPosition());
 	p->Awake();
 	
-	m_particles.push_back(p);
+	m_Particles.push_back(p);
 }
 
 
 void VGParticleRenderer::UpdateParticles(const float dt)
 {
-	for (UINT i = 0; i < m_particleCount; i++)
+	for (UINT i = 0; i < m_ParticleCount; i++)
 	{
-		VGParticle* p = m_particles[i];
+		VGParticle* p = m_Particles[i];
 
 		// Since some particles might be deleted, we need to check if the pointer is still valid
 		if (p == nullptr) continue;
@@ -142,20 +139,15 @@ void VGParticleRenderer::UpdateParticles(const float dt)
 		if (!p->IsAlive() || !p->IsActive())
 		{
 			DELPTR(p)
-			m_particles.erase(m_particles.begin() + i);
-			m_particleInstanceData.erase(m_particleInstanceData.begin() + i);
-			m_particleCount--;
+			m_Particles.erase(m_Particles.begin() + i);
+			m_ParticleCount--;
 			if (i > 0)
 				i--;
 			continue;
 		}
 
-		// Get the reference to the particle's InstanceData to be copied to the shader buffer
-		auto& [World, Color1, Color2, AgeRatio] = m_particleInstanceData[i];
-
 		// Update particle's lifetime and InstanceData AgeRatio
 		p->CurrentLifeTime += dt;
-		AgeRatio = (p->LifeTime - p->CurrentLifeTime) / p->LifeTime;
 
 		// Update position with particle's velocity
 		p->Transform->Translate(p->Velocity.x * dt, p->Velocity.y * dt, p->Velocity.z * dt);
@@ -165,10 +157,6 @@ void VGParticleRenderer::UpdateParticles(const float dt)
 
 		// Update InstanceData World matrix
 		p->Transform->UpdateWorldMatrix();
-		World = *p->Transform->GetWorldMatrix();
-		
-		Color1 = m_color1;
-		Color2 = m_color2;
 	}
 
 	UpdateShaderBuffer();
@@ -180,9 +168,21 @@ void VGParticleRenderer::UpdateShaderBuffer() const
 	if (const auto shader = dynamic_cast<VGShaderParticle*>(Mat->GetShader()))
 	{
 		// Update the InstanceData buffer for each particle
-		for (int i = 0; i < static_cast<int>(m_particleInstanceData.size()); i++)
+		for (int i = 0; i < static_cast<int>(m_Particles.size()); i++)
 		{
-			shader->UpdateParticleInstanceDataBuffer(i, &m_particleInstanceData[i]);
+			auto objC = shader->GetNewObjectData();
+			const auto particle = m_Particles[i];
+			
+			objC.World = *particle->Transform->GetWorldMatrix();
+			objC.Color1 = m_Color1;
+			objC.Color2 = m_Color2;
+			objC.AgeRatio = (particle->LifeTime - particle->CurrentLifeTime) / particle->LifeTime;
+			
+			shader->UpdateParticleInstanceDataBuffer(i, &objC);
 		}
+	}
+	else
+	{
+		throw std::exception("Shader is not a ParticleShader!");
 	}
 }

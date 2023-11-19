@@ -1,13 +1,5 @@
 #pragma once
 
-struct InstanceData
-{
-	DirectX::XMFLOAT4X4 World = Identity4X4();
-	DirectX::XMFLOAT4 Color1 = DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
-	DirectX::XMFLOAT4 Color2 = DirectX::XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	float AgeRatio = 0.0f;
-};
-
 // ParticleTransform class that holds the position, rotation and scale of a particle
 // Note that we do not used the Transform class, we do not need to component part of the transform
 class VGParticleTransform
@@ -83,10 +75,10 @@ public:
 	void Update(float deltaTime);
 
 	[[nodiscard]] bool IsAlive() const { return CurrentLifeTime < LifeTime; }
-	[[nodiscard]] bool IsActive() const { return m_isActive; }
+	[[nodiscard]] bool IsActive() const { return m_IsActive; }
 
-	void Sleep() { m_isActive = false; }
-	void Awake() { m_isActive = true; }
+	void Sleep() { m_IsActive = false; }
+	void Awake() { m_IsActive = true; }
 
 	void Reset();
 	void Init(float rLifeTime, DirectX::XMFLOAT3 rVel, DirectX::XMFLOAT3 rAngVel, DirectX::XMFLOAT3 parentPos);
@@ -100,5 +92,5 @@ public:
 	VGParticleTransform* Transform;
 
 private:
-	bool m_isActive;
+	bool m_IsActive;
 };

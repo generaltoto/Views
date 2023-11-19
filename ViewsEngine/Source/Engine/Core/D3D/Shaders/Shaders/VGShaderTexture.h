@@ -2,7 +2,8 @@
 
 #include "VGShaderBase.h"
 
-class VGShaderTexture : public VGShaderBase
+
+class VGShaderTexture : public VGShaderBase<>
 {
 public:
     VGShaderTexture(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath);
@@ -15,3 +16,5 @@ public:
     void Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR) override;
     void EndDraw(ID3D12GraphicsCommandList* cmdList) override;
 };
+
+

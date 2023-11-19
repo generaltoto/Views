@@ -30,7 +30,10 @@ void VGSkyRenderer::Update(float dt)
 	if (transform->IsDirty())
 		transform->UpdateParentedWorldMatrix();
 
-	Mat->GetShader()->UpdateObjectCb(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
+	const auto shader = Mat->GetShader();
+	auto objC = shader->GetNewObjectData();
+	objC.World = *transform->GetTransposedParentedWorldMatrix();
+	Mat->GetShader()->UpdateObjectCb(objC, ObjectCbIndex);
 }
 
 

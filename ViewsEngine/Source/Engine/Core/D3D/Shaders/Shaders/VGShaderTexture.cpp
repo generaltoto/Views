@@ -11,6 +11,7 @@ VGShaderTexture::VGShaderTexture(ID3D12Device* device, ID3D12DescriptorHeap* cbv
 VGShaderTexture::~VGShaderTexture()
 = default;
 
+
 void VGShaderTexture::Init()
 {
 	VGShaderBase::Init();

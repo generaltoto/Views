@@ -5,6 +5,9 @@
 
 #include "VGMeshRenderer.h"
 
+#include "D3D/Shaders/Shaders/VGShaderColor.h"
+#include "D3D/Shaders/Shaders/VGShaderTexture.h"
+
 using namespace DirectX;
 
 VGMeshRenderer::VGMeshRenderer(): VGIRenderer(), m_IsClippable(true)
@@ -31,5 +34,26 @@ void VGMeshRenderer::Update(float dt)
 
     transform->UpdateParentedWorldMatrix();
 
-    Mat->GetShader()->UpdateObjectCb(transform->GetTransposedParentedWorldMatrix(), ObjectCbIndex);
+    // First, get the shader that is used by the material.
+    // Then, check if the shader is supported by this renderer.
+    const auto shader = Mat->GetShader();
+
+    // TODO This is a temporary solution. We need to find a better way to handle this.
+    if (const auto shaderTexture = dynamic_cast<VGShaderTexture*>(shader))
+    {
+        auto objC = shaderTexture->GetNewObjectData();
+        objC.World = *transform->GetTransposedParentedWorldMatrix();
+        shaderTexture->UpdateObjectCb(objC, ObjectCbIndex);
+    }
+    else if (const auto shaderColor = dynamic_cast<VGShaderColor*>(shader))
+    {
+        auto objC = shaderColor->GetNewObjectData();
+        objC.World = *transform->GetTransposedParentedWorldMatrix();
+        objC.Color = XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f); //TODO Store color in material
+        shaderColor->UpdateObjectCb(objC, ObjectCbIndex);
+    }
+    else
+    {
+        throw std::exception("Shader not supported by this renderer.");
+    }
 }
