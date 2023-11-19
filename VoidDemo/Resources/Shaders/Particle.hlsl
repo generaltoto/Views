@@ -1,4 +1,4 @@
-struct InstanceData
+struct Data
 {
     float4x4 World;
     float4 Color1;
@@ -6,7 +6,7 @@ struct InstanceData
     float AgeRatio;
 };
 
-StructuredBuffer<InstanceData> gInstanceData : register(t0, space1);
+StructuredBuffer<Data> gInstanceData : register(t0, space1);
 
 cbuffer cbPass : register(b0)
 {
@@ -37,7 +37,7 @@ PS_INPUT vs_main(VS_INPUT input, uint instanceID : SV_InstanceID)
 {
     PS_INPUT output;
     
-    InstanceData instance = gInstanceData[instanceID];
+    Data instance = gInstanceData[instanceID];
     float4x4 gWorld = instance.World;
 
     float4 posW = mul(float4(input.pos, 1.0f), gWorld);

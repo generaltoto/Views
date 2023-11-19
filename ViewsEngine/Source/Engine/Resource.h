@@ -61,4 +61,6 @@ private:
 	static void CreateMaterials();
 	static void CreateMaterial(const MaterialType& mt, const std::string& name);
 
+	inline static const std::wstring SHADER_ROOT = L"Resources/Shaders/";
+
 };

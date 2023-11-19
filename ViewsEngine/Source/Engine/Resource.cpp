@@ -68,23 +68,23 @@ VGShaderBase* Resource::FindShader(const MaterialType& id)
 
 void Resource::CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvSrvDescriptorSize)
 {
-	std::wstring shaderPathSimple = L"Shader/Simple.hlsl";
+	std::wstring shaderPathSimple = SHADER_ROOT + L"Simple.hlsl";
 	m_Shaders[SIMPLE] = new VGShaderColor(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSimple);
 	m_Shaders[SIMPLE]->Init();
 
-	std::wstring shaderPathTex = L"Shader/Texture.hlsl";
+	std::wstring shaderPathTex = SHADER_ROOT + L"Texture.hlsl";
 	m_Shaders[TEXTURE] = new VGShaderTexture(device, cbvHeap, cbvSrvDescriptorSize, shaderPathTex);
 	m_Shaders[TEXTURE]->Init();
 
-	std::wstring shaderPathTexTrans = L"Shader/Texture_UI.hlsl";
+	std::wstring shaderPathTexTrans = SHADER_ROOT + L"Texture_UI.hlsl";
 	m_Shaders[TEXTURE_UI] = new VGShaderTextureUI(device, cbvHeap, cbvSrvDescriptorSize, shaderPathTexTrans);
 	m_Shaders[TEXTURE_UI]->Init();
 
-	std::wstring shaderPathParticle = L"Shader/Particle.hlsl";
+	std::wstring shaderPathParticle = SHADER_ROOT + L"Particle.hlsl";
 	m_Shaders[PARTICLE] = new VGShaderParticle(device, cbvHeap, cbvSrvDescriptorSize, shaderPathParticle);
 	m_Shaders[PARTICLE]->Init();
 
-	std::wstring shaderPathSkybox = L"Shader/Sky.hlsl";
+	std::wstring shaderPathSkybox = SHADER_ROOT + L"Sky.hlsl";
 	m_Shaders[SKYBOX] = new VGShaderSkybox(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSkybox);
 	m_Shaders[SKYBOX]->Init();
 }
