@@ -1,9 +1,10 @@
-#include "D3D/Shaders/Shaders/VGShaderColor.h"
-#include "D3D/Shaders/Shaders/VGShaderTexture.h"
-#include "D3D/Shaders/Shaders/VGShaderTextureUI.h"
-#include "D3D/Shaders/Shaders/VGShaderParticle.h"
-#include "D3D/Shaders/Shaders/VGShaderSkybox.h"
+#include "D3D/Shaders/List/Color/VGShaderColor.h"
+#include "D3D/Shaders/List/Texture/VGShaderTexture.h"
+#include "D3D/Shaders/List/TextureUI/VGShaderTextureUI.h"
+#include "D3D/Shaders/List/Particle/VGShaderParticle.h"
+#include "D3D/Shaders/List/Skybox/VGShaderSkybox.h"
 
+#include "D3D/Shaders/VGShaderBase.h"
 
 #include "IResourceObject.h"
 
@@ -13,8 +14,7 @@
 
 #include "D3D/Base/VGHandler.h"
 
-std::unordered_map<MaterialType, VGShaderBase<>*> Resource::m_Shaders;
-std::unordered_map<MaterialType, VGMaterial*> Resource::m_Materials;
+std::unordered_map<MaterialType, VGShader*> Resource::m_Shaders;
 std::unordered_map<std::string, IResourceObject*> Resource::m_Resources;
 
 int Resource::m_TexIndex = 0;
@@ -55,7 +55,7 @@ void Resource::ReleaseResources()
 	m_Resources.clear();
 }
 
-VGShaderBase<>* Resource::FindShader(const MaterialType& id)
+VGShader* Resource::FindShader(const MaterialType& id)
 {
 	if (const auto iter = m_Shaders.find(id); iter != m_Shaders.end())
 	{
@@ -107,10 +107,7 @@ void Resource::CreateMaterial(const MaterialType& mt, const std::string& name)
 int Resource::AddToResourceHeap(IResourceObject* resObj, int resType)
 {
 	if (!resObj) return -1;
-
-	// Everytime we create a new texture, we need to store it in the m_pCbvSrvHeap.
-	// To do so, we create a new descriptor handle and offset it by the number of textures already stored in the heap.
-	// The methods returns the index of the texture in the heap, which will be stored in the Texture class.
+	
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
 	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	CD3DX12_CPU_DESCRIPTOR_HANDLE hDescriptor(cbvSrvHeap->GetCPUDescriptorHandleForHeapStart());
@@ -127,4 +124,13 @@ int Resource::AddToResourceHeap(IResourceObject* resObj, int resType)
 	I(VGHandler)->GetDevice()->CreateShaderResourceView(res, &srvDesc, hDescriptor);
 
 	return m_TexIndex++;
+}
+
+IResourceObject* Resource::GetResource(const std::string& name)
+{
+	if (const auto it = m_Resources.find(name); it != m_Resources.end())
+	{
+		return it->second;
+	}
+	return nullptr;
 }

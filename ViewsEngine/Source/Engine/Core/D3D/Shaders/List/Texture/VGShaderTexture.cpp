@@ -1,22 +1,23 @@
-﻿#include "VGShaderTextureUI.h"
+﻿#include "VGShaderTexture.h"
 
 #include "D3D/Geometry/VGMesh.h"
 #include "D3D/Base/VGHandler.h"
 
-VGShaderTextureUI::VGShaderTextureUI(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvDescriptorSize, std::wstring& filepath)
-    : VGShaderBase(device, cbvHeap, cbvDescriptorSize, filepath)
+VGShaderTexture::VGShaderTexture(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvDescriptorSize, std::wstring& filepath)
+	: VGShaderBase(device, cbvHeap, cbvDescriptorSize, filepath)
 {
 }
 
-VGShaderTextureUI::~VGShaderTextureUI()
+VGShaderTexture::~VGShaderTexture()
 = default;
 
-void VGShaderTextureUI::Init()
+
+void VGShaderTexture::Init()
 {
 	VGShaderBase::Init();
 }
 
-void VGShaderTextureUI::CreatePsoAndRootSignature(DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
+void VGShaderTexture::CreatePsoAndRootSignature(DXGI_FORMAT& rtvFormat, DXGI_FORMAT& dsvFormat)
 {
 	SetInputLayout();
 
@@ -77,7 +78,7 @@ void VGShaderTextureUI::CreatePsoAndRootSignature(DXGI_FORMAT& rtvFormat, DXGI_F
 	RELPTR(serializedRootSignature)
 }
 
-void VGShaderTextureUI::BeginDraw(ID3D12GraphicsCommandList* cmdList)
+void VGShaderTexture::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	cmdList->SetGraphicsRootSignature(m_RootSignature);
 
@@ -88,7 +89,7 @@ void VGShaderTextureUI::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void VGShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
+void VGShaderTexture::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
 	// UINT are not supposed to be negative, it will only be negative if it is not initialized (debug only).
 	// ReSharper disable once CppUnsignedZeroComparison
@@ -96,13 +97,13 @@ void VGShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* dr
 
 	// If the object has no constant buffer index, we add one.
 	// This is not supposed to happen, but it is a security.
-	if (drawnMeshR->ObjectCbIndex >= m_ObjectCBs.size())
+	if (drawnMeshR->m_ObjectCbIndex >= m_ObjectCBs.size())
 		AddObjectCb();
 
-	assert(drawnMeshR->ObjectCbIndex <= m_ObjectCBs.size());
+	assert(drawnMeshR->m_ObjectCbIndex <= m_ObjectCBs.size());
 
-	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
-	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
+	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->m_Mesh->VertexBufferView());
+	cmdList->IASetIndexBuffer(&drawnMeshR->m_Mesh->IndexBufferView());
 
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
 	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
@@ -110,11 +111,11 @@ void VGShaderTextureUI::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* dr
 	cbvHandle.Offset(drawnMeshR->GetTexture(0)->GetHeapIndex(), m_CbvDescriptorSize);
 
 	cmdList->SetGraphicsRootDescriptorTable(0, cbvHandle);
-	cmdList->SetGraphicsRootConstantBufferView(1, m_ObjectCBs[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(1, m_ObjectCBs[drawnMeshR->m_ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
 	
-	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), 1, 0, 0, 0);
+	cmdList->DrawIndexedInstanced(drawnMeshR->m_Mesh->GetIndexCount(), 1, 0, 0, 0);
 }
 
-void VGShaderTextureUI::EndDraw(ID3D12GraphicsCommandList* cmdList)
+void VGShaderTexture::EndDraw(ID3D12GraphicsCommandList* cmdList)
 {
 }

@@ -10,11 +10,9 @@ struct ID3D12DescriptorHeap;
 class Resource
 {
 public:
-	Resource() = default;
-	~Resource();
-
-	template <class T = IResourceObject>
-	static T* Load(const char* filepath)
+	template <class R> requires std::derived_from<R, IResourceObject>
+	[[nodiscard]]
+	static R* Load(const char* filepath)
 	{
 		std::string path = filepath;
 
@@ -23,11 +21,11 @@ public:
 		if (m_Resources.contains(name))
 		{
 			IResourceObject* resource = m_Resources[name];
-			T* cRes = reinterpret_cast<T*>(resource);
+			R* cRes = reinterpret_cast<R*>(resource);
 			return cRes;
 		}
 
-		T* resource = new T(name);
+		R* resource = new R(name);
 		resource->Load(path);
 		m_Resources[name] = resource;
 
@@ -42,19 +40,20 @@ public:
 	static void ReleaseResources();
 	static int AddToResourceHeap(IResourceObject* resObj, int resType);
 
-	static std::unordered_map<MaterialType, VGShaderBase<>*>& GetShaders() { return m_Shaders; }
+	static std::unordered_map<MaterialType, VGShader*>& GetShaders() { return m_Shaders; }
 	static std::unordered_map<std::string, IResourceObject*>& GetResources() { return m_Resources; }
-	static IResourceObject* GetResource(const std::string& name) { return m_Resources[name]; }
+	static IResourceObject* GetResource(const std::string& name);
 
 private:
-	static std::unordered_map<MaterialType, VGShaderBase<>*> m_Shaders;
-	static std::unordered_map<MaterialType, VGMaterial*> m_Materials;
+	Resource() = default;
+	~Resource() = default;
+	
+	static std::unordered_map<MaterialType, VGShader*> m_Shaders;
 	static std::unordered_map<std::string, IResourceObject*> m_Resources;
 
 	static int m_TexIndex;
 
-	static VGShaderBase<>* FindShader(const MaterialType& id);
-
+	static VGShader* FindShader(const MaterialType& id);
 	static void CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize);
 
 	static void CreateMaterials();

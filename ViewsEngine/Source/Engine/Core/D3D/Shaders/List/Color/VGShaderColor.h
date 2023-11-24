@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "VGShaderBase.h"
+#include "D3D/Shaders/VGShaderBase.h"
 
 struct ColorObjConstants : public ObjConstants
 {

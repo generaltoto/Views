@@ -96,22 +96,22 @@ void VGShaderParticle::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* dra
 
 void VGShaderParticle::DrawAsParticle(ID3D12GraphicsCommandList* cmdList, const VGParticleRenderer* drawnMeshR)
 {
-	if (drawnMeshR->ObjectCbIndex >= m_ObjectCBs.size())
+	if (drawnMeshR->m_ObjectCbIndex >= m_ObjectCBs.size())
 		AddObjectCb();
 
-	assert(drawnMeshR->ObjectCbIndex <= m_ObjectCBs.size());
+	assert(drawnMeshR->m_ObjectCbIndex <= m_ObjectCBs.size());
 
-	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
-	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
+	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->m_Mesh->VertexBufferView());
+	cmdList->IASetIndexBuffer(&drawnMeshR->m_Mesh->IndexBufferView());
 
 	ID3D12DescriptorHeap* cbvSrvHeap = nullptr;
 	UINT heapSize = I(VGHandler)->GetCbvHeap(&cbvSrvHeap);
 	auto cbvHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(cbvSrvHeap->GetGPUDescriptorHandleForHeapStart());
-	cbvHandle.Offset(drawnMeshR->ObjectCbIndex, m_CbvDescriptorSize);
+	cbvHandle.Offset(drawnMeshR->m_ObjectCbIndex, m_CbvDescriptorSize);
 
 	cmdList->SetGraphicsRootShaderResourceView(0, m_ParticleInstanceDataBuffer->GetResource()->GetGPUVirtualAddress());
 
-	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), drawnMeshR->GetParticleCount(), 0, 0, 0);
+	cmdList->DrawIndexedInstanced(drawnMeshR->m_Mesh->GetIndexCount(), drawnMeshR->GetParticleCount(), 0, 0, 0);
 }
 
 void VGShaderParticle::EndDraw(ID3D12GraphicsCommandList* cmdList)

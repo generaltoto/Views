@@ -80,17 +80,17 @@ void VGShaderColor::BeginDraw(ID3D12GraphicsCommandList* cmdList)
 
 void VGShaderColor::Draw(ID3D12GraphicsCommandList* cmdList, VGIRenderer* drawnMeshR)
 {
-	if (drawnMeshR->ObjectCbIndex >= m_ObjectCBs.size())
+	if (drawnMeshR->GetObjectCbIndex() >= m_ObjectCBs.size())
 		AddObjectCb();
 
-	assert(drawnMeshR->ObjectCbIndex <= m_ObjectCBs.size());
+	assert(drawnMeshR->m_ObjectCbIndex <= m_ObjectCBs.size());
 
-	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->Mesh->VertexBufferView());
-	cmdList->IASetIndexBuffer(&drawnMeshR->Mesh->IndexBufferView());
+	cmdList->IASetVertexBuffers(0, 1, &drawnMeshR->m_Mesh->VertexBufferView());
+	cmdList->IASetIndexBuffer(&drawnMeshR->m_Mesh->IndexBufferView());
 
-	cmdList->SetGraphicsRootConstantBufferView(0, m_ObjectCBs[drawnMeshR->ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(0, m_ObjectCBs[drawnMeshR->m_ObjectCbIndex]->GetResource()->GetGPUVirtualAddress());
 
-	cmdList->DrawIndexedInstanced(drawnMeshR->Mesh->GetIndexCount(), 1, 0, 0, 0);
+	cmdList->DrawIndexedInstanced(drawnMeshR->m_Mesh->GetIndexCount(), 1, 0, 0, 0);
 }
 
 void VGShaderColor::EndDraw(ID3D12GraphicsCommandList* cmdList)

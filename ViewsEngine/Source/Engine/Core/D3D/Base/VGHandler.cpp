@@ -1,6 +1,6 @@
 #include "Engine/Resource.h"
 
-#include "D3D/Shaders/Shaders/VGShaderBase.h"
+#include "D3D/Shaders/VGShaderBase.h"
 
 #include "D3D/Geometry/VGGeometryHandler.h"
 
@@ -90,7 +90,7 @@ void VGHandler::Update(const float dt, const float totalTime)
 {
     Engine::GetMainCamera()->UpdateViewMatrix();
 
-    for (const VGShaderBase<>* shader : Resource::GetShaders() | std::views::values)
+    for (const VGShader* shader : Resource::GetShaders() | std::views::values)
     {
         const XMMATRIX camView = CameraManager::GetMainCamera()->GetView();
         const XMMATRIX camOrthoProj = CameraManager::GetMainCamera()->GetOrthoProj();
@@ -108,7 +108,7 @@ void VGHandler::Update(const float dt, const float totalTime)
         mainPassCb.TotalTime = totalTime;
         mainPassCb.DeltaTime = dt;
 
-        shader->UpdatePassCb(mainPassCb);
+        shader->UpdatePassCb(&mainPassCb);
     }
 }
 
