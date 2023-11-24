@@ -10,42 +10,65 @@
 
 VGIRenderer::VGIRenderer()
 {
-	Mesh = nullptr;
-	Mat = nullptr;
+    m_Mesh = nullptr;
+    m_Mat = nullptr;
 }
 
 VGIRenderer::~VGIRenderer()
 {
-	OnDelete();
-
-	Mesh = nullptr;
-	Mat = nullptr;
-	m_Textures.clear();
+    OnDelete();
 }
 
 void VGIRenderer::Init(const MeshType meshType, const MaterialType matType)
 {
-	Mesh = VGGeometryHandler::GetMesh(meshType);
+    m_Mesh = VGGeometryHandler::GetMesh(meshType);
 
-	VGMaterial* mat = Resource::LoadMaterial(matType);
-	BindMaterial(mat);
+    m_Mat = Resource::CreateMaterial<VGMaterial>(this, matType);
 }
 
-void VGIRenderer::OnDelete() const
+VGTexture* VGIRenderer::GetTexture(const UINT index) const
 {
-	if (Mat)
-		Mat->GetShader()->UnBind(ObjectCbIndex);
+    assert(m_Textures.size() > index);
+    return m_Textures.at(index);
+}
+
+const std::vector<VGTexture*>& VGIRenderer::GetTextures()
+{
+    return m_Textures;
+}
+
+void VGIRenderer::OnDelete()
+{
+    DELPTR(m_Mat)
+    NULLPTR(m_Mesh)
 }
 
 void VGIRenderer::RegisterTexture(VGTexture* tex)
 {
-	assert(tex != nullptr);
+    assert(tex != nullptr);
+    m_Textures.push_back(tex);
+}
 
-	m_Textures.push_back(tex);
+VGMaterial* VGIRenderer::GetMaterial() const
+{
+    assert(m_Mat != nullptr, "Material is nullptr, be sure to call the Init() method first");
+    return m_Mat;
+}
+
+VGMesh* VGIRenderer::GetMesh() const
+{
+    assert(m_Mesh != nullptr, "Mesh is nullptr, be sure to call the Init() method first");
+    return m_Mesh;
+}
+
+UINT VGIRenderer::GetObjectCbIndex() const
+{
+    assert(m_Mat != nullptr, "Material is nullptr, be sure to call the Init() method first");
+    return m_Mat->GetObjectCbIndex();
 }
 
 void VGIRenderer::BindMaterial(VGMaterial* mat)
 {
-	Mat = mat;
-	ObjectCbIndex = Mat->GetShader()->Bind()->GetCreatedIndex();
+    m_Mat = mat;
+    //m_ObjectCbIndex = m_Mat->GetShader()->Bind()->GetCreatedIndex();
 }

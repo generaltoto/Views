@@ -63,9 +63,9 @@ UINT VGParticleRenderer::GetParticleCount() const
 
 void VGParticleRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
-	if (!IsEnabled() || !Mat || !Mesh) return;
+	if (!IsEnabled() || !m_Mat || !m_Mesh) return;
 
-	const auto shader = Mat->GetShader();
+	const auto shader = m_Mat->GetShader();
 	shader->BeginDraw(cmdList);
 
 	shader->Draw(cmdList, this);
@@ -75,7 +75,7 @@ void VGParticleRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 
 void VGParticleRenderer::Update(float dt)
 {
-	if (!IsEnabled() || !Mat || !Mesh) return;
+	if (!IsEnabled() || !m_Mat || !m_Mesh) return;
 
 	UpdateParticles(dt);
 }
@@ -165,7 +165,7 @@ void VGParticleRenderer::UpdateParticles(const float dt)
 void VGParticleRenderer::UpdateShaderBuffer() const
 {
 	// Make sure the shader is a ParticleShader, otherwise we can't update the InstanceData buffer
-	if (const auto shader = dynamic_cast<VGShaderParticle*>(Mat->GetShader()))
+	if (const auto shader = dynamic_cast<VGShaderParticle*>(m_Mat->GetShader()))
 	{
 		// Update the InstanceData buffer for each particle
 		for (int i = 0; i < static_cast<int>(m_Particles.size()); i++)

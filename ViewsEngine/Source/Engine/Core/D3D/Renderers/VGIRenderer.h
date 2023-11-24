@@ -19,25 +19,27 @@ public:
 public:
 	virtual void Init(const MeshType meshType, const MaterialType matType);
 
-	[[nodiscard]] VGTexture* GetTexture(const UINT index) const { return m_Textures[index]; }
-	[[nodiscard]] std::vector<VGTexture*> GetTextures() const { return m_Textures; }
+	[[nodiscard]] VGTexture* GetTexture(const UINT index) const;
+	[[nodiscard]] const std::vector<VGTexture*>& GetTextures();
 	void RegisterTexture(VGTexture* tex);
 
+	[[nodiscard]] VGMaterial* GetMaterial() const;
+	[[nodiscard]] VGMesh* GetMesh() const;
+	
+	[[nodiscard]] UINT GetObjectCbIndex() const;
 public:
-	VGMesh* Mesh;
-	UINT ObjectCbIndex = -1;
-
-	VGMaterial* Mat;
+	
 
 protected:
-	void OnDelete() const;
+	void OnDelete();
 	void BindMaterial(VGMaterial* mat);
 
 	virtual void Render(ID3D12GraphicsCommandList* cmdList) = 0;
 	virtual void Update(float dt) = 0;
+	
 protected:
 	std::vector<VGTexture*> m_Textures{};
-
-private:
-
+	
+	VGMesh* m_Mesh;
+	VGMaterial* m_Mat;
 };

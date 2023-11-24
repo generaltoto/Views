@@ -13,8 +13,8 @@ VGSkyRenderer::~VGSkyRenderer() = default;
 
 void VGSkyRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
-	if (!Mat || !Mesh) return;
-	const auto shader = Mat->GetShader();
+	if (!m_Mat || !m_Mesh) return;
+	const auto shader = m_Mat->GetShader();
 	
 	shader->BeginDraw(cmdList);
 
@@ -25,15 +25,15 @@ void VGSkyRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 
 void VGSkyRenderer::Update(float dt)
 {
-	if (!IsEnabled() || !Mat || !Mesh) return;
+	if (!IsEnabled() || !m_Mat || !m_Mesh) return;
 
 	if (transform->IsDirty())
 		transform->UpdateParentedWorldMatrix();
 
-	const auto shader = Mat->GetShader();
+	const auto shader = m_Mat->GetShader();
 	auto objC = shader->GetNewObjectData();
 	objC.World = *transform->GetTransposedParentedWorldMatrix();
-	Mat->GetShader()->UpdateObjectCb(objC, ObjectCbIndex);
+	m_Mat->GetShader()->UpdateObjectCb(objC, m_ObjectCbIndex);
 }
 
 

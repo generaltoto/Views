@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_map>
-#include "D3D/Shaders/Base/VGMaterial.h"
+#include "D3D/Shaders/VGMaterial.h"
 
 class IResourceObject;
 struct ID3D12Device;
@@ -34,7 +34,19 @@ public:
 		return resource;
 	}
 
-	static VGMaterial* LoadMaterial(MaterialType matType);
+	template <class M> requires std::derived_from<M, VGMaterial>
+	[[nodiscard]]
+	static M* CreateMaterial(VGIRenderer* self, const MaterialType& mt)
+	{
+		const auto it = m_Shaders.find(mt);
+		if (it == m_Shaders.end()) return nullptr;
+
+		M* mat = new M();
+		mat->OnCreate(it->second, self);
+
+		mat->SetName(typeid(M).name() + mat->GetObjectCbIndex());
+		return mat;
+	}
 
 	static void CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize);
 	static void ReleaseResources();
@@ -55,10 +67,7 @@ private:
 
 	static VGShader* FindShader(const MaterialType& id);
 	static void CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, UINT cbvSrvDescriptorSize);
-
-	static void CreateMaterials();
-	static void CreateMaterial(const MaterialType& mt, const std::string& name);
-
+	
 	inline static const std::wstring SHADER_ROOT = L"Resources/Shaders/";
 
 };

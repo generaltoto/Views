@@ -26,8 +26,8 @@ void VGUiRenderer::AddOffsetY(const float offsetY)
 
 void VGUiRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
-    if (!IsEnabled() || !Mat || !Mesh) return;
-    const auto shader = Mat->GetShader();
+    if (!IsEnabled() || !m_Mat || !m_Mesh) return;
+    const auto shader = m_Mat->GetShader();
 
     shader->BeginDraw(cmdList);
 
@@ -38,17 +38,17 @@ void VGUiRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 
 void VGUiRenderer::Update(float dt)
 {
-    if (!IsEnabled() || !Mat || !Mesh) return;
+    if (!IsEnabled() || !m_Mat || !m_Mesh) return;
 
     transform->UpdateParentedWorldMatrix();
 
-    if (const auto offsetShader = dynamic_cast<VGShaderTextureUI*>(Mat->GetShader()))
+    if (const auto offsetShader = dynamic_cast<VGShaderTextureUI*>(m_Mat->GetShader()))
     {
         auto objC = offsetShader->GetNewObjectData();
         objC.World = *transform->GetTransposedParentedWorldMatrix();
         objC.Offset = {0.0f, m_uvOffsetY};
         objC.Scale = {transform->GetScale().x, transform->GetScale().y};
-        offsetShader->UpdateObjectCb(objC, ObjectCbIndex);
+        offsetShader->UpdateObjectCb(objC, m_ObjectCbIndex);
     }
     else
     {

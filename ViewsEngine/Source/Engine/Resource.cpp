@@ -19,27 +19,13 @@ std::unordered_map<std::string, IResourceObject*> Resource::m_Resources;
 
 int Resource::m_TexIndex = 0;
 
-Resource::~Resource()
-= default;
-
-VGMaterial* Resource::LoadMaterial(const MaterialType matType)
-{
-	return m_Materials[matType];
-}
-
 void Resource::CreateResources(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap, const UINT cbvSrvDescriptorSize)
 {
 	CreateShaders(device, cbvHeap, cbvSrvDescriptorSize);
-	CreateMaterials();
 }
 
 void Resource::ReleaseResources()
 {
-	for (auto& mat : m_Materials | std::views::values)
-	{
-		DELPTR(mat)
-	}
-
 	for (auto& shader : m_Shaders | std::views::values)
 	{
 		DELPTR(shader)
@@ -51,7 +37,6 @@ void Resource::ReleaseResources()
 	}
 	
 	m_Shaders.clear();
-	m_Materials.clear();
 	m_Resources.clear();
 }
 
@@ -86,22 +71,6 @@ void Resource::CreateShaders(ID3D12Device* device, ID3D12DescriptorHeap* cbvHeap
 	std::wstring shaderPathSkybox = SHADER_ROOT + L"Sky.hlsl";
 	m_Shaders[SKYBOX] = new VGShaderSkybox<>(device, cbvHeap, cbvSrvDescriptorSize, shaderPathSkybox);
 	m_Shaders[SKYBOX]->Init();
-}
-
-void Resource::CreateMaterials()
-{
-	CreateMaterial(SIMPLE, "Simple");
-	CreateMaterial(TEXTURE, "Texture");
-	CreateMaterial(TEXTURE_UI, "TextureOffset");
-	CreateMaterial(PARTICLE, "Particle");
-	CreateMaterial(SKYBOX, "Skybox");
-}
-
-void Resource::CreateMaterial(const MaterialType& mt, const std::string& name)
-{
-	m_Materials[mt] = new VGMaterial();
-	m_Materials[mt]->SetShader(m_Shaders[mt]);
-	m_Materials[mt]->Name = name;
 }
 
 int Resource::AddToResourceHeap(IResourceObject* resObj, int resType)
