@@ -10,11 +10,11 @@ struct ID3D12GraphicsCommandList;
 Base class for all Render components
 It manages to communication between Shader classes, Mesh classes and D3DRenderer class
 */
-class VGIRenderer
+class VGIRenderer : public Component
 {
 public:
 	VGIRenderer();
-	virtual ~VGIRenderer();
+	~VGIRenderer() override;
 
 public:
 	virtual void Init(const MeshType meshType, const MaterialType matType);

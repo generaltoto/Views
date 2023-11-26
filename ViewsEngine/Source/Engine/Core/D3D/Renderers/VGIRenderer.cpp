@@ -23,6 +23,7 @@ void VGIRenderer::Init(const MeshType meshType, const MaterialType matType)
 {
     m_Mesh = VGGeometryHandler::GetMesh(meshType);
 
+    // TODO move this to child class
     m_Mat = Resource::CreateMaterial<VGMaterial>(this, matType);
 }
 

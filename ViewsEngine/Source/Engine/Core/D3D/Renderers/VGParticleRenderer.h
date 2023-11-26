@@ -17,7 +17,7 @@ struct InstanceData
 Particle Renderer is a component that renders particles.
 For now, it is used as a general renderer for all particles.
 */
-class VGParticleRenderer final : public Component, public VGIRenderer
+class VGParticleRenderer final : public VGIRenderer
 {
 	friend class VECS_ParticleRendererSystem;
 public:
@@ -33,16 +33,10 @@ public:
 	void AddParticles(UINT count);
 	[[nodiscard]] UINT GetParticleCount() const;
 
-	DirectX::XMFLOAT4 GetColor1() const { return m_Color1; }
-	DirectX::XMFLOAT4 GetColor2() const { return m_Color2; }
-
 private:
 	std::vector<VGParticle*> m_Particles{};
 
 	UINT m_ParticleCount = 0;
-
-	DirectX::XMFLOAT4 m_Color1;
-	DirectX::XMFLOAT4 m_Color2;
 
 	void Render(ID3D12GraphicsCommandList* cmdList) override;
 	void Update(float dt) override;

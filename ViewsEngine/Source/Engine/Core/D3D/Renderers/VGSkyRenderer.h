@@ -4,7 +4,7 @@
 This class is responsible for rendering the skybox.
 It is not working yet.
 */
-class VGSkyRenderer final : public Component, public VGIRenderer
+class VGSkyRenderer final : public VGIRenderer
 {
 	friend class VECS_SkyRendererSystem;
 

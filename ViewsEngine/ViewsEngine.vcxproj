@@ -259,10 +259,15 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\Color\VGMaterialColor.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\Color\VGShaderColor.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\Particle\VGMaterialParticle.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\Particle\VGShaderParticle.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\Skybox\VGMaterialSkybox.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\Skybox\VGShaderSkybox.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\TextureUI\VGMaterialTextureUi.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\TextureUI\VGShaderTextureUI.cpp" />
+    <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\Texture\VGMaterialTexture.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Shaders\List\Texture\VGShaderTexture.cpp" />
     <ClCompile Include="Source\Engine\Core\D3D\Shaders\Textures\VGCubemap.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -706,10 +711,15 @@
     <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGSkyRenderer.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Renderers\VGUiRenderer.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Shaders\Base\VGUploadBuffer.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\Color\VGMaterialColor.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\Color\VGShaderColor.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\Particle\VGMaterialParticle.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\Particle\VGShaderParticle.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\Skybox\VGMaterialSkybox.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\Skybox\VGShaderSkybox.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\TextureUI\VGMaterialTextureUi.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\TextureUI\VGShaderTextureUI.h" />
+    <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\Texture\VGMaterialTexture.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Shaders\List\Texture\VGShaderTexture.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\VGCubemap.h" />
     <ClInclude Include="Source\Engine\Core\D3D\Shaders\Textures\VGTexture.h" />

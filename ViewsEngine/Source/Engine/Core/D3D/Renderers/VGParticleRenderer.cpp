@@ -1,6 +1,5 @@
-#include "D3D/Shaders/Base/VGMaterial.h"
-#include "D3D/Shaders/Shaders/VGShaderBase.h"
-#include "D3D/Shaders/Shaders/VGShaderParticle.h"
+#include "D3D/Shaders/VGMaterial.h"
+#include "D3D/Shaders/List/Particle/VGShaderParticle.h"
 
 #include "VGParticleRenderer.h"
 
@@ -9,8 +8,6 @@ using namespace DirectX;
 VGParticleRenderer::VGParticleRenderer() : VGIRenderer()
 {
 	srand(time(nullptr));
-	m_Color2 = XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f);
-	m_Color1 = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 
 	m_Particles.resize(0);
 }
@@ -64,13 +61,7 @@ UINT VGParticleRenderer::GetParticleCount() const
 void VGParticleRenderer::Render(ID3D12GraphicsCommandList* cmdList)
 {
 	if (!IsEnabled() || !m_Mat || !m_Mesh) return;
-
-	const auto shader = m_Mat->GetShader();
-	shader->BeginDraw(cmdList);
-
-	shader->Draw(cmdList, this);
-
-	shader->EndDraw(cmdList);
+	m_Mat->Render();
 }
 
 void VGParticleRenderer::Update(float dt)
@@ -164,25 +155,19 @@ void VGParticleRenderer::UpdateParticles(const float dt)
 
 void VGParticleRenderer::UpdateShaderBuffer() const
 {
-	// Make sure the shader is a ParticleShader, otherwise we can't update the InstanceData buffer
-	if (const auto shader = dynamic_cast<VGShaderParticle*>(m_Mat->GetShader()))
+	/*
+	// Update the InstanceData buffer for each particle
+	for (int i = 0; i < static_cast<int>(m_Particles.size()); i++)
 	{
-		// Update the InstanceData buffer for each particle
-		for (int i = 0; i < static_cast<int>(m_Particles.size()); i++)
-		{
-			auto objC = shader->GetNewObjectData();
-			const auto particle = m_Particles[i];
+		auto objC = shader->GetNewObjectData();
+		const auto particle = m_Particles[i];
 			
-			objC.World = *particle->Transform->GetWorldMatrix();
-			objC.Color1 = m_Color1;
-			objC.Color2 = m_Color2;
-			objC.AgeRatio = (particle->LifeTime - particle->CurrentLifeTime) / particle->LifeTime;
+		objC.World = *particle->Transform->GetWorldMatrix();
+		objC.Color1 = m_Color1;
+		objC.Color2 = m_Color2;
+		objC.AgeRatio = (particle->LifeTime - particle->CurrentLifeTime) / particle->LifeTime;
 			
-			shader->UpdateParticleInstanceDataBuffer(i, &objC);
-		}
+		shader->UpdateParticleInstanceDataBuffer(i, &objC);
 	}
-	else
-	{
-		throw std::exception("Shader is not a ParticleShader!");
-	}
+	*/
 }

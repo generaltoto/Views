@@ -6,7 +6,7 @@
 UIRenderer is a component that is used to render UI elements such as score, health, etc.
 Be careful to use shaders that supports UI rendering, such as ShaderTextureOffset.
 */
-class VGUiRenderer final : public Component, public VGIRenderer
+class VGUiRenderer final : public VGIRenderer
 {
 	friend class VECS_UiRenderSystem;
 

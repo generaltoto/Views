@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "VGShaderTexture.h"
+#include "D3D/Shaders/List/Texture/VGShaderTexture.h"
 
 struct UIObjConstants : ObjConstants
 {

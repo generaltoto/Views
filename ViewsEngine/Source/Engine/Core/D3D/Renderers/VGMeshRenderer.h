@@ -5,7 +5,7 @@
 /*
 Classic mesh renderer component, used to render a mesh with a material
 */
-class VGMeshRenderer final : public Component, public VGIRenderer
+class VGMeshRenderer final : public VGIRenderer
 {
 	friend class VECS_MeshRendererSystem;
 
