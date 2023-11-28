@@ -7,6 +7,8 @@ It was made with the help of :
 * [Nathanael Vogt](https://github.com/Gotvna)
 * [Theo Da Silva](https://github.com/Sinozer)
 
+> See [Chokbar Engine](https://github.com/sh4dy01/Chokbar-Engine).
+
 ## What was made during those first 3 weeks
 The goal of these first weeks was to create a 3D space shooter game. The main goal was to
 learn DirectX12 rendering and how to create a game engine.
